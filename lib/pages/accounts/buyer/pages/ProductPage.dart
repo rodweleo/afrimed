@@ -8,7 +8,7 @@ import 'ShoppingCart.dart';
 import 'package:provider/provider.dart';
 
 class ProductPage extends StatelessWidget {
-  const ProductPage({Key? key, required this.product}) : super(key: key);
+  const ProductPage({super.key, required this.product});
   final Product product;
 
   @override
@@ -230,7 +230,7 @@ class ProductPage extends StatelessWidget {
                 onPressed: () {
                   //check whether the product is in the shopping cart
                   if (productCartIndex != -1) {
-                    return null;
+                    return;
                   } else {
                     cartProvider.addToCart(CartItem(product: product));
                   }

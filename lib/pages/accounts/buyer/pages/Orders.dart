@@ -4,7 +4,6 @@ import 'package:connecta/components/success_page/OrderSuccessful.dart';
 import 'package:connecta/models/ProductOrder.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../models/OrderProduct.dart';
 import '../../../../providers/user_provider.dart';
 
 class Orders extends StatefulWidget {
@@ -18,26 +17,9 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late Future<List<ProductOrder>?> _buyerOrders;
 
-  List<ProductOrder> orders = [
-    ProductOrder(
-        id: "1",
-        buyerId: 'John Doe',
-        supplierId: 'Widget A',
-        products: [
-          OrderProduct(
-              productId: '',
-              supplierId: "",
-              orderQuantity: 10,
-              totalAmount: 10
-          )
-        ],
-        totalAmount: 40,
-        status: "COMPLETED", createdOn: DateTime.timestamp()),
-  ];
-
   @override
   void initState() {
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _loadOrders();
     super.initState();
   }
@@ -67,17 +49,15 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
               text: 'All',
             ),
             Tab(
-              text: 'Completed',
+              text: 'COMPLETED',
             ),
             Tab(
-              text: 'Processing',
+              text: 'PENDING',
             ),
             Tab(
-              text: 'Cancelled',
+              text: 'IN PROGRESS',
             ),
-            Tab(
-              text: 'Not Completed',
-            ),
+
           ],
         ),
         automaticallyImplyLeading: false,
@@ -108,47 +88,88 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
               }
             },
           ),
-          ListView.builder(
-            itemCount:
-                orders.where((order) => order.status == 'COMPLETED').length,
-            itemBuilder: (BuildContext context, int index) {
-              // Filter the orders based on completion status
-              List<ProductOrder> completedOrders = orders
-                  .where((order) => order.status == 'COMPLETED')
-                  .toList();
-              return OrderCard(order: completedOrders[index]);
+          FutureBuilder(
+            future: _buyerOrders,
+            builder: (context, AsyncSnapshot<List<ProductOrder>?> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(child: Text('No orders.'));
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                    itemCount:
+                    snapshot.data!.where((order) => order.status == 'COMPLETED').length,
+                    itemBuilder: (BuildContext context, int index) {
+                      // Filter the orders based on completion status
+                      List<ProductOrder> completedOrders = snapshot.data!
+                          .where((order) => order.status == 'COMPLETED')
+                          .toList();
+                      ProductOrder productOrder = completedOrders[index];
+                      return OrderCard(order: productOrder);
+                    },
+                  ),
+                );
+              }
             },
           ),
-          ListView.builder(
-            itemCount: orders
-                .where((order) => order.status == 'IN PROGRESS')
-                .length,
-            itemBuilder: (BuildContext context, int index) {
-              List<ProductOrder> processingOrders = orders
-                  .where((order) => order.status == 'IN PROGRESS')
-                  .toList();
-              return OrderCard(order: processingOrders[index]);
+          FutureBuilder(
+            future: _buyerOrders,
+            builder: (context, AsyncSnapshot<List<ProductOrder>?> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(child: Text('No orders.'));
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                    itemCount:
+                    snapshot.data!.where((order) => order.status == 'PENDING').length,
+                    itemBuilder: (BuildContext context, int index) {
+                      // Filter the orders based on completion status
+                      List<ProductOrder> completedOrders = snapshot.data!
+                          .where((order) => order.status == 'PENDING')
+                          .toList();
+                      ProductOrder productOrder = completedOrders[index];
+                      return OrderCard(order: productOrder);
+                    },
+                  ),
+                );
+              }
             },
           ),
-          ListView.builder(
-            itemCount:
-                orders.where((order) => order.status == 'CANCELLED').length,
-            itemBuilder: (BuildContext context, int index) {
-              List<ProductOrder> cancelledOrders = orders
-                  .where((order) => order.status == 'CANCELLED')
-                  .toList();
-              return OrderCard(order: cancelledOrders[index]);
-            },
-          ),
-          ListView.builder(
-            itemCount: orders
-                .where((order) => order.status == 'NOT COMPLETED')
-                .length,
-            itemBuilder: (BuildContext context, int index) {
-              List<ProductOrder> incompleteOrders = orders
-                  .where((order) => order.status == 'NOT COMPLETED')
-                  .toList();
-              return OrderCard(order: incompleteOrders[index]);
+          FutureBuilder(
+            future: _buyerOrders,
+            builder: (context, AsyncSnapshot<List<ProductOrder>?> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(child: Text('No orders.'));
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                    itemCount:
+                    snapshot.data!.where((order) => order.status == 'IN PROGRESS').length,
+                    itemBuilder: (BuildContext context, int index) {
+                      // Filter the orders based on completion status
+                      List<ProductOrder> completedOrders = snapshot.data!
+                          .where((order) => order.status == 'IN PROGRESS')
+                          .toList();
+                      ProductOrder productOrder = completedOrders[index];
+                      return OrderCard(order: productOrder);
+                    },
+                  ),
+                );
+              }
             },
           ),
         ],

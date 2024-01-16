@@ -13,7 +13,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FCMService().initialize();
+  await FCMService().initialize();
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
   );
@@ -22,6 +22,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
 
   // This widget is the root of your application.
   @override

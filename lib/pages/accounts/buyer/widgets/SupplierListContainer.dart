@@ -21,9 +21,9 @@ class _SupplierListContainerState extends State<SupplierListContainer> {
   }
 
   Future<void> _loadSuppliers() async {
-    AccountApi _accountApi = new AccountApi();
+    AccountApi accountApi = AccountApi();
     // Use your fetchAllSuppliers() function to get the suppliers
-    _suppliers = _accountApi.fetchAllSuppliers();
+    _suppliers = accountApi.fetchAllSuppliers();
   }
 
   @override
@@ -32,11 +32,11 @@ class _SupplierListContainerState extends State<SupplierListContainer> {
       future: _suppliers,
       builder: (context, AsyncSnapshot<List<Account>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Text('No suppliers available.');
+          return const Text('No suppliers available.');
         } else {
           return ListView.builder(
             itemCount: 3,

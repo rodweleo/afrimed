@@ -26,6 +26,6 @@ class OrderProduct {
       : productId = map['productId'],
         supplierId = map['supplierId'],
         orderQuantity = map['orderQuantity'],
-        totalAmount = (map['totalAmount'] as int).toDouble();
+        totalAmount = map['totalAmount'].toDouble();
 
 }

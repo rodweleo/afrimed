@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SellerInformation extends StatelessWidget {
-  const SellerInformation({Key? key}) : super(key: key);
+  const SellerInformation({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class SellerInformation extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Suppliers(),
+                        builder: (context) => const Suppliers(),
                       ),
                     );
                   },

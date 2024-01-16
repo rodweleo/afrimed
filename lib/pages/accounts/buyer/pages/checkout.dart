@@ -1,3 +1,4 @@
+import 'package:connecta/components/success_page/OrderSuccessful.dart';
 import 'package:connecta/pages/accounts/buyer/functions/groupCartItems.dart';
 import 'package:connecta/pages/accounts/buyer/widgets/CheckoutPaymentInformation.dart';
 import 'package:connecta/pages/accounts/buyer/widgets/CheckoutShippingAddress.dart';
@@ -9,8 +10,7 @@ import '../../../../apis/Order_Api.dart';
 import '../../../../models/Account.dart';
 import '../../../../models/CartItem.dart';
 import 'package:connecta/providers/cart_provider.dart';
-
-import 'Orders.dart';
+import '../../../../models/ShippingAddress.dart';
 
 class Checkout extends StatefulWidget {
   const Checkout({super.key});
@@ -20,15 +20,17 @@ class Checkout extends StatefulWidget {
 }
 
 class _CheckoutState extends State<Checkout> {
+  ShippingAddress? selectedShippingAddress;
   void _createOrder() async {
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (BuildContext context){
           return AlertDialog(
             content: Row(
               children: [
-                CircularProgressIndicator(color: Colors.black,),
-                SizedBox(
+                const CircularProgressIndicator(color: Colors.black,),
+                const SizedBox(
                   width: 20,
                 ),
                 Text('Processing Order...', style: TextStyle(
@@ -47,25 +49,39 @@ class _CheckoutState extends State<Checkout> {
 
     //in cases where the products have different suppliers,
     //we need to group the products per supplier then send the order
-    Map<String, List<CartItem>> _modifiedCartItems = groupCartItems(
+    Map<String, List<CartItem>> modifiedCartItems = groupCartItems(
         Provider.of<CartProvider>(context, listen: false).cartItems);
 
-    Order_Api _orderApi = new Order_Api();
-    String? feedback = await _orderApi.createOrder(
+    Order_Api orderApi = Order_Api();
+
+    String? feedback = await orderApi.createOrder(
         Provider.of<UserProvider>(context, listen: false).account!.id!,
-        _modifiedCartItems,
+        modifiedCartItems,
+        selectedShippingAddress,
         context);
 
     if(feedback != null){
       //clear the cart provider
-      Provider.of<CartProvider>(context, listen: false).clearCart();
+      //Provider.of<CartProvider>(context, listen: false).clearCart();
       Navigator.of(context).pop();
 
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => Orders(),
+          builder: (context) => const OrderSuccessful(),
         ),
+      );
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: const Text('Something went wrong.'),
+            action: SnackBarAction(
+              label: 'Retry',
+              onPressed: (){
+                _createOrder();
+              },
+            ),
+        )
       );
     }
 
@@ -74,27 +90,43 @@ class _CheckoutState extends State<Checkout> {
 
   }
 
+  void updateSelectedAddress(ShippingAddress address) {
+    setState(() {
+      selectedShippingAddress = address;
+    });
+
+    print(selectedShippingAddress);
+  }
+
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
-    final _accountProvider = Provider.of<UserProvider>(context);
-    Account? _account = _accountProvider.account;
+    final accountProvider = Provider.of<UserProvider>(context);
+    Account? account = accountProvider.account;
     return Scaffold(
       appBar: AppBar(title: const Text('Checkout'), centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CheckoutShippingAddress(account: _account),
-            SizedBox(height: MediaQuery.of(context).size.height / 20),
-            CheckoutPaymentInformation(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 3,
+                child: CheckoutShippingAddress(
+                  account: account,
+                  onAddressSelected: updateSelectedAddress,),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 3,
+                child: const CheckoutPaymentInformation(),
+              ),
+            ]
+          ),
         ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Container(
+        child: SizedBox(
           height: 150,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +143,7 @@ class _CheckoutState extends State<Checkout> {
                       'Total Items:',
                     ),
                     Text(
-                      cartProvider.getTotalItems().toString(),
+                      cartProvider.getTotalAmount().toString(),
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 20),
                     ),

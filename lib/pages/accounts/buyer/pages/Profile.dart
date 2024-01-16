@@ -9,7 +9,7 @@ import '../widgets/ProfileMenuWidget.dart';
 import 'EditProfile.dart';
 
 class Profile extends StatefulWidget {
-  Profile({super.key});
+  const Profile({super.key});
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -20,12 +20,12 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    Account? _account = Provider.of<UserProvider>(context, listen: false).account;
+    Account? account = Provider.of<UserProvider>(context, listen: false).account;
 
     Color backgroundColor;
     Color textColor;
     String verificationtext = "";
-    switch (_account?.isVerified) {
+    switch (account!.isVerified) {
       case true:
         verificationtext = "Verified";
         backgroundColor = Colors.lightGreen.shade200;
@@ -33,7 +33,7 @@ class _ProfileState extends State<Profile> {
         break;
       case false:
         verificationtext = "Not Verified";
-        backgroundColor = Color(0xFFFFCDD2);
+        backgroundColor = const Color(0xFFFFCDD2);
         textColor = Colors.red;
         break;
       default:
@@ -54,7 +54,7 @@ class _ProfileState extends State<Profile> {
               /// -- IMAGE
               Stack(
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                       radius: 75,
                       backgroundImage: NetworkImage(
                           "https://rickandmortyapi.com/api/character/avatar/144.jpeg")),
@@ -75,7 +75,7 @@ class _ProfileState extends State<Profile> {
                               MaterialPageRoute(builder: (context) => EditProfile(user: user)),
                             );
                           },
-                          icon: Icon(Icons.edit, color: Colors.white),
+                          icon: const Icon(Icons.edit, color: Colors.white),
                         )
                       ),
                     ),
@@ -83,23 +83,23 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
               const SizedBox(height: 10),
-              Text(_account != null ? _account.name.toString() : '',
-                  style: TextStyle(
+              Text(account != null ? account.name.toString() : '',
+                  style: const TextStyle(
                       letterSpacing: 1.5,
                       fontWeight: FontWeight.bold,
                       fontSize: 22)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(_account != null ? _account.contact.phoneNumber.toString() : '',
+                  Text(account != null ? account.contact.phoneNumber.toString() : '',
                       style: TextStyle(
                         color: Colors.black.withOpacity(0.4),
                         letterSpacing: 1.5,
                       )),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Container(
                     padding:
-                    EdgeInsets.only(top: 2.0, right: 8.0, bottom: 2.0, left: 8.0),
+                    const EdgeInsets.only(top: 2.0, right: 8.0, bottom: 2.0, left: 8.0),
                     decoration: BoxDecoration(
                         color: backgroundColor,
                         border: Border.all(
@@ -123,17 +123,17 @@ class _ProfileState extends State<Profile> {
                   children: [
                     ProfileMenuWidget(
                         title: "Settings",
-                        icon: Icon(Icons.settings),
+                        icon: const Icon(Icons.settings),
                         onPress: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Settings()),
+                            MaterialPageRoute(builder: (context) => const Settings()),
                           );
                         }),
                     const Divider(),
                     ProfileMenuWidget(
                         title: "Billing Details",
-                        icon: Icon(Icons.wallet),
+                        icon: const Icon(Icons.wallet),
                         onPress: () {}),
                   ],
                 ),
@@ -145,13 +145,13 @@ class _ProfileState extends State<Profile> {
                 child: Column(
                   children: [
                     ProfileMenuWidget(
-                        title: "About Konnecta",
-                        icon: Icon(Icons.info),
+                        title: "About AfriMed",
+                        icon: const Icon(Icons.info),
                         onPress: () {}),
                     const Divider(),
                     ProfileMenuWidget(
                         title: "Logout",
-                        icon: Icon(Icons.logout),
+                        icon: const Icon(Icons.logout),
                         textColor: Colors.red,
                         endIcon: false,
                         onPress: () {
@@ -205,8 +205,8 @@ void showLogoutDialog(BuildContext context) {
 
 // Function to perform the logout
 void performLogout(context) async {
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  await _auth.signOut().whenComplete(() {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  await auth.signOut().whenComplete(() {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(

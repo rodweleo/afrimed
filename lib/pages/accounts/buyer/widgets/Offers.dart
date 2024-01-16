@@ -13,7 +13,7 @@ class _OffersState extends State<Offers> {
   Widget build(BuildContext context) {
     return CarouselSlider(
       options: CarouselOptions(
-        height: MediaQuery.of(context).size.height,
+        height: MediaQuery.of(context).size.height / 4,
         initialPage: 0,
         autoPlayInterval: const Duration(seconds: 5),
         autoPlayAnimationDuration: const Duration(milliseconds: 500),

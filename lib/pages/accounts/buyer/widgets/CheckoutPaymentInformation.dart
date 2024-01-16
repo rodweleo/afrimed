@@ -12,11 +12,11 @@ class CheckoutPaymentInformation extends StatelessWidget {
           'Payment Information',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Container(
-          padding: EdgeInsets.only(top: 0, bottom: 16.0, left: 16.0, right: 16.0),
+          padding: const EdgeInsets.only(top: 0, bottom: 16.0, left: 16.0, right: 16.0),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5.0),
@@ -35,7 +35,7 @@ class CheckoutPaymentInformation extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Jane Doe', style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.height * 0.02)),
-                  Text('qwert'),
+                  const Text('qwert'),
                   TextButton(
                       onPressed: (){
                         print('Change the shipping address information');

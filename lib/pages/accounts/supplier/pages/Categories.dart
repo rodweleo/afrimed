@@ -16,8 +16,8 @@ class _CategoriesState extends State<Categories> {
               onPressed: () {
                 print('Search');
               },
-              icon: Icon(Icons.search_outlined))
+              icon: const Icon(Icons.search_outlined))
         ]),
-        body: Center(child: Text('Supplier categories')));
+        body: const Center(child: Text('Supplier categories')));
   }
 }

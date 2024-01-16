@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 
 class EditProfile extends StatefulWidget {
   final User? user;
-  EditProfile({super.key, this.user});
+  const EditProfile({super.key, this.user});
 
   @override
   State<EditProfile> createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
-  TextEditingController _nameController = new TextEditingController();
-  TextEditingController _emailController = new TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
 
   @override
@@ -40,7 +40,7 @@ class _EditProfileState extends State<EditProfile> {
 
       print("User information updated successfully");
     }catch(e){
-      print('Error updating user information: ${e}');
+      print('Error updating user information: $e');
     }
 
   }
@@ -54,7 +54,7 @@ class _EditProfileState extends State<EditProfile> {
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Container(
-          margin: EdgeInsets.only(top:20),
+          margin: const EdgeInsets.only(top:20),
           child: SingleChildScrollView(
             child: Column(
 
@@ -64,7 +64,7 @@ class _EditProfileState extends State<EditProfile> {
                   width: double.infinity,
                   child: TextFormField(
                     controller: _nameController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
                     onChanged: (input){
@@ -73,7 +73,7 @@ class _EditProfileState extends State<EditProfile> {
                     obscureText: false,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 SizedBox(
@@ -81,7 +81,7 @@ class _EditProfileState extends State<EditProfile> {
                   child: TextFormField(
                     controller: _emailController,
                                   obscureText: false,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
                     onChanged: (input){
@@ -98,10 +98,10 @@ class _EditProfileState extends State<EditProfile> {
                   shape: const RoundedRectangleBorder(
                   borderRadius:
                   BorderRadius.all(Radius.circular(5))),
-                    padding: EdgeInsets.all(16.0),),
+                    padding: const EdgeInsets.all(16.0),),
                   onPressed: () {
                     _saveChanges();
-                  }, child: Text('Save Changes'),))
+                  }, child: const Text('Save Changes'),))
               ],
             ),
           ),

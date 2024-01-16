@@ -2,7 +2,7 @@ import 'package:connecta/pages/accounts/buyer/pages/homepage.dart';
 import 'package:flutter/material.dart';
 
 class OkButton extends StatefulWidget {
-  const OkButton({Key? key}) : super(key: key);
+  const OkButton({super.key});
 
   @override
   _OkButtonState createState() => _OkButtonState();

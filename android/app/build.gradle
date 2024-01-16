@@ -2,7 +2,8 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
-    id 'com.google.gms.google-services'
+    id "com.google.gms.google-services"
+    id "com.google.firebase.firebase-perf"
 }
 
 def localProperties = new Properties()
@@ -59,6 +60,11 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    lintOptions {
+        warning 'unchecked'
+        warning 'deprecation'
+    }
 }
 
 flutter {
@@ -73,5 +79,5 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
-
+    implementation("com.google.firebase:firebase-perf")
 }

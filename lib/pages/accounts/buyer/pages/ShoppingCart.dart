@@ -1,5 +1,5 @@
 import 'package:connecta/components/cards/CartItem.dart';
-import 'package:connecta/pages/accounts/buyer/pages/Checkout.dart';
+import 'package:connecta/pages/accounts/buyer/pages/checkout.dart';
 import 'package:connecta/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -44,7 +44,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                 const Text('Total Items:',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 Text(cartProvider
-                    .getTotalItems()
+                    .cartItems.length
                     .toString()), // Add your discount logic here
               ],
             ),

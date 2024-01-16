@@ -52,7 +52,7 @@ class CartProvider extends ChangeNotifier {
     return totalAmount;
   }
 
-  int getTotalItems() {
+  int getTotalAmount() {
     return _cartItems.fold(0, (sum, item) => sum + item.quantity);
   }
 

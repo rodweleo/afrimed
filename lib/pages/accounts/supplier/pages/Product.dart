@@ -27,11 +27,11 @@ class _ProductPageState extends State<ProductPage> {
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: false,
                 background: CachedNetworkImage(
-                  placeholder: (context, url) => SizedBox(
+                  placeholder: (context, url) => const SizedBox(
                       height: 20,
                       width: 20,
                       child: CircularProgressIndicator()),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                   imageUrl:
                   widget.product.imageUrl,
                   fit: BoxFit.cover,

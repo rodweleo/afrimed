@@ -17,20 +17,20 @@ class AddProductForm extends StatefulWidget {
 class _AddProductFormState extends State<AddProductForm> {
   //creating the form key
   final _addProductKey = GlobalKey<FormState>();
-  List<String> _productCategories = [
+  final List<String> _productCategories = [
     'Pharmaceutical Products',
     'Non-Pharmaceutical Products'
   ];
 
   //creating controllers for the form
-  TextEditingController _productNameController = new TextEditingController();
+  final TextEditingController _productNameController = TextEditingController();
   String _productCategory = "";
-  TextEditingController _productDescriptionController =
-      new TextEditingController();
-  TextEditingController _productPriceController = new TextEditingController();
-  TextEditingController _productStockController = new TextEditingController();
-  TextEditingController _productDiscountPercentageController =
-      new TextEditingController();
+  final TextEditingController _productDescriptionController =
+      TextEditingController();
+  final TextEditingController _productPriceController = TextEditingController();
+  final TextEditingController _productStockController = TextEditingController();
+  final TextEditingController _productDiscountPercentageController =
+      TextEditingController();
   //TextEditingController _productManufacturingDateController = new TextEditingController();
   //TextEditingController _productExpiryDateController = new TextEditingController();
   File? _productImage;
@@ -63,7 +63,7 @@ class _AddProductFormState extends State<AddProductForm> {
       _isAddingProduct = true;
     });
 
-    Product newProduct = new Product(
+    Product newProduct = Product(
         id: '',
         name: _productNameController.text,
         category: _productCategory,
@@ -77,17 +77,17 @@ class _AddProductFormState extends State<AddProductForm> {
             Provider.of<UserProvider>(context, listen: false).user!.uid);
 
     //try adding the product into the database
-    Product_Api _productApi = new Product_Api();
+    Product_Api productApi = Product_Api();
     String? feedback =
-        await _productApi.createProduct(newProduct, _productImage);
+        await productApi.createProduct(newProduct, _productImage);
 
     return feedback;
   }
 
   void _pickProductImage() async {
-    final ImagePicker _picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
     try {
-      final productImage = await _picker.pickImage(
+      final productImage = await picker.pickImage(
         source: ImageSource.gallery,
       );
 
@@ -107,14 +107,14 @@ class _AddProductFormState extends State<AddProductForm> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Error'),
-            content: Text('Failed to pick an image. Please try again.'),
+            title: const Text('Error'),
+            content: const Text('Failed to pick an image. Please try again.'),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -127,11 +127,11 @@ class _AddProductFormState extends State<AddProductForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Product'),
+        title: const Text('Add Product'),
         centerTitle: true,
       ),
       body: Container(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _addProductKey,
           child: SingleChildScrollView(
@@ -144,7 +144,7 @@ class _AddProductFormState extends State<AddProductForm> {
                   },
                   keyboardType: TextInputType.text,
                   maxLength: 50,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Name',
                     border: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -160,22 +160,22 @@ class _AddProductFormState extends State<AddProductForm> {
                     return null;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 InputDecorator(
                   decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(12, 10, 20, 20),
+                      contentPadding: const EdgeInsets.fromLTRB(12, 10, 20, 20),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0))),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Colors.black,
                         fontFamily: "poppins",
                       ),
-                      hint: Text(
+                      hint: const Text(
                         "Select Product Category",
                         style: TextStyle(
                           color: Colors.black,
@@ -200,7 +200,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 TextFormField(
@@ -211,7 +211,7 @@ class _AddProductFormState extends State<AddProductForm> {
                   keyboardType: TextInputType.multiline,
                   maxLines: 3,
                   maxLength: 100,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Description',
                     border: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -226,7 +226,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     return null;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 TextFormField(
@@ -235,7 +235,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     _productPriceController.text = value;
                   },
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Price',
                     border: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -251,7 +251,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     return null;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 /*TextFormField(
@@ -329,7 +329,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     return null;
                   },
                 ),*/
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 TextFormField(
@@ -338,7 +338,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     _productDiscountPercentageController.text = value;
                   },
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Discount Percentage',
                     border: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -354,7 +354,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     return null;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 TextFormField(
@@ -363,7 +363,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     _productStockController.text = value;
                   },
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Stock',
                     border: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -379,14 +379,14 @@ class _AddProductFormState extends State<AddProductForm> {
                     return null;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 _productImage == null
                     ? GestureDetector(
                         child: Container(
                             width: MediaQuery.of(context).size.width,
-                            padding: EdgeInsets.all(16.0),
+                            padding: const EdgeInsets.all(16.0),
                             decoration: BoxDecoration(
                                 border: Border.all(
                                     color: Colors.black.withOpacity(0.5),
@@ -394,12 +394,12 @@ class _AddProductFormState extends State<AddProductForm> {
                                 borderRadius: BorderRadius.circular(5.0)),
                             child: Column(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.cloud_upload,
                                   size: 50,
                                   color: Colors.blueGrey,
                                 ),
-                                Text(
+                                const Text(
                                   'Upload product image',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -416,7 +416,7 @@ class _AddProductFormState extends State<AddProductForm> {
                           _pickProductImage();
                         },
                       )
-                    : Container(
+                    : SizedBox(
                         width: double.infinity,
                         child: Stack(children: [
                           Column(
@@ -430,7 +430,7 @@ class _AddProductFormState extends State<AddProductForm> {
                                 child: Image.file(_productImage!,
                                     fit: BoxFit.cover),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 15,
                               ),
                               GestureDetector(
@@ -439,7 +439,7 @@ class _AddProductFormState extends State<AddProductForm> {
                                   },
                                   child: Container(
                                     width: double.infinity,
-                                    padding: EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(8.0),
                                     decoration: BoxDecoration(
                                         border: Border.all(
                                             color:
@@ -454,7 +454,7 @@ class _AddProductFormState extends State<AddProductForm> {
                                           Text(_productImage!.path
                                               .split("/")
                                               .last),
-                                          Icon(
+                                          const Icon(
                                             Icons.edit_document,
                                             color: Colors.blueGrey,
                                           )
@@ -476,11 +476,11 @@ class _AddProductFormState extends State<AddProductForm> {
                                   decoration: BoxDecoration(
                                       color: Colors.red.withOpacity(0.8),
                                       borderRadius: BorderRadius.circular(50.0)),
-                                  child: Icon(Icons.close, color: Colors.white),
+                                  child: const Icon(Icons.close, color: Colors.white),
                                 ),
                               ))
                         ])),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 SizedBox(
@@ -513,10 +513,10 @@ class _AddProductFormState extends State<AddProductForm> {
                       }
                     },
                     child: _isAddingProduct
-                        ? CircularProgressIndicator(
+                        ? const CircularProgressIndicator(
                             color: Colors.white,
                           )
-                        : Text('Submit'),
+                        : const Text('Submit'),
                   ),
                 ),
               ],

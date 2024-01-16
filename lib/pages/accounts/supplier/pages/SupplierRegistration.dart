@@ -68,7 +68,6 @@ class _SupplierRegistrationState extends State<SupplierRegistration> {
         hasUploadedIdentificationDocuments: hasUploadedIdentificationDocuments,
         isVerified: false,
         imageUrl: "",
-        shippingAddress: ""
       );
 
       final FirebaseAuth auth = FirebaseAuth.instance;

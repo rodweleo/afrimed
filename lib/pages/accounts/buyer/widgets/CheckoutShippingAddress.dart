@@ -1,4 +1,5 @@
 
+import 'package:connecta/pages/accounts/buyer/widgets/account_shipping_address.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../apis/AccountApi.dart';
@@ -8,50 +9,48 @@ import '../../../../providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutShippingAddress extends StatefulWidget {
-  CheckoutShippingAddress({super.key, required this.account});
+
+  const CheckoutShippingAddress({super.key, required this.account, required this.onAddressSelected});
   final Account? account;
 
+  final Function(ShippingAddress selectedAddress) onAddressSelected;
   @override
   State<CheckoutShippingAddress> createState() => _CheckoutShippingAddressState();
 }
 
 class _CheckoutShippingAddressState extends State<CheckoutShippingAddress> {
   final GlobalKey<FormState> _shippingAddressFormKey = GlobalKey<FormState>();
-  AccountApi _accountApi = new AccountApi();
-  TextEditingController _addressController = new TextEditingController();
+  final AccountApi _accountApi = AccountApi();
+  final TextEditingController _addressController = TextEditingController();
 
-  TextEditingController _cityController = new TextEditingController();
+  final TextEditingController _townController = TextEditingController();
 
-  TextEditingController _countryController = new TextEditingController();
+  final TextEditingController _countyController = TextEditingController();
 
-  TextEditingController _postalCodeController = new TextEditingController();
 
   bool _isAddingAddress = false;
 
   void clearInputFields(){
     _addressController.text = "";
-    _cityController.text = "";
-    _countryController.text = "";
-    _postalCodeController.text = "";
+    _townController.text = "";
+    _countyController.text = "";
   }
   void _addAddressInformation() async {
     //create ta new address object
-    ShippingAddress _shippingAddress = new ShippingAddress(
-      accountId: Provider.of<UserProvider>(context, listen: false).account!.id!,
+    ShippingAddress shippingAddress = ShippingAddress(
       address: _addressController.text,
-      city: _cityController.text,
-      county: _countryController.text,
-      postalCode: _postalCodeController.text
+      town: _townController.text,
+      county: _countyController.text,
     );
 
 
-    String? feedback = await _accountApi.addShippingAddress(_shippingAddress);
+    String? feedback = await _accountApi.addShippingAddress(Provider.of<UserProvider>(context, listen: false).account!.id!, shippingAddress);
     if(feedback != null){
       _isAddingAddress = false;
       clearInputFields();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(feedback),
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5.0),
@@ -62,21 +61,32 @@ class _CheckoutShippingAddressState extends State<CheckoutShippingAddress> {
 
 
   //fetching the shipping address for this given account
-  late Future<ShippingAddress?> _shippingAddress;
+  late Future<List<ShippingAddress>?> _shippingAddress;
 
   void _fetchShippingAddress() async {
     _shippingAddress = _accountApi.fetchAccountShippingAddress(Provider.of<UserProvider>(context, listen: false).account!.id!);
   }
+
 
   @override
   void initState(){
     _fetchShippingAddress();
     super.initState();
   }
+
+  ShippingAddress? selectedAddress;
+  void selectShippingAddress(ShippingAddress shippingAddress){
+    setState((){
+      selectedAddress = shippingAddress;
+    });
+
+    widget.onAddressSelected(selectedAddress!);
+  }
+
   @override
   Widget build(BuildContext context) {
     //retrieve the account's shipping address
-    void _handleAddShippingAddress() async {
+    void handleAddShippingAddress() async {
       return showDialog(
           context: context,
           barrierDismissible: true,
@@ -92,7 +102,7 @@ class _CheckoutShippingAddressState extends State<CheckoutShippingAddress> {
                           TextFormField(
                             controller: _addressController,
                             keyboardType: TextInputType.streetAddress,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'Address',
                               border: OutlineInputBorder(
                                   borderSide: BorderSide(width: 1.0, style: BorderStyle.solid, color: Colors.black)
@@ -106,11 +116,11 @@ class _CheckoutShippingAddressState extends State<CheckoutShippingAddress> {
                               return null;
                             },
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           TextFormField(
-                            controller: _cityController,
-                            decoration: InputDecoration(
-                              labelText: 'City',
+                            controller: _townController,
+                            decoration: const InputDecoration(
+                              labelText: 'Town',
                               border: OutlineInputBorder(
                                   borderSide: BorderSide(width: 1.0, style: BorderStyle.solid, color: Colors.black)
                               ),
@@ -123,10 +133,10 @@ class _CheckoutShippingAddressState extends State<CheckoutShippingAddress> {
                               return null;
                             },
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           TextFormField(
-                            controller: _countryController,
-                            decoration: InputDecoration(
+                            controller: _countyController,
+                            decoration: const InputDecoration(
                               labelText: 'County',
                               border: OutlineInputBorder(
                                   borderSide: BorderSide(width: 1.0, style: BorderStyle.solid, color: Colors.black)
@@ -140,26 +150,9 @@ class _CheckoutShippingAddressState extends State<CheckoutShippingAddress> {
                               return null;
                             },
                           ),
-                          SizedBox(height: 10),
-                          TextFormField(
-                            controller: _postalCodeController,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              labelText: 'Postal Code',
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide(width: 1.0, style: BorderStyle.solid, color: Colors.black)
-                              ),
-                            ),
-                            obscureText: false,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the product name';
-                              }
-                              return null;
-                            },
-                          ),
-                          SizedBox(height: 20),
-                          Container(
+                          const SizedBox(height: 10),
+                          const SizedBox(height: 20),
+                          SizedBox(
                             width: MediaQuery.of(context).size.width,
                             child: Row(
                               children: [
@@ -178,7 +171,7 @@ class _CheckoutShippingAddressState extends State<CheckoutShippingAddress> {
                                     child: const Text('Cancel'),
                                   ),
                                 ),
-                                SizedBox(width: 10),
+                                const SizedBox(width: 10),
                                 Expanded(
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
@@ -210,99 +203,91 @@ class _CheckoutShippingAddressState extends State<CheckoutShippingAddress> {
       );
     }
 
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
       const Text(
         'Shipping Address',
         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      SizedBox(
+      const SizedBox(
         height: 10,
       ),
-      Container(
-          padding:
-              EdgeInsets.only(top: 0, bottom: 16.0, left: 16.0, right: 16.0),
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blueGrey.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 2,
-                )
-              ]),
-          child: FutureBuilder<ShippingAddress?>(
-            future: _shippingAddress,
-            builder: (BuildContext context, snapshot){
-              if(snapshot.connectionState == ConnectionState.waiting){
-                return CircularProgressIndicator();
-              }else if(snapshot.hasError){
-                return Text('Something has gone wrong!');
-              }else if(snapshot.data == null){
-                return GestureDetector(
-                  onTap: (){
-                    _handleAddShippingAddress();
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(top: 16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/images/question.png',
-                          height: MediaQuery.of(context).size.height * 0.075,
-                          width: MediaQuery.of(context).size.height * 0.075,),
-                        SizedBox(height: 10),
-                        Container(
-                            width: 200,
-                            padding: EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.0),
-                                border: Border.all(color: Colors.black.withOpacity(0.2))
-                            ),
-                            child: Row(
-                                children: [
-                                  Icon(Icons.add),
-                                  Text('Add Shipping Address')
-                                ]
-                            )
-
+      FutureBuilder<List<ShippingAddress>?>(
+        future: _shippingAddress,
+        builder: (BuildContext context, snapshot){
+          if(snapshot.connectionState == ConnectionState.waiting){
+            return const CircularProgressIndicator();
+          }else if(snapshot.hasError){
+            return const Text('Something has gone wrong!');
+          }else if(snapshot.data == null){
+            return GestureDetector(
+              onTap: (){
+                handleAddShippingAddress();
+              },
+              child: Container(
+                margin: const EdgeInsets.only(top: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/images/question.png',
+                      height: MediaQuery.of(context).size.height * 0.075,
+                      width: MediaQuery.of(context).size.height * 0.075,),
+                    const SizedBox(height: 10),
+                    Container(
+                        width: 200,
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            border: Border.all(color: Colors.black.withOpacity(0.2))
                         ),
-                      ],
+                        child: const Row(
+                            children: [
+                              Icon(Icons.add),
+                              Text('Add Shipping Address')
+                            ]
+                        )
+
                     ),
-                  ),
-                );
-              }else {
-                final shippingAddress = snapshot.data!;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(shippingAddress.address,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize:
-                                MediaQuery.of(context).size.height * 0.02)),
-                        TextButton(
-                            onPressed: () {
-                              print('Change the shipping address information');
-                            },
-                            child: Text('Change',
-                                style: TextStyle(
-                                    color: Colors.red.shade300,
-                                    fontWeight: FontWeight.bold))),
-                      ],
-                    ),
-                    //Text(shippingAddress.),
-                    Text(
-                        '${shippingAddress.city}, ${shippingAddress.county} - ${shippingAddress.postalCode}')
                   ],
-                );
-              }
+                ),
+              ),
+            );
+          }else {
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: ListView.builder(
+                    itemCount: snapshot.data?.length,
+                    itemBuilder: (context, int index){
+                      return Container(
+                        margin: const EdgeInsets.only(top: 7.5),
+                        padding: const EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5.0),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.blueGrey,
+                              spreadRadius: 1.0,
+                              blurRadius: 2.0
+                            )
+                          ]
+                        ),
+                        child: Row(
+                          children: [
+                            Radio(value: snapshot.data![index], groupValue: selectedAddress, onChanged: (value){
+                              selectShippingAddress(snapshot.data![index]);
+                            }),
+                            AccountShippingAddress(shippingAddress: snapshot.data![index])
+                          ],
+                        ),
+                      );
+                    }),
+              ),
+            );
           }
-          )
+      }
       )
     ]);
   }

@@ -45,22 +45,20 @@ class AccountApi {
   }
 
   //update the shipping address of the buyers
-  Future<String?> addShippingAddress(ShippingAddress shippingAddress) async {
+  Future<String?> addShippingAddress(String accountId, ShippingAddress shippingAddress) async {
     // Reference to the FireStore collection
-    CollectionReference shippingAddressesReference = _firebaseFirestore.collection('shipping_addresses');
+    CollectionReference shippingAddressesReference = _firebaseFirestore.collection('users').doc(accountId).collection("shipping_addresses");
 
     // Data to be added, including nested fields like location
     Map<String, dynamic> newShippingAddress = {
-      'accountId': shippingAddress.accountId,
       'address': shippingAddress.address,
-      'city': shippingAddress.city,
+      'town': shippingAddress.town,
       'county': shippingAddress.county,
-      'postalCode': shippingAddress.postalCode
     };
 
     try {
       // Add the data to FireStore
-      await shippingAddressesReference.doc(shippingAddress.accountId).set(newShippingAddress);// Return a success message
+      await shippingAddressesReference.add(newShippingAddress);
 
       return 'Shipping address added successfully';
 
@@ -73,6 +71,7 @@ class AccountApi {
   Future<Account?> fetchAccountById(String? id) async {
     CollectionReference usersReference = _firebaseFirestore.collection('users');
     DocumentReference documentReference = usersReference.doc(id);
+
     try {
       DocumentSnapshot doc = await documentReference.get();
 
@@ -105,7 +104,6 @@ class AccountApi {
           hasUploadedIdentificationDocuments: data['hasUploadedIdentificationDocuments'],
           isVerified: data['isVerified'],
             imageUrl: data['imageUrl'],
-          shippingAddress: data['shippingAddress']
         );
 
 
@@ -114,37 +112,39 @@ class AccountApi {
         return null;
       }
     } catch (e) {
+      print(e);
       return null;
     }
   }
 
   //get account shipping address
-  Future<ShippingAddress?> fetchAccountShippingAddress(String? id) async {
-    CollectionReference shippingAddressesReference = _firebaseFirestore.collection('shipping_addresses');
-    DocumentReference documentReference = shippingAddressesReference.doc(id);
+  Future<List<ShippingAddress>?> fetchAccountShippingAddress(String? id) async {
     try {
-      DocumentSnapshot doc = await documentReference.get();
+      CollectionReference shippingAddressesReference = _firebaseFirestore
+          .collection('users').doc(id).collection('shipping_addresses');
 
-      if (doc.exists) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      QuerySnapshot querySnapshot = await shippingAddressesReference.get();
 
-        ShippingAddress shippingAddress = ShippingAddress(
-            accountId: data['accountId'],
-            address: data['address'],
-            city: data['city'],
-            county: data['county'],
-          postalCode: data['postalCode']
+      List<ShippingAddress> shippingAddressList = querySnapshot.docs
+          .map((DocumentSnapshot document) {
+        Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+        return ShippingAddress(
+          address: data['address'] ?? '',
+          town: data['town'] ?? '',
+          county: data['county'] ?? '',
         );
+      })
+          .toList();
 
-
-        return shippingAddress;
-      } else {
-        return null;
-      }
-    } catch (e) {
-      return null;
+      return shippingAddressList;
+    } catch (error) {
+      // Handle any errors that might occur during the fetch operation
+      print('Error fetching shipping addresses: $error');
+      return null; // Return an empty list or handle the error as appropriate for your application
     }
   }
+
+
   Future<List<Account>> fetchAllSuppliers() async {
     CollectionReference usersCollection = _firebaseFirestore.collection("users");
 
@@ -182,7 +182,6 @@ class AccountApi {
           hasUploadedIdentificationDocuments: data['hasUploadedIdentificationDocuments'] ?? false,
           isVerified: data['isVerified'] ?? false,
           imageUrl: data['imageUrl'],
-          shippingAddress: data['shippingAddress']
         );
       }).toList();
 

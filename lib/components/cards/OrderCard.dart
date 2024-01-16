@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class OrderCard extends StatelessWidget {
   final ProductOrder order;
 
-  const OrderCard({Key? key, required this.order}) : super(key: key);
+  const OrderCard({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class OrderCard extends StatelessWidget {
         textColor = Colors.green;
         break;
       case 'IN PROGRESS':
-        backgroundColor = Color(0xFFFFE0B2);
+        backgroundColor = const Color(0xFFFFE0B2);
         textColor = Colors.orange;
         break;
       case 'NOT COMPLETED':
@@ -27,7 +27,7 @@ class OrderCard extends StatelessWidget {
         textColor = Colors.black;
         break;
       case 'CANCELLED':
-        backgroundColor = Color(0xFFFFCDD2);
+        backgroundColor = const Color(0xFFFFCDD2);
         textColor = Colors.red;
         break;
       default:
@@ -35,7 +35,7 @@ class OrderCard extends StatelessWidget {
         textColor = Colors.black;
     }
     return Container(
-      margin: EdgeInsets.only(top: 8.0),
+      margin: const EdgeInsets.only(top: 8.0),
       decoration: BoxDecoration(
         color: Colors.blueGrey.withOpacity(0.3),
         borderRadius: BorderRadius.circular(5.0)
@@ -63,13 +63,13 @@ class OrderCard extends StatelessWidget {
               children: [
                 Text(
                     'Products: ${order.products.length}'),
-                SizedBox(width: 10,),
+                const SizedBox(width: 10,),
                 Text('Price: ${order.totalAmount.toString()}')
               ],
             ),
             Container(
               padding:
-                  EdgeInsets.only(top: 2.0, right: 8.0, bottom: 2.0, left: 8.0),
+                  const EdgeInsets.only(top: 2.0, right: 8.0, bottom: 2.0, left: 8.0),
               decoration: BoxDecoration(
                   color: backgroundColor,
                   border: Border.all(

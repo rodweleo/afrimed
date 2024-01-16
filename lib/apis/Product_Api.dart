@@ -8,7 +8,7 @@ import 'dart:convert';
 import '../models/Product.dart';
 
 class Product_Api {
-  FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   Future<String?> createProduct (Product product, File? productImage) async {
 
@@ -91,8 +91,8 @@ class Product_Api {
   Future<List<Product>> fetchAllSupplierProducts(String sId) async {
 
     try {
-      CollectionReference _productsCollection = _firebaseFirestore.collection('products');
-      QuerySnapshot querySnapshot = await _productsCollection
+      CollectionReference productsCollection = _firebaseFirestore.collection('products');
+      QuerySnapshot querySnapshot = await productsCollection
           .where('supplierId', isEqualTo: sId)
           .get();
 
@@ -103,7 +103,7 @@ class Product_Api {
       return productList;
     } catch (e) {
       print("Error fetching products: $e");
-      throw e;
+      rethrow;
     }
   }
 

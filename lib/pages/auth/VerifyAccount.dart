@@ -85,32 +85,30 @@ class _VerifyAccountState extends State<VerifyAccount> {
                     //once the account has been created, get the user id
                     String? uId = auth.currentUser?.uid;
 
-                    if (uId != null) {
-                      //save the account under the document id uId above
-                      AccountApi accountApi = AccountApi();
-                      String? feedBack = await accountApi.createAccount(
-                          uId, widget.account);
+                    //save the account under the document id uId above
+                    AccountApi accountApi = AccountApi();
+                    String? feedBack = await accountApi.createAccount(
+                        uId, widget.account);
 
-                      if (feedBack != null) {
-                        //change the status of onboarding to false
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                            feedBack,
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w300),
-                          ),
-                          closeIconColor: Colors.red.withOpacity(0.4),
-                          backgroundColor: Colors.green,
-                        ));
-                        /*Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const BuyerAccount(),
+                    if (feedBack != null) {
+                      //change the status of onboarding to false
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                          feedBack,
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w300),
                         ),
-                      );*/
-                      }
+                        closeIconColor: Colors.red.withOpacity(0.4),
+                        backgroundColor: Colors.green,
+                      ));
+                      /*Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const BuyerAccount(),
+                      ),
+                    );*/
                     }
-                  }catch(e){
+                                    }catch(e){
                     rethrow;
                   }
 

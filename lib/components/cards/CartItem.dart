@@ -16,11 +16,11 @@ class _ShoppingCartItemState extends State<ShoppingCartItem> {
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
     return Container(
-      margin: EdgeInsets.only(bottom: 5.0),
+      margin: const EdgeInsets.only(bottom: 5.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
           color: Colors.blueGrey,
           blurRadius: 3.5,

@@ -42,35 +42,35 @@ class _ProductsState extends State<Products> {
                 onPressed: () {
                   print('Navigate to the notification page');
                 },
-                icon: Icon(Icons.notifications_active_outlined))
+                icon: const Icon(Icons.notifications_active_outlined))
           ]),
       body: FutureBuilder<List<Product>>(
           future: _supplierProducts,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
+              return const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: ProductListSkeleton(),
               );
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
-              List<Product> _supplierProducts = snapshot.data!;
+              List<Product> supplierProducts = snapshot.data!;
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView.builder(
                     scrollDirection: Axis.vertical,
-                    physics: BouncingScrollPhysics(),
-                    itemCount: _supplierProducts.length,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: supplierProducts.length,
                     itemBuilder: (context, index) {
-                      Product product = _supplierProducts[index];
+                      Product product = supplierProducts[index];
                       return ProductCard(product: product);
                     }),
               );
             }
           }),
       floatingActionButton: FloatingActionButton.extended(
-          icon: Icon(Icons.add),
+          icon: const Icon(Icons.add),
           backgroundColor: Colors.blueGrey,
           foregroundColor: Colors.white,
           onPressed: () {

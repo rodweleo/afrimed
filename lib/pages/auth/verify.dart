@@ -1,7 +1,6 @@
 import 'package:connecta/pages/accounts/buyer/BuyerAccount.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import '../../apis/AccountApi.dart';
 import '../../models/Account.dart';
@@ -48,23 +47,17 @@ class _VerificationPageState extends State<VerificationPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Lottie.asset('assets/images/OTPVerification.json',
-                  height: 250, width: 250),
-              const SizedBox(height: 20.0),
-              Center(
-                child: Column(
-                  children: [
-                    Text(
-                      'Verify your',
-                      style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.085, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      'Phone number',
-                      style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.085, fontWeight: FontWeight.bold),
-                    )
-                  ]
-                ),
-
+              Column(
+                children: [
+                  Text(
+                    'Verify your',
+                    style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.085, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'Phone number',
+                    style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.085, fontWeight: FontWeight.bold),
+                  )
+                ]
               ),
               Text('Enter your OTP code here', style: TextStyle(color: Colors.blueGrey.withOpacity(0.75))),
               const SizedBox(height: 20.0),
@@ -117,48 +110,46 @@ class _VerificationPageState extends State<VerificationPage> {
                       });
                       String? uId = auth.currentUser?.uid;
 
-                      if(uId != null){
-                        //get the role of the user from the database
-                        AccountApi accountApi = AccountApi();
-                        Account? account = await accountApi.fetchAccountById(uId);
+                      //get the role of the user from the database
+                      AccountApi accountApi = AccountApi();
+                      Account? account = await accountApi.fetchAccountById(uId);
 
-                        if(account?.role != null){
-                          String? role = account?.role;
+                      if(account?.role != null){
+                        String? role = account?.role;
 
-                          switch(role) {
-                            case "supplier":
-                            // Set the user and account in the AuthProvider
-                              Provider.of<UserProvider>(context, listen: false).setUser(auth.currentUser);
-                              Provider.of<UserProvider>(context, listen: false).setAccount(account);
+                        switch(role) {
+                          case "supplier":
+                          // Set the user and account in the AuthProvider
+                            Provider.of<UserProvider>(context, listen: false).setUser(auth.currentUser);
+                            Provider.of<UserProvider>(context, listen: false).setAccount(account);
 
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SupplierAccount(),
-                                ),
-                              );
-                              break;
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SupplierAccount(),
+                              ),
+                            );
+                            break;
 
-                            case "buyer":
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const BuyerAccount(),
-                                ),
-                              );
-                              break;
-                            default:
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                builder: (context) => const LoginPage(),
-                                ),
-                              );
-                          }
+                          case "buyer":
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const BuyerAccount(),
+                              ),
+                            );
+                            break;
+                          default:
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                              builder: (context) => const LoginPage(),
+                              ),
+                            );
                         }
-
                       }
 
+                    
                     }catch(e){
                       rethrow;
                     }

@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:connecta/providers/user_provider.dart';
 
 class Profile extends StatefulWidget {
-  Profile({super.key});
+  const Profile({super.key});
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -20,7 +20,7 @@ class _ProfileState extends State<Profile> {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   User? user = FirebaseAuth.instance.currentUser;
-  AccountApi _accountApi = new AccountApi();
+  final AccountApi _accountApi = AccountApi();
   late Future<Account?> account;
 
   
@@ -42,12 +42,12 @@ class _ProfileState extends State<Profile> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Profile'),
+          title: const Text('Profile'),
           centerTitle: true,
           automaticallyImplyLeading: false,
         ),
         body: Container(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 height: MediaQuery.of(context).size.height,
                 decoration:
                     BoxDecoration(color: Colors.black.withOpacity(0.05)),
@@ -59,7 +59,7 @@ class _ProfileState extends State<Profile> {
                         ProfileCard(
                           account: account,
                         ),
-                        ProfileOptions(),
+                        const ProfileOptions(),
                       ]),
                     ),
                     SizedBox(

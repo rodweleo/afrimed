@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../models/Product.dart';
 
 class ProductCard extends StatefulWidget {
-  ProductCard({super.key, required this.product});
+  const ProductCard({super.key, required this.product});
   final Product product;
   static const kTransparentImage =
       "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAApklEQVR42mP8//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
@@ -26,8 +26,8 @@ class _ProductCardState extends State<ProductCard> {
         );
       },
       child: Container(
-        padding: EdgeInsets.all(8.0),
-        margin: EdgeInsets.only(bottom: 10.0),
+        padding: const EdgeInsets.all(8.0),
+        margin: const EdgeInsets.only(bottom: 10.0),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(7.5),
@@ -47,11 +47,11 @@ class _ProductCardState extends State<ProductCard> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(7.5),
                 child: CachedNetworkImage(
-                  placeholder: (context, url) => SizedBox(
+                  placeholder: (context, url) => const SizedBox(
                       height: 20,
                       width: 20,
                       child: CircularProgressIndicator()),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                   height: 100,
                   width: 100,
                   imageUrl:
@@ -65,7 +65,7 @@ class _ProductCardState extends State<ProductCard> {
                 children: [
                   Text(
                     widget.product.name,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,10 +91,10 @@ class _ProductCardState extends State<ProductCard> {
                             style: TextStyle(color: Colors.black.withOpacity(0.4)),
                           ),
                           Text('KSh ${widget.product.price.toString()}',
-                              style: TextStyle(fontWeight: FontWeight.bold))
+                              style: const TextStyle(fontWeight: FontWeight.bold))
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 25,
                       ),
                       Column(
@@ -104,7 +104,7 @@ class _ProductCardState extends State<ProductCard> {
                               style:
                               TextStyle(color: Colors.black.withOpacity(0.4))),
                           Text('KSh ${widget.product.price.toString()}',
-                              style: TextStyle(fontWeight: FontWeight.bold))
+                              style: const TextStyle(fontWeight: FontWeight.bold))
                         ],
                       ),
                     ],
@@ -119,14 +119,14 @@ class _ProductCardState extends State<ProductCard> {
                               style:
                               TextStyle(color: Colors.black.withOpacity(0.4))),
                           Text(DateTime.now().toString(),
-                              style: TextStyle(fontWeight: FontWeight.bold))
+                              style: const TextStyle(fontWeight: FontWeight.bold))
                         ],
                       ),
-                      Icon(
+                      const Icon(
                         Icons.edit,
                         color: Colors.green,
                       ),
-                      Icon(Icons.delete, color: Colors.red)
+                      const Icon(Icons.delete, color: Colors.red)
                     ],
                   )
                 ],

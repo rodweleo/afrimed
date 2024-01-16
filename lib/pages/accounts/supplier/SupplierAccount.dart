@@ -13,10 +13,10 @@ class SupplierAccount extends StatefulWidget {
 
 class _SupplierAccountState extends State<SupplierAccount> {
   final List<Widget> _pages = [
-    Dashboard(),
+    const Dashboard(),
     const Orders(),
     const Products(),
-    Profile(),
+    const Profile(),
   ];
   int currentPageIndex = 0;
   @override

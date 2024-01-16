@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connecta/models/ShippingAddress.dart';
 
 import 'OrderProduct.dart';
 
@@ -8,6 +9,7 @@ class ProductOrder {
   final String supplierId;
   List<OrderProduct> products;
   final double totalAmount;
+  final ShippingAddress shippingAddress;
   final DateTime createdOn;
   final String status;
 
@@ -17,6 +19,7 @@ class ProductOrder {
       required this.supplierId,
       required this.products,
       required this.totalAmount,
+    required this.shippingAddress,
     required this.createdOn,
       required this.status});
 
@@ -27,6 +30,7 @@ class ProductOrder {
       'supplierId': supplierId,
       'products': products.map((product) => product.toMap()).toList(),
       'createdOn': createdOn,
+      'shippingAddress': shippingAddress,
       'totalAmount': totalAmount,
       'status': status,
     };
@@ -44,5 +48,6 @@ class ProductOrder {
         ),
         createdOn = (map['createdOn'] as Timestamp).toDate(),
         totalAmount = map['totalAmount'].toDouble(),
+        shippingAddress = ShippingAddress.fromMap(map['shippingAddress']),
         status = map['status'];
 }

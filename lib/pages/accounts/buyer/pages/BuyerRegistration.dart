@@ -56,7 +56,7 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
                           });
                         },
                       ),
-                      Text('Business')
+                      const Text('Business')
                     ],
                   ),
                   Row(
@@ -70,7 +70,7 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
                           });
                         },
                       ),
-                      Text('Individual')
+                      const Text('Individual')
                     ],
                   ),
                 ],
@@ -156,7 +156,7 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Do you have relevant valid certificates and licenses?'),
+                  const Text('Do you have relevant valid certificates and licenses?'),
                   Row(
                     children: [
                       Row(
@@ -170,7 +170,7 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
                               });
                             },
                           ),
-                          Text('Yes')
+                          const Text('Yes')
                         ],
                       ),
                       Row(
@@ -184,7 +184,7 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
                               });
                             },
                           ),
-                          Text('I will upload later')
+                          const Text('I will upload later')
                         ],
                       ),
                     ],
@@ -207,13 +207,12 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
                             // Set the selected file to a variable to be used in the UI
                             selectedDocument =
                                 file.path != null ? File(file.path!) : null;
-                            ;
                           });
                         }
                       },
                       child: Container(
                         height: 60,
-                        padding: EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.blueGrey),
                             borderRadius: BorderRadius.circular(5.0)),
@@ -225,12 +224,12 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
                               style: TextStyle(
                                   color: Colors.black.withOpacity(0.4)),
                             ),
-                            Icon(Icons.file_upload, color: Colors.blueGrey)
+                            const Icon(Icons.file_upload, color: Colors.blueGrey)
                           ],
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     if (selectedDocument != null)
                       Row(
                         children: [
@@ -248,15 +247,14 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
               Row(
                 children: [
                   Checkbox(
-                    value: this.hasAgreedTermsAndConditions,
+                    value: hasAgreedTermsAndConditions,
                     onChanged: (bool? value) {
                       setState(() {
-                        this.hasAgreedTermsAndConditions = value ?? false;
-                        ;
+                        hasAgreedTermsAndConditions = value ?? false;
                       });
                     },
                   ),
-                  Text('I agree with Terms and Policies of Konnecta.')
+                  const Text('I agree with Terms and Policies of Konnecta.')
                 ],
               ),
               //create button for register
@@ -277,7 +275,7 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
 
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => BuyerAccount()),
+                    MaterialPageRoute(builder: (context) => const BuyerAccount()),
                   );
                 },
                 child: const Text(
@@ -294,7 +292,7 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
+                        MaterialPageRoute(builder: (context) => const LoginPage()),
                       );
                     },
                     child: const Text(

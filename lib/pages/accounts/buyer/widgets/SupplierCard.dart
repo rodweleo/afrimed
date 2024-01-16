@@ -19,11 +19,11 @@ class _SupplierCardState extends State<SupplierCard> {
     return ListTile(
         leading: widget.account.imageUrl != "" ? CircleAvatar(
             radius: 20, backgroundImage: NetworkImage(widget.account.imageUrl))
-          : CircleAvatar(
+          : const CircleAvatar(
       radius: 20, child: Icon(Icons.person),),
         title: Text(
           widget.account.name,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(widget.account.businessInfo.businessCategory),
 

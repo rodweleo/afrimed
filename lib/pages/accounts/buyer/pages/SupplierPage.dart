@@ -14,19 +14,29 @@ class SupplierPage extends StatefulWidget {
 }
 
 class _SupplierPageState extends State<SupplierPage> {
-  late Future<List<Product>> _supplierProducts;
+  final TextEditingController _searchBoxController = TextEditingController();
+  var searchQuery = "";
 
   @override
   void initState() {
-    _loadSupplierProducts();
+
     super.initState();
   }
 
-  void _loadSupplierProducts() async {
+  Future<List<Product>> _loadSupplierProducts() async {
     Product_Api productApi = Product_Api();
 
-    //getting the current active supplier Id
-    _supplierProducts = productApi.fetchAllSupplierProducts(widget.account!.id!);
+    // Getting the current active supplier Id
+    List<Product> allProducts =
+    await productApi.fetchAllSupplierProducts(widget.account!.id!);
+
+    // Filter products based on the search query
+    List<Product> filteredProducts = allProducts
+        .where((product) =>
+        product.name.toLowerCase().contains(searchQuery.toLowerCase()))
+        .toList();
+
+    return filteredProducts;
   }
 
   @override
@@ -36,36 +46,13 @@ class _SupplierPageState extends State<SupplierPage> {
         slivers: [
           SliverAppBar(
             backgroundColor: Colors.white,
-            actions: [
-              Container(
-                  padding: const EdgeInsets.all(5.0),
-                  decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(100)),
-                  child: const Icon(Icons.search)),
-              const SizedBox(
-                width: 5.0,
-              ),
-              const SizedBox(
-                width: 5.0,
-              ),
-              Container(
-                  padding: const EdgeInsets.all(5.0),
-                  decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(100)),
-                  child: const Icon(Icons.bookmark_border_outlined)),
-              const SizedBox(
-                width: 5.0,
-              ),
-            ],
             snap: false,
             pinned: true,
             floating: false,
             expandedHeight: 200,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                decoration: BoxDecoration(color: Colors.blueGrey),
+                decoration: const BoxDecoration(color: Colors.blueGrey),
                 child: widget.account?.imageUrl != ""
                     ? CircleAvatar(
                         radius: 20,
@@ -122,14 +109,68 @@ class _SupplierPageState extends State<SupplierPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Products', style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: MediaQuery.of(context).size.width * 0.05
-                    ),),
-                    TextButton(onPressed: (){}, child: const Text('Sort By'))],
-                  ),
+                      Expanded(
+                        child:  SizedBox(
+                          height: 40,
+                          child: TextField(
+                            controller: _searchBoxController,
+                            onChanged: (String? value){
+                              setState(() {
+                                searchQuery = _searchBoxController.text;
+                              });
+                            },
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'Search product...',
+                              contentPadding: EdgeInsets.symmetric(horizontal: 10), // Optional padding
+                              alignLabelWithHint: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                    IconButton(onPressed: (){
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Sort products by:'),
+                            content: const Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children:[
+                                Text('Alphabets (A-Z)'),
+                                Text('Date of Expiration'),
+                              ]
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  // Dismiss the dialog
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.black,
+                                    foregroundColor: Colors.white,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                                    textStyle: const TextStyle(
+                                        color: Colors.white, fontStyle: FontStyle.normal)),
+                                onPressed: () {
+                                  print('Sorting');
+                                },
+                                child: const Text('Sort'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }, icon: const Icon(Icons.sort),
+                  )]),
                   FutureBuilder<List<Product>>(
-                      future: _supplierProducts,
+                      future: _loadSupplierProducts(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return const CircularProgressIndicator();
@@ -137,18 +178,20 @@ class _SupplierPageState extends State<SupplierPage> {
                           return Center(child: Text('Error: ${snapshot.error}'));
                         } else {
                           List<Product> supplierProducts = snapshot.data!;
-                          return GridView.builder(
-                            shrinkWrap: true,
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, // Set the number of columns here
-                              crossAxisSpacing: 8.0,
-                              mainAxisSpacing: 8.0,
+                          return Expanded(
+                            child: GridView.builder(
+                              shrinkWrap: true,
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2, // Set the number of columns here
+                                crossAxisSpacing: 8.0,
+                                mainAxisSpacing: 8.0,
+                              ),
+                              itemCount: supplierProducts.length,
+                              itemBuilder: (context, index) {
+                                Product product = supplierProducts[index];
+                                return ProductCard(product: product);
+                              },
                             ),
-                            itemCount: supplierProducts.length,
-                            itemBuilder: (context, index) {
-                              Product product = supplierProducts[index];
-                              return ProductCard(product: product);
-                            },
                           );
                         }
                       })

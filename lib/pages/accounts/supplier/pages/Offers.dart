@@ -16,8 +16,8 @@ class _OffersState extends State<Offers> {
               onPressed: () {
                 print('Search');
               },
-              icon: Icon(Icons.search_outlined))
+              icon: const Icon(Icons.search_outlined))
         ]),
-        body: Center(child: Text('Offers')));
+        body: const Center(child: Text('Offers')));
   }
 }

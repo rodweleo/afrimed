@@ -8,7 +8,6 @@ class Account {
   late bool hasUploadedIdentificationDocuments;
   late bool isVerified;
   late String imageUrl;
-  late String shippingAddress;
 
   Account({
     required this.id,
@@ -20,7 +19,6 @@ class Account {
     required this.hasUploadedIdentificationDocuments,
     required this.isVerified,
     required this.imageUrl,
-    required this.shippingAddress
 });
 
   factory Account.fromMap(String id,Map<String, dynamic> map) {
@@ -34,7 +32,6 @@ class Account {
       hasUploadedIdentificationDocuments: map['hasUploadedIdentificationDocuments'] ?? false,
       isVerified : map['isVerified'] ?? false,
       imageUrl: map['imageUrl'],
-      shippingAddress: map['shippingAddress']
     );
   }
 }
