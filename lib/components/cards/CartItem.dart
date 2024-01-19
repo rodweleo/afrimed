@@ -34,7 +34,7 @@ class _ShoppingCartItemState extends State<ShoppingCartItem> {
           height: 50,
           child: FadeInImage.assetNetwork(
             placeholder: widget.cartItem.product.name,
-            image: widget.cartItem.product.imageUrl,
+            image: widget.cartItem.product.imageUrl!,
             fit: BoxFit.fill,
           ),
         ),

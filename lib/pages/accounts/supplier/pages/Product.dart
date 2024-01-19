@@ -33,7 +33,7 @@ class _ProductPageState extends State<ProductPage> {
                       child: CircularProgressIndicator()),
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                   imageUrl:
-                  widget.product.imageUrl,
+                  widget.product.imageUrl!,
                   fit: BoxFit.cover,
                 ),
               ), //FlexibleSpaceBar

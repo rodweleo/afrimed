@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "73049652113",
+    "project_id": "streetmatt-d4392",
+    "storage_bucket": "streetmatt-d4392.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:73049652113:android:9181020857d50941443830",
+        "android_client_info": {
+          "package_name": "com.example.connecta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "73049652113-sv5ajpkr77khepbq868lkuea9fspnr0c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFBZ54p5XR8D3GX7FURH6kzqA1x31icHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "73049652113-sv5ajpkr77khepbq868lkuea9fspnr0c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -55,7 +55,7 @@ class _ProductCardState extends State<ProductCard> {
                   height: 100,
                   width: 100,
                   imageUrl:
-                  widget.product.imageUrl,
+                  widget.product.imageUrl!,
                   fit: BoxFit.cover,
                 ),
               ),

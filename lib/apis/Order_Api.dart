@@ -24,9 +24,11 @@ class Order_Api{
       'products': supplierCartItem.map((cartItem) =>
           OrderProduct(
             productId: cartItem.product.id,
+            name: cartItem.product.name,
             supplierId: cartItem.product.supplierId,
             orderQuantity: cartItem.quantity,
-            totalAmount: cartItem.product.price * cartItem.quantity
+            totalAmount: cartItem.product.price * cartItem.quantity,
+            imageURL: cartItem.product.imageUrl!
           ).toMap())
           .toList(),
       'totalAmount': Provider.of<CartProvider>(context, listen: false).getTotal(supplierId: supplierId),

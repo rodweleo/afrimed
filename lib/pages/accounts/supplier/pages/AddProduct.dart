@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:camera/camera.dart';
+import 'package:connecta/pages/take_picture.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +10,8 @@ import '../../../../providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class AddProductForm extends StatefulWidget {
-  const AddProductForm({super.key});
+  AddProductForm({super.key, String? productImagePath});
+  String? productImagePath;
 
   @override
   State<AddProductForm> createState() => _AddProductFormState();
@@ -18,8 +21,11 @@ class _AddProductFormState extends State<AddProductForm> {
   //creating the form key
   final _addProductKey = GlobalKey<FormState>();
   final List<String> _productCategories = [
-    'Pharmaceutical Products',
-    'Non-Pharmaceutical Products'
+    'Painkillers',
+    'Antibiotics',
+    'Anti-inflammatory',
+    'Anti-fungal',
+    'Antiviral'
   ];
 
   //creating controllers for the form
@@ -33,7 +39,7 @@ class _AddProductFormState extends State<AddProductForm> {
       TextEditingController();
   //TextEditingController _productManufacturingDateController = new TextEditingController();
   //TextEditingController _productExpiryDateController = new TextEditingController();
-  File? _productImage;
+  String productImagePath = "";
   bool _isAddingProduct = false;
   @override
   void dispose() {
@@ -47,14 +53,15 @@ class _AddProductFormState extends State<AddProductForm> {
     _productStockController.clear();
     _productDiscountPercentageController.dispose();
     _productDiscountPercentageController.clear();
-
     super.dispose();
   }
 
   @override
   void initState() {
-    super.initState();
     _productCategory = _productCategories[0];
+    widget.productImagePath = productImagePath;
+
+    super.initState();
   }
 
   Future<String?> _addProduct() async {
@@ -68,7 +75,7 @@ class _AddProductFormState extends State<AddProductForm> {
         name: _productNameController.text,
         category: _productCategory,
         description: _productDescriptionController.text,
-        imageUrl: _productImage!.path,
+        imageUrl: widget.productImagePath,
         price: double.parse(_productPriceController.text),
         discountPercentage:
             double.parse(_productDiscountPercentageController.text),
@@ -78,13 +85,14 @@ class _AddProductFormState extends State<AddProductForm> {
 
     //try adding the product into the database
     Product_Api productApi = Product_Api();
-    String? feedback =
-        await productApi.createProduct(newProduct, _productImage);
-
+    String? feedback = '';
+    /*String? feedback =
+        await productApi.createProduct(newProduct, File(widget.productImagePath));
+*/
     return feedback;
   }
 
-  void _pickProductImage() async {
+  void _pickProductImageFromGallery() async {
     final ImagePicker picker = ImagePicker();
     try {
       final productImage = await picker.pickImage(
@@ -93,7 +101,7 @@ class _AddProductFormState extends State<AddProductForm> {
 
       if (productImage != null) {
         setState(() {
-          _productImage = File(productImage.path);
+          productImagePath = productImage.path;
         });
       } else {
         return;
@@ -120,9 +128,76 @@ class _AddProductFormState extends State<AddProductForm> {
           );
         },
       );
+
     }
+
   }
 
+  void _displayImageSourceList(){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: SizedBox(
+            height: 100,
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children:[
+                  GestureDetector(
+                    onTap: () async {
+                      // Obtain a list of the available cameras on the device.
+                      final cameras = await availableCameras();
+                      // Get a specific camera from the list of available cameras.
+                      final camera = cameras[1];
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => TakePicture(
+                            // Pass the automatically generated path to
+                            // the AddProductForm widget.
+                            camera: camera,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Icon(Icons.photo_camera, size: MediaQuery.of(context).size.height * 0.035,),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text('Camera', style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.height * 0.025,
+                            color: Colors.blueGrey
+                        ),)
+                      ],
+                    ),
+                  ),
+                  Divider(),
+                  GestureDetector(
+                    onTap: (){
+                      _pickProductImageFromGallery();
+                    },
+                    child: Row(
+                      children: [
+                        Icon(Icons.photo, size: MediaQuery.of(context).size.height * 0.03,),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text('Gallery', style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.height * 0.025,
+                            color: Colors.blueGrey
+                        ),)
+                      ],
+                    ),
+                  )
+                ]
+            ),
+          ),
+        );
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -382,7 +457,7 @@ class _AddProductFormState extends State<AddProductForm> {
                 const SizedBox(
                   height: 15,
                 ),
-                _productImage == null
+                productImagePath == ""
                     ? GestureDetector(
                         child: Container(
                             width: MediaQuery.of(context).size.width,
@@ -413,7 +488,7 @@ class _AddProductFormState extends State<AddProductForm> {
                               ],
                             )),
                         onTap: () {
-                          _pickProductImage();
+                          _displayImageSourceList();
                         },
                       )
                     : SizedBox(
@@ -427,7 +502,7 @@ class _AddProductFormState extends State<AddProductForm> {
                                     border: Border.all(
                                         color: Colors.black.withOpacity(0.5)),
                                     borderRadius: BorderRadius.circular(5.0)),
-                                child: Image.file(_productImage!,
+                                child: Image.file(File(productImagePath!),
                                     fit: BoxFit.cover),
                               ),
                               const SizedBox(
@@ -435,7 +510,7 @@ class _AddProductFormState extends State<AddProductForm> {
                               ),
                               GestureDetector(
                                   onTap: () {
-                                    _pickProductImage();
+                                    _displayImageSourceList();
                                   },
                                   child: Container(
                                     width: double.infinity,
@@ -451,7 +526,7 @@ class _AddProductFormState extends State<AddProductForm> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(_productImage!.path
+                                          Text(productImagePath
                                               .split("/")
                                               .last),
                                           const Icon(
@@ -467,10 +542,7 @@ class _AddProductFormState extends State<AddProductForm> {
                               right: 0,
                               child: GestureDetector(
                                 onTap:(){
-                                  //delete the product image from display
-                                  setState((){
-                                    _productImage = null;
-                                  });
+                                  _pickProductImageFromGallery();
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(

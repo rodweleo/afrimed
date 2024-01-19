@@ -81,7 +81,7 @@ class ProductPage extends StatelessWidget {
             width: double.infinity,
             child: FadeInImage.assetNetwork(
               placeholder: product.name,
-              image: product.imageUrl,
+              image: product.imageUrl!,
               height: 150,
               width: 200,
               fit: BoxFit.fill,
@@ -188,7 +188,7 @@ class ProductPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Image.network(
-                                product.imageUrl,
+                                product.imageUrl!,
                                 fit: BoxFit.cover,
                               ),
                             ),

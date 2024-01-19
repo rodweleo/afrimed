@@ -2,7 +2,6 @@ import 'package:connecta/models/Account.dart';
 import 'package:connecta/pages/accounts/buyer/pages/Profile.dart';
 import 'package:connecta/pages/accounts/buyer/pages/homepage.dart';
 import 'package:connecta/pages/accounts/buyer/pages/Orders.dart';
-import 'package:connecta/pages/accounts/buyer/pages/search.dart';
 import 'package:connecta/services/firebase_cloud_messaging.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';

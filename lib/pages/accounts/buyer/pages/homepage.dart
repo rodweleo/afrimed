@@ -1,16 +1,11 @@
 import 'package:connecta/apis/AccountApi.dart';
 import 'package:flutter/material.dart';
 import '../../../../models/Account.dart';
-import '../../../../providers/cart_provider.dart';
 import '../widgets/Offers.dart';
 import '../widgets/SupplierCard.dart';
-import 'ShoppingCart.dart';
-import 'Suppliers.dart';
-import 'notifications.dart';
-import 'package:provider/provider.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({Key? key}) : super(key: key);
+  const Homepage({super.key});
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -35,7 +30,7 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
       body: Column(
         children: [
-          Offers(),
+          const Offers(),
           Flexible(
             child: Stack(
               children: [
@@ -47,12 +42,12 @@ class _HomepageState extends State<Homepage> {
                       Text('Featured Suppliers', style: TextStyle(
                         fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width * 0.04
                       ),),
-                      IconButton(onPressed: (){}, icon: Icon(Icons.keyboard_arrow_right_rounded, color: Colors.blueGrey,))
+                      IconButton(onPressed: (){}, icon: const Icon(Icons.keyboard_arrow_right_rounded, color: Colors.blueGrey,))
                     ],
                   ),
                 ),
                 FutureBuilder<List<Account>>(
-                  key: Key("suppliersBuilder"),
+                  key: const Key("suppliersBuilder"),
                   future: _suppliers,
                   builder: (context, AsyncSnapshot<List<Account>> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
