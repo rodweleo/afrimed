@@ -1,4 +1,4 @@
-# connecta
+# AfriMed
 
 A new Flutter project.
 
