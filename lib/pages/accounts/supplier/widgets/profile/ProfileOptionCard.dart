@@ -1,8 +1,8 @@
-import 'package:connecta/models/ProfileOption.dart';
-import 'package:connecta/pages/accounts/supplier/SupplierAccount.dart';
-import 'package:connecta/pages/accounts/supplier/pages/Categories.dart';
-import 'package:connecta/pages/accounts/supplier/pages/Offers.dart';
-import 'package:connecta/pages/accounts/supplier/pages/Reviews.dart';
+import 'package:AfriMed/models/ProfileOption.dart';
+import 'package:AfriMed/pages/accounts/supplier/SupplierAccount.dart';
+import 'package:AfriMed/pages/accounts/supplier/pages/Categories.dart';
+import 'package:AfriMed/pages/accounts/supplier/pages/Offers.dart';
+import 'package:AfriMed/pages/accounts/supplier/pages/Reviews.dart';
 import 'package:flutter/material.dart';
 
 class ProfileOptionCard extends StatefulWidget {

@@ -1,10 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class EditProfile extends StatefulWidget {
-  final User? user;
-  const EditProfile({super.key, this.user});
+import '../../../../models/Account.dart';
 
+class EditProfile extends StatefulWidget {
+  const EditProfile({super.key, required this.account});
+  final Account account;
   @override
   State<EditProfile> createState() => _EditProfileState();
 }
@@ -18,8 +18,8 @@ class _EditProfileState extends State<EditProfile> {
   void initState() {
     super.initState();
     // Initialize controllers with user data
-    _nameController.text = widget.user?.displayName ?? '';
-    _emailController.text = widget.user?.email ?? '';
+    _nameController.text = widget.account.name ?? '';
+    _emailController.text = widget.account.contact.email ?? '';
   }
 
   @override
@@ -30,10 +30,10 @@ class _EditProfileState extends State<EditProfile> {
 
   }
 
-  void _saveChanges() async {
+  /*void _saveChanges() async {
     //update the user information
     try{
-      await widget.user?.updateDisplayName(_nameController.text);
+      await widget.account?.updateDisplayName(_nameController.text);
       //updating the display name
       await widget.user?.updateEmail(_emailController.text);
       //updating the email address
@@ -43,68 +43,72 @@ class _EditProfileState extends State<EditProfile> {
       print('Error updating user information: $e');
     }
 
-  }
+  }*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Profile'),
-        centerTitle: true,
-      ),
+              ),
       body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Container(
-          margin: const EdgeInsets.only(top:20),
-          child: SingleChildScrollView(
-            child: Column(
-
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: TextFormField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
+                Column(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextFormField(
+                        controller: _nameController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (input){
+                          _nameController.text = input;
+                        },
+                        obscureText: false,
+                      ),
                     ),
-                    onChanged: (input){
-                      _nameController.text = input;
-                    },
-                    obscureText: false,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: TextFormField(
-                    controller: _emailController,
-                                  obscureText: false,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
+                    const SizedBox(
+                      height: 10,
                     ),
-                    onChanged: (input){
-                      _emailController.text = input;
-                    },
-                  ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextFormField(
+                        controller: _emailController,
+                        obscureText: false,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (input){
+                          _emailController.text = input;
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
+
+              ],
+
+            ),
+            SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  shape: const RoundedRectangleBorder(
-                  borderRadius:
-                  BorderRadius.all(Radius.circular(5))),
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(5))),
                     padding: const EdgeInsets.all(16.0),),
                   onPressed: () {
-                    _saveChanges();
+                    //_saveChanges();
                   }, child: const Text('Save Changes'),))
-              ],
-            ),
-          ),
+          ],
         ),
       ),
     );

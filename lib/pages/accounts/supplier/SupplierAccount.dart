@@ -1,7 +1,7 @@
-import 'package:connecta/pages/accounts/supplier/pages/Profile.dart';
-import 'package:connecta/pages/accounts/supplier/pages/Orders.dart';
-import 'package:connecta/pages/accounts/supplier/pages/Products.dart';
-import 'package:connecta/pages/accounts/supplier/pages/Dashboard.dart';
+import 'package:AfriMed/pages/accounts/supplier/pages/Profile.dart';
+import 'package:AfriMed/pages/accounts/supplier/pages/Orders.dart';
+import 'package:AfriMed/pages/accounts/supplier/pages/Products.dart';
+import 'package:AfriMed/pages/accounts/supplier/pages/Dashboard.dart';
 import 'package:flutter/material.dart';
 
 class SupplierAccount extends StatefulWidget {
@@ -41,14 +41,8 @@ class _SupplierAccountState extends State<SupplierAccount> {
               label: 'Dashboard',
             ),
             NavigationDestination(
-              selectedIcon: Badge(
-                label: Text('2'),
-                child: Icon(Icons.shopping_bag_sharp, color: Colors.white),
-              ),
-              icon: Badge(
-                label: Text('2'),
-                child: Icon(Icons.shopping_bag),
-              ),
+              selectedIcon: Icon(Icons.shopping_bag_sharp, color: Colors.white),
+              icon: Icon(Icons.shopping_bag),
               label: 'Orders',
             ),
             NavigationDestination(
@@ -64,9 +58,7 @@ class _SupplierAccountState extends State<SupplierAccount> {
                 Icons.person,
                 color: Colors.white,
               ),
-              icon: Badge(
-                child: Icon(Icons.person_sharp),
-              ),
+              icon: Icon(Icons.person_sharp),
               label: 'Profile',
             ),
           ],

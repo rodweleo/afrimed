@@ -1,4 +1,4 @@
-import 'package:connecta/models/ShippingAddress.dart';
+import 'package:AfriMed/models/ShippingAddress.dart';
 import 'package:flutter/material.dart';
 
 class AccountShippingAddress extends StatelessWidget {

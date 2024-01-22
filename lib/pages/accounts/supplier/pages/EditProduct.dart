@@ -4,22 +4,19 @@ import 'package:AfriMed/pages/take_picture.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../apis/Product_Api.dart';
 import '../../../../models/Product.dart';
-import '../../../../providers/user_provider.dart';
-import 'package:provider/provider.dart';
 
-class AddProductForm extends StatefulWidget {
-  AddProductForm({super.key, String? productImagePath});
-  String? productImagePath;
+class EditProduct extends StatefulWidget {
+  EditProduct({super.key, required this.product});
+  Product product;
 
   @override
-  State<AddProductForm> createState() => _AddProductFormState();
+  State<EditProduct> createState() => _EditProductState();
 }
 
-class _AddProductFormState extends State<AddProductForm> {
+class _EditProductState extends State<EditProduct> {
   //creating the form key
-  final _addProductKey = GlobalKey<FormState>();
+  final _editProductKey = GlobalKey<FormState>();
   final List<String> _productCategories = [
     'Painkillers',
     'Antibiotics',
@@ -32,15 +29,13 @@ class _AddProductFormState extends State<AddProductForm> {
   final TextEditingController _productNameController = TextEditingController();
   String _productCategory = "";
   final TextEditingController _productDescriptionController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _productPriceController = TextEditingController();
   final TextEditingController _productStockController = TextEditingController();
   final TextEditingController _productDiscountPercentageController =
-      TextEditingController();
-  //TextEditingController _productManufacturingDateController = new TextEditingController();
-  //TextEditingController _productExpiryDateController = new TextEditingController();
+  TextEditingController();
   String productImagePath = "";
-  bool _isAddingProduct = false;
+  final bool _isAddingProduct = false;
   @override
   void dispose() {
     _productNameController.dispose();
@@ -58,19 +53,25 @@ class _AddProductFormState extends State<AddProductForm> {
 
   @override
   void initState() {
-    _productCategory = _productCategories[0];
-    widget.productImagePath = productImagePath;
+    _productNameController.text = widget.product.name ?? "";
+    _productCategory = widget.product.category ?? "";
+    _productDescriptionController.text = widget.product.description ?? "";
+    _productPriceController.text = widget.product.price.toString();
+    _productDiscountPercentageController.text = widget.product.discountPercentage.toString();
+    _productStockController.text = widget.product.stock.toString();
+
+    //widget.product.imageUrl = productImagePath;
 
     super.initState();
   }
 
-  Future<String?> _addProduct() async {
+  /*Future<String?> _addProduct() async {
     //make the state to be submitting state
     setState(() {
       _isAddingProduct = true;
     });
 
-    Product newProduct = Product(
+    Product edittedProduct = Product(
         id: '',
         name: _productNameController.text,
         category: _productCategory,
@@ -78,10 +79,10 @@ class _AddProductFormState extends State<AddProductForm> {
         imageUrl: widget.productImagePath,
         price: double.parse(_productPriceController.text),
         discountPercentage:
-            double.parse(_productDiscountPercentageController.text),
+        double.parse(_productDiscountPercentageController.text),
         stock: int.parse(_productStockController.text),
         supplierId:
-            Provider.of<UserProvider>(context, listen: false).user!.uid);
+        Provider.of<UserProvider>(context, listen: false).user!.uid);
 
     //try adding the product into the database
     Product_Api productApi = Product_Api();
@@ -90,7 +91,7 @@ class _AddProductFormState extends State<AddProductForm> {
         await productApi.createProduct(newProduct, File(widget.productImagePath));
 */
     return feedback;
-  }
+  }*/
 
   void _pickProductImageFromGallery() async {
     final ImagePicker picker = ImagePicker();
@@ -202,13 +203,13 @@ class _AddProductFormState extends State<AddProductForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Product'),
+        title: const Text('Edit Product'),
         centerTitle: true,
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: _addProductKey,
+          key: _editProductKey,
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -260,15 +261,15 @@ class _AddProductFormState extends State<AddProductForm> {
                       items: _productCategories
                           .map<DropdownMenuItem<String>>(
                             (category) => DropdownMenuItem(
-                              value: category.capitalize,
-                              child: Text(category.toString()),
-                            ),
-                          )
+                          value: category.capitalize,
+                          child: Text(category.toString()),
+                        ),
+                      )
                           .toList(),
                       isExpanded: true,
                       isDense: true,
                       onChanged: (String? value) => setState(
-                        () {
+                            () {
                           if (value != null) _productCategory = value;
                         },
                       ),
@@ -459,99 +460,99 @@ class _AddProductFormState extends State<AddProductForm> {
                 ),
                 productImagePath == ""
                     ? GestureDetector(
-                        child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            padding: const EdgeInsets.all(16.0),
+                  child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.black.withOpacity(0.5),
+                              style: BorderStyle.solid),
+                          borderRadius: BorderRadius.circular(5.0)),
+                      child: Column(
+                        children: [
+                          const Icon(
+                            Icons.cloud_upload,
+                            size: 50,
+                            color: Colors.blueGrey,
+                          ),
+                          const Text(
+                            'Upload product image',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          ),
+                          Text(
+                            'Try to upload the image of your product here',
+                            style: TextStyle(
+                                color: Colors.black.withOpacity(0.5)),
+                          )
+                        ],
+                      )),
+                  onTap: () {
+                    _displayImageSourceList();
+                  },
+                )
+                    : SizedBox(
+                    width: double.infinity,
+                    child: Stack(children: [
+                      Column(
+                        children: [
+                          Container(
+                            height: MediaQuery.of(context).size.height / 5,
                             decoration: BoxDecoration(
                                 border: Border.all(
-                                    color: Colors.black.withOpacity(0.5),
-                                    style: BorderStyle.solid),
+                                    color: Colors.black.withOpacity(0.5)),
                                 borderRadius: BorderRadius.circular(5.0)),
-                            child: Column(
-                              children: [
-                                const Icon(
-                                  Icons.cloud_upload,
-                                  size: 50,
-                                  color: Colors.blueGrey,
-                                ),
-                                const Text(
-                                  'Upload product image',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                ),
-                                Text(
-                                  'Try to upload the image of your product here',
-                                  style: TextStyle(
-                                      color: Colors.black.withOpacity(0.5)),
-                                )
-                              ],
-                            )),
-                        onTap: () {
-                          _displayImageSourceList();
-                        },
-                      )
-                    : SizedBox(
-                        width: double.infinity,
-                        child: Stack(children: [
-                          Column(
-                            children: [
-                              Container(
-                                height: MediaQuery.of(context).size.height / 5,
+                            child: Image.file(File(productImagePath),
+                                fit: BoxFit.cover),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                _displayImageSourceList();
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(8.0),
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                        color: Colors.black.withOpacity(0.5)),
-                                    borderRadius: BorderRadius.circular(5.0)),
-                                child: Image.file(File(productImagePath),
-                                    fit: BoxFit.cover),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              GestureDetector(
-                                  onTap: () {
-                                    _displayImageSourceList();
-                                  },
-                                  child: Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.all(8.0),
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color:
-                                                Colors.black.withOpacity(0.5),
-                                            width: 1),
-                                        borderRadius:
-                                            BorderRadius.circular(5.0)),
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(productImagePath
-                                              .split("/")
-                                              .last),
-                                          const Icon(
-                                            Icons.edit_document,
-                                            color: Colors.blueGrey,
-                                          )
-                                        ]),
-                                  ))
-                            ],
-                          ),
-                          Positioned(
-                              top: 0,
-                              right: 0,
-                              child: GestureDetector(
-                                onTap:(){
-                                  _pickProductImageFromGallery();
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.red.withOpacity(0.8),
-                                      borderRadius: BorderRadius.circular(50.0)),
-                                  child: const Icon(Icons.close, color: Colors.white),
-                                ),
+                                        color:
+                                        Colors.black.withOpacity(0.5),
+                                        width: 1),
+                                    borderRadius:
+                                    BorderRadius.circular(5.0)),
+                                child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(productImagePath
+                                          .split("/")
+                                          .last),
+                                      const Icon(
+                                        Icons.edit_document,
+                                        color: Colors.blueGrey,
+                                      )
+                                    ]),
                               ))
-                        ])),
+                        ],
+                      ),
+                      Positioned(
+                          top: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap:(){
+                              _pickProductImageFromGallery();
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.red.withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(50.0)),
+                              child: const Icon(Icons.close, color: Colors.white),
+                            ),
+                          ))
+                    ])),
                 const SizedBox(
                   height: 30,
                 ),
@@ -563,10 +564,10 @@ class _AddProductFormState extends State<AddProductForm> {
                         foregroundColor: Colors.white,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(5)))),
+                            BorderRadius.all(Radius.circular(5)))),
                     onPressed: () async {
                       // Validate returns true if the form is valid, or false otherwise.
-                      if (_addProductKey.currentState!.validate()) {
+                      /*if (_addProductKey.currentState!.validate()) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Processing Data')),
                         );
@@ -582,13 +583,13 @@ class _AddProductFormState extends State<AddProductForm> {
                           //reset the whole form
                           _addProductKey.currentState!.reset();
                         }
-                      }
+                      }*/
                     },
                     child: _isAddingProduct
                         ? const CircularProgressIndicator(
-                            color: Colors.white,
-                          )
-                        : const Text('Submit'),
+                      color: Colors.white,
+                    )
+                        : const Text('Save Changes'),
                   ),
                 ),
               ],

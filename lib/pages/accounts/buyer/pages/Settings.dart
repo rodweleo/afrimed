@@ -1,4 +1,4 @@
-import 'package:connecta/pages/accounts/buyer/widgets/ProfileMenuWidget.dart';
+import 'package:AfriMed/pages/accounts/buyer/widgets/ProfileMenuWidget.dart';
 import 'package:flutter/material.dart';
 
 class Settings extends StatefulWidget {

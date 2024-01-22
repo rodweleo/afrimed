@@ -26,16 +26,15 @@ class ProductListSkeleton extends StatelessWidget {
                       color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    margin: const EdgeInsets.only(top: 40),
+                    margin: const EdgeInsets.only(top: 10),
                   ),
                 ),
               ),
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.only(top: 60, bottom: 20),
-                  decoration: const BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.only(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(20),
                       bottomRight: Radius.circular(20),
                     ),

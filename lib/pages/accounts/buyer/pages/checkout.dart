@@ -1,15 +1,15 @@
-import 'package:connecta/components/success_page/OrderSuccessful.dart';
-import 'package:connecta/pages/accounts/buyer/functions/groupCartItems.dart';
-import 'package:connecta/pages/accounts/buyer/widgets/CheckoutPaymentInformation.dart';
-import 'package:connecta/pages/accounts/buyer/widgets/CheckoutShippingAddress.dart';
+import 'package:AfriMed/components/success_page/OrderSuccessful.dart';
+import 'package:AfriMed/pages/accounts/buyer/functions/groupCartItems.dart';
+import 'package:AfriMed/pages/accounts/buyer/widgets/CheckoutPaymentInformation.dart';
+import 'package:AfriMed/pages/accounts/buyer/widgets/CheckoutShippingAddress.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:connecta/providers/user_provider.dart';
+import 'package:AfriMed/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import '../../../../apis/Order_Api.dart';
 import '../../../../models/Account.dart';
 import '../../../../models/CartItem.dart';
-import 'package:connecta/providers/cart_provider.dart';
+import 'package:AfriMed/providers/cart_provider.dart';
 import '../../../../models/ShippingAddress.dart';
 
 class Checkout extends StatefulWidget {

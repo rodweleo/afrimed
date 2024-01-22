@@ -1,8 +1,9 @@
-import 'package:connecta/apis/AccountApi.dart';
+import 'package:AfriMed/apis/AccountApi.dart';
+import 'package:AfriMed/components/activities/recent_activities.dart';
 import 'package:flutter/material.dart';
 import '../../../../models/Account.dart';
 import '../widgets/Offers.dart';
-import '../widgets/SupplierCard.dart';
+import 'SupplierPage.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -28,53 +29,91 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          const Offers(),
-          Flexible(
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, right: 16.0, left: 16.0, bottom: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Featured Suppliers', style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width * 0.04
-                      ),),
-                      IconButton(onPressed: (){}, icon: const Icon(Icons.keyboard_arrow_right_rounded, color: Colors.blueGrey,))
-                    ],
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          padding: const EdgeInsets.only(top:10.0),
+          color: Colors.blueGrey.shade200.withOpacity(0.5),
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Offers(),
+              ),
+              ListTile(
+                title: const Text('Featured suppliers', style: TextStyle(
+                    fontWeight: FontWeight.bold
+                ),),
+                subtitle: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.blueGrey.withOpacity(0.5),
+                          spreadRadius: 2.5,
+                          blurRadius: 7,
+                          offset: const Offset(0,5), // changes position of shadow
+                        ),
+                      ]
+                  ),
+                  child: FutureBuilder<List<Account>>(
+                    key: const Key("suppliersBuilder"),
+                    future: _suppliers,
+                    builder: (context, AsyncSnapshot<List<Account>> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (snapshot.data!.isEmpty) {
+                        return const Center(child: Text('No suppliers found.'));
+                      } else {
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            Account account = snapshot.data![index];
+                            return ListTile(
+                                leading: account.imageUrl != ""
+                                    ? CircleAvatar(
+                                    radius: 20,
+                                    backgroundImage: NetworkImage(account.imageUrl))
+                                    : const CircleAvatar(
+                                  radius: 20,
+                                  child: Icon(Icons.person),
+                                ),
+                                title: Text(
+                                  account.name,
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Text(account.businessInfo.businessCategory),
+                                onTap: () {
+                                  // Handle tap, navigate to supplier details page, etc.
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          SupplierPage(account: account),
+                                    ),
+                                  );
+                                });
+                          },
+                        );
+                      }
+                    },
                   ),
                 ),
-                FutureBuilder<List<Account>>(
-                  key: const Key("suppliersBuilder"),
-                  future: _suppliers,
-                  builder: (context, AsyncSnapshot<List<Account>> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (snapshot.data!.isEmpty) {
-                      return const Center(child: Text('No suppliers found.'));
-                    } else {
-                      return ListView.separated(
-                        itemCount: snapshot.data!.length,
-                        separatorBuilder: (BuildContext context, int index) =>
-                        const SizedBox(height: 10), // Separator widget
-                        itemBuilder: (BuildContext context, int index) {
-                          Account account = snapshot.data![index];
-                          return SupplierCard(account: account);
-                        },
-                      );
-                    }
-                  },
-                )
-              ],
-            ),
+              ),
+              const ListTile(
+                title: Text('Recent Activities', style: TextStyle(
+                    fontWeight: FontWeight.bold
+                ),),
+                subtitle: RecentActivities(),
+              )
+            ],
           ),
-        ],
-      )
+        ),
+      ),
     );
   }
 }
-

@@ -1,5 +1,5 @@
 
-import 'package:connecta/pages/accounts/buyer/widgets/account_shipping_address.dart';
+import 'package:AfriMed/pages/accounts/buyer/widgets/account_shipping_address.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../apis/AccountApi.dart';

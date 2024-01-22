@@ -1,4 +1,4 @@
-import 'package:connecta/components/order/order_list_item.dart';
+import 'package:AfriMed/components/order/order_list_item.dart';
 import 'package:flutter/material.dart';
 import '../../models/OrderProduct.dart';
 
@@ -10,7 +10,7 @@ class OrderProducts extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Divider(),
+        const Divider(),
         SizedBox(
           height: 150,
           child: ListView.builder(
@@ -19,7 +19,7 @@ class OrderProducts extends StatelessWidget {
                 return OrderListItem(orderProduct: orderProducts[index],);
               }),
         ),
-        Divider(),
+        const Divider(),
       ],
     );
   }

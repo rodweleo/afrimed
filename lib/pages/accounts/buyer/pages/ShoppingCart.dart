@@ -1,12 +1,14 @@
-import 'package:connecta/components/cards/CartItem.dart';
-import 'package:connecta/pages/accounts/buyer/pages/checkout.dart';
-import 'package:connecta/providers/cart_provider.dart';
+import 'package:AfriMed/components/cards/CartItem.dart';
+import 'package:AfriMed/models/Account.dart';
+import 'package:AfriMed/pages/accounts/buyer/pages/checkout.dart';
+import 'package:AfriMed/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class ShoppingCart extends StatefulWidget {
-  const ShoppingCart({super.key});
+  const ShoppingCart({super.key, required this.account});
+  final Account account;
 
   @override
   State<ShoppingCart> createState() => _ShoppingCartState();
@@ -25,9 +27,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
         padding: const EdgeInsets.all(8.0),
         child: ListView.builder(
           shrinkWrap: true,
-          itemCount: cartProvider.cartItems.length,
+          itemCount: cartProvider.getSupplierItemsInCart(widget.account.id!).length,
           itemBuilder: (context, index) {
-            final cartItem = cartProvider.cartItems[index];
+            final cartItem = cartProvider.getSupplierItemsInCart(widget.account.id!)[index];
             return ShoppingCartItem(cartItem: cartItem);
           },
         ),

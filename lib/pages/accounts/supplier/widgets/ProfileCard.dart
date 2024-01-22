@@ -1,4 +1,4 @@
-import 'package:connecta/models/Account.dart';
+import 'package:AfriMed/models/Account.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

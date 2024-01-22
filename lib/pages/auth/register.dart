@@ -1,17 +1,17 @@
 import 'dart:io';
-import 'package:connecta/pages/accounts/buyer/BuyerAccount.dart';
-import 'package:connecta/pages/auth/login.dart';
+import 'package:AfriMed/pages/accounts/buyer/BuyerAccount.dart';
+import 'package:AfriMed/pages/auth/login.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
-class BuyerRegistration extends StatefulWidget {
-  const BuyerRegistration({super.key});
+class Register extends StatefulWidget {
+  const Register({super.key});
 
   @override
-  State<BuyerRegistration> createState() => _BuyerRegistrationState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _BuyerRegistrationState extends State<BuyerRegistration> {
+class _RegisterState extends State<Register> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //create the controllers
   final TextEditingController _nameController = TextEditingController();
@@ -19,7 +19,6 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
   final TextEditingController _contactController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
 
-  String vendorType = "";
   String selectedOption = "";
   bool hasAgreedTermsAndConditions = false;
 
@@ -30,7 +29,7 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registeration'),
+        title: const Text('Register'),
       ),
       body: Form(
         key: _formKey,
@@ -42,38 +41,6 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
               const Text('Fill in the details below.'),
               const SizedBox(
                 height: 20,
-              ),
-              Row(
-                children: [
-                  Row(
-                    children: [
-                      Radio(
-                        value: 'Business',
-                        groupValue: vendorType,
-                        onChanged: (value) {
-                          setState(() {
-                            vendorType = "Business";
-                          });
-                        },
-                      ),
-                      const Text('Business')
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Radio(
-                        value: 'Individual',
-                        groupValue: vendorType,
-                        onChanged: (value) {
-                          setState(() {
-                            vendorType = "Individual";
-                          });
-                        },
-                      ),
-                      const Text('Individual')
-                    ],
-                  ),
-                ],
               ),
               SizedBox(
                 width: 250,
@@ -91,18 +58,17 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
               const SizedBox(
                 height: 15,
               ),
-              if (vendorType == 'Business')
-                SizedBox(
-                  width: 250,
-                  child: TextField(
-                    controller: _emailController,
-                    obscureText: false,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Business Name',
-                    ),
+              SizedBox(
+                width: 250,
+                child: TextField(
+                  controller: _emailController,
+                  obscureText: false,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Business Name',
                   ),
                 ),
+              ),
               //some space between name and email
               const SizedBox(
                 height: 15,
@@ -206,7 +172,7 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
                           setState(() {
                             // Set the selected file to a variable to be used in the UI
                             selectedDocument =
-                                file.path != null ? File(file.path!) : null;
+                            file.path != null ? File(file.path!) : null;
                           });
                         }
                       },
@@ -254,7 +220,7 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
                       });
                     },
                   ),
-                  const Text('I agree with Terms and Policies of Konnecta.')
+                  const Text('I agree with Terms and Policies of AfriMed.')
                 ],
               ),
               //create button for register
@@ -279,7 +245,7 @@ class _BuyerRegistrationState extends State<BuyerRegistration> {
                   );
                 },
                 child: const Text(
-                  'Register',
+                  'Submit',
                   style: TextStyle(
                     fontSize: 20,
                   ),

@@ -1,10 +1,10 @@
-import 'package:connecta/models/CartItem.dart';
-import 'package:connecta/models/Product.dart';
-import 'package:connecta/pages/accounts/buyer/widgets/SellerInformation.dart';
-import 'package:connecta/providers/cart_provider.dart';
+import 'package:AfriMed/models/CartItem.dart';
+import 'package:AfriMed/models/Product.dart';
+import 'package:AfriMed/pages/accounts/buyer/widgets/SellerInformation.dart';
+import 'package:AfriMed/providers/cart_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'ShoppingCart.dart';
 import 'package:provider/provider.dart';
 
 class ProductPage extends StatelessWidget {
@@ -22,68 +22,23 @@ class ProductPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(product.name),
         elevation: 1,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.favorite_outline_rounded),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ShoppingCart()),
-              );
-            },
           ),
-          IconButton(
-            icon: const Icon(Icons.share),
-            onPressed: () {
-              print('sharing');
-            },
-          ),
-          Stack(
-            alignment: Alignment.center,
-            fit: StackFit.loose,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.shopping_cart),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ShoppingCart()),
-                  );
-                },
-              ),
-              Positioned(
-                  top: 0,
-                  right: 2.5,
-                  child: Container(
-                    width: 20,
-                    decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(50.0)),
-                    child: Center(
-                      child: Text(cartQuantity.toString(),
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.035)),
-                    ),
-                  ))
-            ],
-          ),
-        ],
-      ),
       body: Column(
         children: [
           SizedBox(
             height: MediaQuery.of(context).size.height * .35,
             width: double.infinity,
-            child: FadeInImage.assetNetwork(
-              placeholder: product.name,
-              image: product.imageUrl!,
-              height: 150,
-              width: 200,
+            child: CachedNetworkImage(
+              placeholder: (context, url) => const SizedBox(
+                  height: 10,
+                  width: 10,
+                  child: CircularProgressIndicator()),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+              height: 50,
+              width: 50,
+              imageUrl:
+              product.imageUrl!,
               fit: BoxFit.fill,
             ),
           ),
@@ -119,11 +74,11 @@ class ProductPage extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    (((100 - product.discountPercentage) /
-                                                100) *
-                                            product.price)
+                                    'KSh ${(((100 - product.discountPercentage) /
+                                        100) *
+                                        product.price)
                                         .roundToDouble()
-                                        .toString(),
+                                        .toString()}',
                                     style: GoogleFonts.poppins(
                                         fontSize: 22,
                                         fontWeight: FontWeight.w600,
@@ -164,36 +119,9 @@ class ProductPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 15),
                         const Divider(),
-                        const SellerInformation(),
+                        SellerInformation(product: product),
                         const Divider(),
-                        Text(
-                          'Similar This',
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        SizedBox(
-                          height: 110,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 2,
-                            itemBuilder: (context, index) => Container(
-                              margin: const EdgeInsets.only(right: 6),
-                              width: 110,
-                              height: 110,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Image.network(
-                                product.imageUrl!,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        )
+                        //SimilarProducts(product: product)
                       ],
                     ),
                   ),

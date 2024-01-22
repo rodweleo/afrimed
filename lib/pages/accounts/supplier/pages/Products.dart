@@ -1,6 +1,6 @@
-import 'package:connecta/pages/accounts/supplier/components/ProductCard.dart';
-import 'package:connecta/pages/accounts/supplier/pages/AddProduct.dart';
-import 'package:connecta/pages/accounts/supplier/widgets/ProductListSkeleton.dart';
+import 'package:AfriMed/pages/accounts/supplier/components/ProductCard.dart';
+import 'package:AfriMed/pages/accounts/supplier/pages/AddProduct.dart';
+import 'package:AfriMed/pages/accounts/supplier/pages/Product.dart';
 import 'package:flutter/material.dart';
 import '../../../../apis/Product_Api.dart';
 import '../../../../models/Product.dart';
@@ -40,17 +40,26 @@ class _ProductsState extends State<Products> {
           actions: [
             IconButton(
                 onPressed: () {
-                  print('Navigate to the notification page');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AddProductForm()),
+                  );
                 },
-                icon: const Icon(Icons.notifications_active_outlined))
+                icon: const Icon(Icons.add_circle))
           ]),
       body: FutureBuilder<List<Product>>(
           future: _supplierProducts,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: ProductListSkeleton(),
+              return const Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(width: 10.0,),
+                    Text('Fetching products...')
+                  ],
+                ),
               );
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
@@ -64,22 +73,19 @@ class _ProductsState extends State<Products> {
                     itemCount: supplierProducts.length,
                     itemBuilder: (context, index) {
                       Product product = supplierProducts[index];
-                      return ProductCard(product: product);
+                      return GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ProductPage(product: product)),
+                          );
+                        },
+                          child: ProductCard(product: product)
+                      );
                     }),
               );
             }
           }),
-      floatingActionButton: FloatingActionButton.extended(
-          icon: const Icon(Icons.add),
-          backgroundColor: Colors.blueGrey,
-          foregroundColor: Colors.white,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AddProductForm()),
-            );
-          },
-          label: const Text('Add Product')),
     );
   }
 }

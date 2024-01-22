@@ -1,9 +1,7 @@
-import 'package:connecta/components/order/order_products.dart';
-import 'package:connecta/models/ProductOrder.dart';
+import 'package:AfriMed/models/ProductOrder.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../components/order/order_details.dart';
-import '../../../../components/order/order_info.dart';
 import '../../../../components/order/order_summary.dart';
 
 class OrderDetailsPage extends StatelessWidget {
@@ -13,7 +11,7 @@ class OrderDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void _cancelOrder() {
+    void cancelOrder() {
       print('Cancelling order...');
     }
 
@@ -30,8 +28,8 @@ class OrderDetailsPage extends StatelessWidget {
               OrderDetails(productOrder: productOrder),
               Column(children: [
                 Container(
-                    margin: EdgeInsets.only(bottom: 20.0),
-                    child: OrderSummary()),
+                    margin: const EdgeInsets.only(bottom: 20.0),
+                    child: OrderSummary(productOrder: productOrder,)),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -47,7 +45,7 @@ class OrderDetailsPage extends StatelessWidget {
                             fontSize:
                                 MediaQuery.of(context).size.height * 0.02)),
                     onPressed: () {
-                      _cancelOrder();
+                      cancelOrder();
                     },
                     child: const Text('CANCEL ORDER'),
                   ),

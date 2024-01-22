@@ -1,12 +1,13 @@
-import 'package:connecta/pages/accounts/buyer/pages/Settings.dart';
-import 'package:connecta/pages/auth/login.dart';
+import 'package:AfriMed/components/profile/profile_information.dart';
+import 'package:AfriMed/pages/accounts/buyer/pages/Settings.dart';
+import 'package:AfriMed/pages/auth/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../models/Account.dart';
 import '../../../../providers/user_provider.dart';
 import '../widgets/ProfileMenuWidget.dart';
-import 'EditProfile.dart';
+import 'notifications.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -20,148 +21,89 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    Account? account = Provider.of<UserProvider>(context, listen: false).account;
+    Account? account =
+        Provider.of<UserProvider>(context, listen: false).account;
 
-    Color backgroundColor;
-    Color textColor;
-    String verificationtext = "";
-    switch (account!.isVerified) {
-      case true:
-        verificationtext = "Verified";
-        backgroundColor = Colors.lightGreen.shade200;
-        textColor = Colors.green;
-        break;
-      case false:
-        verificationtext = "Not Verified";
-        backgroundColor = const Color(0xFFFFCDD2);
-        textColor = Colors.red;
-        break;
-      default:
-        backgroundColor = Colors.black;
-        textColor = Colors.white;
-    }
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Profile'),
-        centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(6.0),
-          child: Column(
-            children: [
-              /// -- IMAGE
-              Stack(
-                children: [
-                  const CircleAvatar(
-                      radius: 75,
-                      backgroundImage: NetworkImage(
-                          "https://rickandmortyapi.com/api/character/avatar/144.jpeg")),
-                  Positioned(
-                    bottom: 7,
-                    right: 7,
-                    child: Center(
-                      child: Container(
-                        width: 35,
-                        height: 35,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: Colors.blueGrey),
-                        child: IconButton(
-                          onPressed: (){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => EditProfile(user: user)),
-                            );
-                          },
-                          icon: const Icon(Icons.edit, color: Colors.white),
-                        )
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                /// -- IMAGE
+                Column(
+                  children: [
+                    ProfileInformation(account: account),
+
+                    /// -- MENU
+                    Container(
+                      margin: const EdgeInsets.only(top: 10.0),
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10.0),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.blueGrey.withOpacity(0.5),
+                                blurRadius: 1,
+                                spreadRadius: 0.5,
+                                offset: const Offset(1, 1))
+                          ]),
+                      child: Column(
+                        children: [
+                          ProfileMenuWidget(
+                              title: "Notifications",
+                              icon: const Icon(Icons.notifications),
+                              onPress: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const Notifications()),
+                                );
+                              }),
+                          const Divider(),
+                          ProfileMenuWidget(
+                              title: "Settings",
+                              icon: const Icon(Icons.settings),
+                              onPress: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Settings()),
+                                );
+                              }),
+                          const Divider(),
+                          ProfileMenuWidget(
+                              title: "About AfriMed",
+                              icon: const Icon(Icons.info),
+                              onPress: () {}),
+                        ],
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Text(account != null ? account.name.toString() : '',
-                  style: const TextStyle(
-                      letterSpacing: 1.5,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(account != null ? account.contact.phoneNumber.toString() : '',
-                      style: TextStyle(
-                        color: Colors.black.withOpacity(0.4),
-                        letterSpacing: 1.5,
-                      )),
-                  const SizedBox(width: 10),
-                  Container(
-                    padding:
-                    const EdgeInsets.only(top: 2.0, right: 8.0, bottom: 2.0, left: 8.0),
-                    decoration: BoxDecoration(
-                        color: backgroundColor,
-                        border: Border.all(
-                          color: textColor,
-                        ),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    child: Text(verificationtext,
-                        style:
-                        TextStyle(color: textColor, fontWeight: FontWeight.bold)),
-                  )
-                ],
-              ),
-              const SizedBox(height: 20),
-
-              const SizedBox(height: 10),
-
-              /// -- MENU
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  children: [
-                    ProfileMenuWidget(
-                        title: "Settings",
-                        icon: const Icon(Icons.settings),
-                        onPress: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const Settings()),
-                          );
-                        }),
-                    const Divider(),
-                    ProfileMenuWidget(
-                        title: "Billing Details",
-                        icon: const Icon(Icons.wallet),
-                        onPress: () {}),
                   ],
                 ),
-              ),
 
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  children: [
-                    ProfileMenuWidget(
-                        title: "About AfriMed",
-                        icon: const Icon(Icons.info),
-                        onPress: () {}),
-                    const Divider(),
-                    ProfileMenuWidget(
-                        title: "Logout",
-                        icon: const Icon(Icons.logout),
-                        textColor: Colors.red,
-                        endIcon: false,
-                        onPress: () {
-                          // Show the logout confirmation dialog
-                          showLogoutDialog(context);
-                        }),
-                  ],
-                ),
-              )
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileMenuWidget(
+                      title: "Logout",
+                      icon: const Icon(Icons.logout),
+                      textColor: Colors.red,
+                      endIcon: false,
+                      onPress: () {
+                        // Show the logout confirmation dialog
+                        showLogoutDialog(context);
+                      }),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -212,11 +154,10 @@ void performLogout(context) async {
       MaterialPageRoute(
         builder: (context) => const LoginPage(),
       ),
-          (Route<dynamic> route) => false,
+      (Route<dynamic> route) => false,
     );
 
     // Close the app when navigating back from the login page
     //SystemNavigator.pop();
   });
-
 }

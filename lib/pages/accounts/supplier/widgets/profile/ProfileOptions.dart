@@ -1,5 +1,5 @@
-import 'package:connecta/models/ProfileOption.dart';
-import 'package:connecta/pages/accounts/supplier/widgets/profile/ProfileOptionCard.dart';
+import 'package:AfriMed/models/ProfileOption.dart';
+import 'package:AfriMed/pages/accounts/supplier/widgets/profile/ProfileOptionCard.dart';
 import 'package:flutter/material.dart';
 
 class ProfileOptions extends StatelessWidget {

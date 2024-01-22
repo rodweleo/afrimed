@@ -1,4 +1,4 @@
-import 'package:connecta/models/ProductOrder.dart';
+import 'package:AfriMed/models/ProductOrder.dart';
 import 'package:flutter/material.dart';
 
 import 'order_info.dart';
@@ -13,7 +13,7 @@ class OrderDetails extends StatelessWidget {
     return Column(
       children: [
         OrderInfo(productOrder: productOrder),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         OrderProducts(orderProducts: productOrder.products)

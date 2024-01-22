@@ -1,12 +1,12 @@
-import 'package:connecta/pages/auth/login.dart';
-import 'package:connecta/providers/user_provider.dart';
-import 'package:connecta/services/firebase_cloud_messaging.dart';
+import 'package:AfriMed/pages/auth/auth.dart';
+import 'package:AfriMed/providers/user_provider.dart';
+import 'package:AfriMed/services/firebase_cloud_messaging.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:connecta/providers/cart_provider.dart';
+import 'package:AfriMed/providers/cart_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
-        home: const LoginPage(),
+        home: const Authenticator(),
       ),
     );
   }

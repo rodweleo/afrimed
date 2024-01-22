@@ -1,7 +1,8 @@
-import 'package:connecta/pages/accounts/supplier/widgets/DashboardWidget.dart';
+import 'package:AfriMed/pages/accounts/supplier/widgets/DashboardWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../apis/Order_Api.dart';
+import '../../../../models/Account.dart';
 import '../../../../models/ProductOrder.dart';
 import '../../../../providers/user_provider.dart';
 
@@ -29,17 +30,11 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    Account? account = Provider.of<UserProvider>(context, listen: false).account;
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Dashboard'),
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-                onPressed: () {
-
-                },
-                icon: const Icon(Icons.notifications_active_outlined))
-          ]),
+          title: Text(account!.businessInfo.businessName),
+          automaticallyImplyLeading: false,),
       body: FutureBuilder(
         future: _supplierOrders,
         builder: (context, AsyncSnapshot<List<ProductOrder>?>snapshot){

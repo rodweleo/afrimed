@@ -1,5 +1,5 @@
-import 'package:connecta/models/ProductOrder.dart';
-import 'package:connecta/pages/accounts/supplier/pages/OrderDetailsPage.dart';
+import 'package:AfriMed/models/ProductOrder.dart';
+import 'package:AfriMed/pages/accounts/supplier/pages/OrderDetailsPage.dart';
 import 'package:flutter/material.dart';
 
 class OrderCard extends StatelessWidget {

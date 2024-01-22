@@ -27,6 +27,14 @@ class Status extends StatelessWidget {
         backgroundColor = const Color(0xFFFFCDD2);
         textColor = Colors.red;
         break;
+      case 'true':
+        backgroundColor = Colors.lightGreen.shade200;
+        textColor = Colors.green;
+        break;
+      case 'false':
+        backgroundColor = const Color(0xFFFFCDD2);
+        textColor = Colors.red;
+        break;
       default:
         backgroundColor = Colors.grey.shade400;
         textColor = Colors.black;

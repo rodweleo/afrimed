@@ -1,14 +1,16 @@
-import 'package:connecta/models/Account.dart';
+import 'package:AfriMed/models/Account.dart';
+import 'package:AfriMed/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import '../../../../apis/Product_Api.dart';
 import '../../../../components/cards/ProductCard.dart';
+import '../../../../models/CartItem.dart';
 import '../../../../models/Product.dart';
+import 'ShoppingCart.dart';
 
 class SupplierPage extends StatefulWidget {
-  final Account? account;
   const SupplierPage({super.key, required this.account});
-
+  final Account account;
   @override
   State<SupplierPage> createState() => _SupplierPageState();
 }
@@ -28,7 +30,7 @@ class _SupplierPageState extends State<SupplierPage> {
 
     // Getting the current active supplier Id
     List<Product> allProducts =
-    await productApi.fetchAllSupplierProducts(widget.account!.id!);
+    await productApi.fetchAllSupplierProducts(widget.account.id!);
 
     // Filter products based on the search query
     List<Product> filteredProducts = allProducts
@@ -39,8 +41,11 @@ class _SupplierPageState extends State<SupplierPage> {
     return filteredProducts;
   }
 
+
   @override
   Widget build(BuildContext context) {
+    //get the elements in the cart that are a given supplier's
+    List<CartItem> items = Provider.of<CartProvider>(context, listen: false).getSupplierItemsInCart(widget.account.id!);
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -50,13 +55,40 @@ class _SupplierPageState extends State<SupplierPage> {
             pinned: true,
             floating: false,
             expandedHeight: 200,
+            actions: [
+              Stack(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.shopping_cart_rounded, color: Colors.black,),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ShoppingCart(account: widget.account,)),
+                      );
+                    },
+                  ),
+                  Positioned(
+                      top: -1,
+                      right: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Text(items.fold<int>(0, (sum, item) => sum + (item.quantity ?? 0)).toString()
+                            .toString(), style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.height * 0.02,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
+                        ),),
+                      ))
+                ],
+              )
+            ],
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 decoration: const BoxDecoration(color: Colors.blueGrey),
-                child: widget.account?.imageUrl != ""
+                child: widget.account.imageUrl != ""
                     ? CircleAvatar(
                         radius: 20,
-                        backgroundImage: NetworkImage(widget.account!.imageUrl))
+                        backgroundImage: NetworkImage(widget.account.imageUrl))
                     : Icon(
                         Icons.person,
                         size: MediaQuery.of(context).size.height * 0.075,
@@ -75,24 +107,24 @@ class _SupplierPageState extends State<SupplierPage> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(widget.account!.name,
+                              Text(widget.account.name,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20)),
                               Text(widget
-                                  .account!.businessInfo.businessCategory),
+                                  .account.businessInfo.businessCategory),
                             ],
                           ),
                           Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    widget.account!.contact.phoneNumber
+                                    widget.account.contact.phoneNumber
                                         .toString(),
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14)),
-                                Text(widget.account!.contact.email,
+                                Text(widget.account.contact.email,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14)),

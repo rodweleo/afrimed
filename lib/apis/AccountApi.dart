@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/Account.dart';
+import '../models/CartItem.dart';
 import '../models/ShippingAddress.dart';
 
 
@@ -103,7 +104,7 @@ class AccountApi {
           role: data['role'], // You need to get the role from data
           hasUploadedIdentificationDocuments: data['hasUploadedIdentificationDocuments'],
           isVerified: data['isVerified'],
-            imageUrl: data['imageUrl'],
+            imageUrl: data['imageUrl'] ?? "",
         );
 
 
@@ -181,7 +182,7 @@ class AccountApi {
           role: data['role'],
           hasUploadedIdentificationDocuments: data['hasUploadedIdentificationDocuments'] ?? false,
           isVerified: data['isVerified'] ?? false,
-          imageUrl: data['imageUrl'],
+          imageUrl: data['imageUrl'] ?? "",
         );
       }).toList();
 
@@ -192,6 +193,38 @@ class AccountApi {
     }
   }
 
+  Future<String?> fetchUserRoleById(String? id) async {
+    AccountApi accountApi = AccountApi();
+    Account? account = await accountApi.fetchAccountById(id);
+    if(account?.role != null){
+      String? role = account?.role;
+      return role;
+    }else{
+      return null;
+    }
+  }
 
+
+  //ACTIONS FOR THE BUYER ACCOUNT
+
+  //fetch the cart items of one buyer by using the id
+  Future<List<CartItem>?> fetchBuyerCartItems(String? id) async{
+    //creating the carts collections
+    CollectionReference cartsRef = _firebaseFirestore.collection('carts');
+
+    //fetch the document that has the id of the buyer
+    DocumentReference cartRef = cartsRef.doc(id);
+
+    try{
+      DocumentSnapshot doc = await cartRef.get();
+
+      if(doc.exists){
+        //retrieve the procuts in that
+      }
+    }catch(e){
+      return null;
+    }
+    return null;
+  }
 
 }

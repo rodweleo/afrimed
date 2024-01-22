@@ -1,5 +1,5 @@
-import 'package:connecta/models/ProductOrder.dart';
-import 'package:connecta/pages/accounts/supplier/components/OrderCard.dart';
+import 'package:AfriMed/models/ProductOrder.dart';
+import 'package:AfriMed/pages/accounts/supplier/components/OrderCard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../apis/Order_Api.dart';

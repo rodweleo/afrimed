@@ -56,6 +56,20 @@ class CartProvider extends ChangeNotifier {
     return _cartItems.fold(0, (sum, item) => sum + item.quantity);
   }
 
+
+  //get a given supplier's items from the cart
+  List<CartItem> getSupplierItemsInCart(String supplierId){
+    List<CartItem> items = [];
+
+    for (var cartItem in cartItems) {
+      if (cartItem.product.supplierId == supplierId) {
+        items.add(cartItem);
+      }
+    }
+
+    return items;
+  }
+
   //clear items from the cart
   void clearCart(){
     _cartItems.clear();

@@ -1,6 +1,8 @@
-import 'package:connecta/models/ProductOrder.dart';
+import 'package:AfriMed/models/ProductOrder.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import '../../../../components/order/order_details.dart';
+import '../../../../components/order/order_summary.dart';
 
 class OrderDetailsPage extends StatelessWidget {
   final ProductOrder productOrder;
@@ -9,25 +11,48 @@ class OrderDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: [
-      SliverAppBar(
-        snap: false,
-        pinned: true,
-        floating: false,
-        expandedHeight: 100,
-        backgroundColor: Colors.white,
-        shadowColor: Colors.blue,
-        automaticallyImplyLeading: true,
-        flexibleSpace: FlexibleSpaceBar(
-          titlePadding: const EdgeInsets.only(left: 8, bottom: 0),
-          title: Text('Order Information',
-              style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15))),
+    void cancelOrder() {
+      print('Cancelling order...');
+    }
+
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Order Details'),
         ),
-      ),
-    ]);
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              OrderDetails(productOrder: productOrder),
+              Column(children: [
+                Container(
+                    margin: const EdgeInsets.only(bottom: 20.0),
+                    child: OrderSummary(productOrder: productOrder,)),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.redAccent,
+                        foregroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10))),
+                        textStyle: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize:
+                            MediaQuery.of(context).size.height * 0.02)),
+                    onPressed: () {
+                      cancelOrder();
+                    },
+                    child: const Text('CANCEL ORDER'),
+                  ),
+                )
+              ])
+            ],
+          ),
+        ));
   }
 }

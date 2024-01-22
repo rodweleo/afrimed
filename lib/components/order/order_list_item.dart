@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:connecta/components/order/order_products.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/OrderProduct.dart';

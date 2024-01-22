@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connecta/models/ShippingAddress.dart';
+import 'package:AfriMed/models/ShippingAddress.dart';
 
 import 'OrderProduct.dart';
 

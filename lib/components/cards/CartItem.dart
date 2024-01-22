@@ -1,7 +1,8 @@
-import 'package:connecta/models/CartItem.dart';
+import 'package:AfriMed/models/CartItem.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:connecta/providers/cart_provider.dart';
+import 'package:AfriMed/providers/cart_provider.dart';
 
 class ShoppingCartItem extends StatefulWidget {
   final CartItem cartItem;
@@ -29,14 +30,17 @@ class _ShoppingCartItemState extends State<ShoppingCartItem> {
         ]
       ),
       child: ListTile(
-        leading: SizedBox(
-          width: 50,
+        leading: CachedNetworkImage(
+          placeholder: (context, url) => const SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator()),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
           height: 50,
-          child: FadeInImage.assetNetwork(
-            placeholder: widget.cartItem.product.name,
-            image: widget.cartItem.product.imageUrl!,
-            fit: BoxFit.fill,
-          ),
+          width: 50,
+          imageUrl:
+          widget.cartItem.product.imageUrl!,
+          fit: BoxFit.fill,
         ),
         title: Text(widget.cartItem.product.name.toString()),
         subtitle: Text('Quantity: ${widget.cartItem.quantity}'),

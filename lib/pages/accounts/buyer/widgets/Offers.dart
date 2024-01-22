@@ -12,36 +12,23 @@ class _OffersState extends State<Offers> {
   @override
   Widget build(BuildContext context) {
     return CarouselSlider(
-      options: CarouselOptions(
-        height: MediaQuery.of(context).size.height / 4,
-        initialPage: 0,
-        autoPlayInterval: const Duration(seconds: 5),
-        autoPlayAnimationDuration: const Duration(milliseconds: 500),
-        disableCenter: true,
-        autoPlay: true,
-        scrollDirection: Axis.horizontal,
-        viewportFraction: 1.0,
-      ),
-      items: [
-        "assets/images/offer1.jpg",
-        "assets/images/offer2.jpg",
-        "assets/images/offer1.jpg"
-      ].map((i) {
-        return Builder(
-          builder: (BuildContext context) {
-            return SizedBox(
-              width: MediaQuery.of(context)
-                  .size
-                  .width, // Cover the full width of the screen
-              // Adjust spacing between images
-              child: Image.asset(
-                i.toString(),
-                fit: BoxFit.fill,
-              ),
-            );
-          },
-        );
-      }).toList(),
-    );
+        items: [
+          'assets/images/offer1.jpg',
+          'assets/images/offer2.jpg',
+          'assets/images/offer1.jpg',
+        ]
+            .map((item) => SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.asset(item.toString(), fit: BoxFit.fill),
+                  ),
+                ))
+            .toList(),
+        options: CarouselOptions(
+            autoPlay: true,
+            autoPlayAnimationDuration: const Duration(milliseconds: 1000),
+            disableCenter: false,
+            viewportFraction: 1.0));
   }
 }

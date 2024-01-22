@@ -1,4 +1,4 @@
-import 'package:connecta/pages/accounts/buyer/BuyerAccount.dart';
+import 'package:AfriMed/pages/accounts/buyer/BuyerAccount.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
