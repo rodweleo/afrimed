@@ -2,9 +2,9 @@ import 'package:AfriMed/components/success_page/OrderSuccessful.dart';
 import 'package:AfriMed/pages/accounts/buyer/functions/groupCartItems.dart';
 import 'package:AfriMed/pages/accounts/buyer/widgets/CheckoutPaymentInformation.dart';
 import 'package:AfriMed/pages/accounts/buyer/widgets/CheckoutShippingAddress.dart';
+import 'package:AfriMed/providers/AuthProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:AfriMed/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import '../../../../apis/Order_Api.dart';
 import '../../../../models/Account.dart';
@@ -55,7 +55,7 @@ class _CheckoutState extends State<Checkout> {
     Order_Api orderApi = Order_Api();
 
     String? feedback = await orderApi.createOrder(
-        Provider.of<UserProvider>(context, listen: false).account!.id!,
+        Provider.of<AuthProvider>(context, listen: false).getCurrentAccount()!.id,
         modifiedCartItems,
         selectedShippingAddress,
         context);
@@ -101,8 +101,8 @@ class _CheckoutState extends State<Checkout> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
-    final accountProvider = Provider.of<UserProvider>(context);
-    Account? account = accountProvider.account;
+    final accountProvider = Provider.of<AuthProvider>(context);
+    Account? account = accountProvider.getCurrentAccount();
     return Scaffold(
       appBar: AppBar(title: const Text('Checkout'), centerTitle: true),
       body: Padding(

@@ -2,11 +2,9 @@ import 'package:AfriMed/apis/Order_Api.dart';
 import 'package:AfriMed/components/cards/OrderCard.dart';
 import 'package:AfriMed/models/ProductOrder.dart';
 import 'package:AfriMed/pages/accounts/buyer/pages/Suppliers.dart';
+import 'package:AfriMed/providers/AuthProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../components/ui/status.dart';
-import '../../../../providers/user_provider.dart';
-import '../../supplier/pages/OrderDetailsPage.dart';
 
 class Orders extends StatefulWidget {
   const Orders({super.key});
@@ -21,7 +19,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _loadOrders();
     super.initState();
   }
@@ -29,7 +27,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
   Future<void> _loadOrders() async {
     Order_Api orderApi = Order_Api();
     // Use your fetchAllOrders() function to get the suppliers
-    _buyerOrders = orderApi.fetchBuyerOrders(Provider.of<UserProvider>(context, listen: false).account?.id);
+    _buyerOrders = orderApi.fetchBuyerOrders(Provider.of<AuthProvider>(context, listen: false).getCurrentAccount()!.id!);
   }
 
   @override
@@ -44,22 +42,27 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Orders'),
+        centerTitle: false,
+        actions: [
+          IconButton(onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Suppliers()),
+            );
+          }, icon: const Icon(Icons.add_circle))
+        ],
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
             Tab(
-              text: 'All',
+              text: 'Completed',
             ),
             Tab(
-              text: 'DELIVERED',
+              text: 'Cancelled',
             ),
             Tab(
-              text: 'SHIPPED',
-            ),
-            Tab(
-              text: 'PENDING',
-            ),
-
+              text: 'Requested',
+            )
           ],
         ),
         automaticallyImplyLeading: false,
@@ -82,7 +85,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ListView.builder(
-                      itemCount: snapshot.data!.length,
+                      itemCount: snapshot.data?.where((productOrder) => productOrder.status == "completed").length,
                       itemBuilder: (context, index) {
                         ProductOrder productOrder = snapshot.data![index];
                         return Container(
@@ -100,47 +103,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                               )
                             ]
                           ),
-                          child: ListTile(
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(productOrder.createdOn.toString(), style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 14),),
-                                    Text(
-                                      'Order #${productOrder.id}',
-                                      style: const TextStyle(fontWeight: FontWeight.bold, ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            subtitle: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                        'Products: ${productOrder.products.length}'),
-                                    const SizedBox(width: 10,),
-                                    Text('Price: ${productOrder.totalAmount.toString()}')
-                                  ],
-                                ),
-                                Status(
-                                    status: productOrder.status
-                                )
-                              ],
-                            ),
-                            onTap: () {
-                              // Implement onTap logic, e.g., navigate to order details page
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => OrderDetailsPage(productOrder: productOrder)),
-                              );
-                            },
-                          ),
+                          child: OrderCard(order: productOrder,),
                         );
                       },
                     ),
@@ -150,7 +113,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
             ),
           ),
           Container(
-            color: Colors.blueGrey.shade200.withOpacity(0.5),
+            color: Colors.blueGrey.shade200.withOpacity(0.3),
             child: FutureBuilder(
               future: _buyerOrders,
               builder: (context, AsyncSnapshot<List<ProductOrder>?> snapshot) {
@@ -181,7 +144,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
             ),
           ),
           Container(
-            color: Colors.blueGrey.shade200.withOpacity(0.5),
+            color: Colors.blueGrey.shade200.withOpacity(0.3),
             child: FutureBuilder(
               future: _buyerOrders,
               builder: (context, AsyncSnapshot<List<ProductOrder>?> snapshot) {
@@ -196,7 +159,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                     padding: const EdgeInsets.all(8.0),
                     child: ListView.builder(
                       itemCount:
-                      snapshot.data!.where((order) => order.status == 'PENDING').length,
+                      snapshot.data!.where((order) => order.status == 'PENDING' || order.status == 'IN PROGRESS').length,
                       itemBuilder: (BuildContext context, int index) {
                         // Filter the orders based on completion status
                         List<ProductOrder> completedOrders = snapshot.data!
@@ -211,101 +174,8 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
               },
             ),
           ),
-          Container(
-            color: Colors.blueGrey.shade200.withOpacity(0.5),
-            child: FutureBuilder(
-              future: _buyerOrders,
-              builder: (context, AsyncSnapshot<List<ProductOrder>?> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('No orders.'));
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListView.builder(
-                      itemCount:
-                      snapshot.data!.where((order) => order.status == 'IN PROGRESS').length,
-                      itemBuilder: (BuildContext context, int index) {
-                        // Filter the orders based on completion status
-                        List<ProductOrder> completedOrders = snapshot.data!
-                            .where((order) => order.status == 'IN PROGRESS')
-                            .toList();
-                        ProductOrder productOrder = completedOrders[index];
-                        return Container(
-                          margin: const EdgeInsets.only(top: 5.0),
-                          color: Colors.white,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0)
-                          ),
-                          child: ListTile(
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(productOrder.createdOn.toString(), style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 14),),
-                                    Text(
-                                      'Order #${productOrder.id}',
-                                      style: const TextStyle(fontWeight: FontWeight.bold, ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            subtitle: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                        'Products: ${productOrder.products.length}'),
-                                    const SizedBox(width: 10,),
-                                    Text('Price: ${productOrder.totalAmount.toString()}')
-                                  ],
-                                ),
-                                Status(
-                                    status: productOrder.status
-                                )
-                              ],
-                            ),
-                            onTap: () {
-                              // Implement onTap logic, e.g., navigate to order details page
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => OrderDetailsPage(productOrder: productOrder)),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                }
-              },
-            ),
-          )
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const Suppliers()),
-          );
-        },
-        label:
-            const Text('Create Order', style: TextStyle(color: Colors.white)),
-        icon: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.blueGrey,
-      ),
+      )
     );
   }
 }

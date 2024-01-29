@@ -44,9 +44,9 @@ class OrderDetailsPage extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             fontSize:
                             MediaQuery.of(context).size.height * 0.02)),
-                    onPressed: () {
+                    onPressed: productOrder.status != 'PENDING' ? (){
                       cancelOrder();
-                    },
+                    } : null,
                     child: const Text('CANCEL ORDER'),
                   ),
                 )

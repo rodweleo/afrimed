@@ -1,10 +1,10 @@
 import 'package:AfriMed/pages/accounts/supplier/components/ProductCard.dart';
 import 'package:AfriMed/pages/accounts/supplier/pages/AddProduct.dart';
 import 'package:AfriMed/pages/accounts/supplier/pages/Product.dart';
+import 'package:AfriMed/providers/AuthProvider.dart';
 import 'package:flutter/material.dart';
 import '../../../../apis/Product_Api.dart';
 import '../../../../models/Product.dart';
-import '../../../../providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class Products extends StatefulWidget {
@@ -25,10 +25,8 @@ class _ProductsState extends State<Products> {
 
   void _loadSupplierProducts() async {
     Product_Api productApi = Product_Api();
-
     //getting the current active supplier Id
-    String sId = Provider.of<UserProvider>(context, listen: false).user!.uid;
-    _supplierProducts = productApi.fetchAllSupplierProducts(sId);
+    _supplierProducts = productApi.fetchAllSupplierProducts(Provider.of<AuthProvider>(context, listen: false).getCurrentAccount()!.id);
   }
 
   @override
@@ -65,24 +63,27 @@ class _ProductsState extends State<Products> {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
               List<Product> supplierProducts = snapshot.data!;
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: supplierProducts.length,
-                    itemBuilder: (context, index) {
-                      Product product = supplierProducts[index];
-                      return GestureDetector(
-                        onTap: (){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ProductPage(product: product)),
-                          );
-                        },
-                          child: ProductCard(product: product)
-                      );
-                    }),
+              return Scrollbar(
+                  trackVisibility: true,
+                  child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: supplierProducts.length,
+                      itemBuilder: (context, index) {
+                        Product product = supplierProducts[index];
+                        return GestureDetector(
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ProductPage(product: product)),
+                            );
+                          },
+                            child: ProductCard(product: product)
+                        );
+                      }),
+                ),
               );
             }
           }),

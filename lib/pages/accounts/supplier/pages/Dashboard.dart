@@ -1,10 +1,10 @@
 import 'package:AfriMed/pages/accounts/supplier/widgets/DashboardWidget.dart';
+import 'package:AfriMed/providers/AuthProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../apis/Order_Api.dart';
 import '../../../../models/Account.dart';
 import '../../../../models/ProductOrder.dart';
-import '../../../../providers/user_provider.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -19,7 +19,7 @@ class _DashboardState extends State<Dashboard> {
   late Future<List<ProductOrder>?> _supplierOrders;
 
   void _handleFetchRequest(){
-    _supplierOrders = orderApi.fetchSupplierOrders(Provider.of<UserProvider>(context, listen: false).account?.id);
+    _supplierOrders = orderApi.fetchSupplierOrders(Provider.of<AuthProvider>(context, listen: false).getCurrentAccount()?.id);
   }
 
   @override
@@ -30,7 +30,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    Account? account = Provider.of<UserProvider>(context, listen: false).account;
+    Account? account = Provider.of<AuthProvider>(context, listen: false).account;
     return Scaffold(
       appBar: AppBar(
           title: Text(account!.businessInfo.businessName),

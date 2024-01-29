@@ -1,11 +1,10 @@
 import 'package:AfriMed/components/profile/profile_information.dart';
 import 'package:AfriMed/pages/accounts/buyer/pages/Settings.dart';
-import 'package:AfriMed/pages/auth/login.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../models/Account.dart';
-import '../../../../providers/user_provider.dart';
+import '../../../../providers/AuthProvider.dart';
+import '../../../auth/login.dart';
 import '../widgets/ProfileMenuWidget.dart';
 import 'notifications.dart';
 
@@ -17,93 +16,89 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-    Account? account =
-        Provider.of<UserProvider>(context, listen: false).account;
+    Account? account = Provider.of<AuthProvider>(context, listen: false).getCurrentAccount();
+
 
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                /// -- IMAGE
-                Column(
-                  children: [
-                    ProfileInformation(account: account),
-
-                    /// -- MENU
-                    Container(
-                      margin: const EdgeInsets.only(top: 10.0),
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10.0),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.blueGrey.withOpacity(0.5),
-                                blurRadius: 1,
-                                spreadRadius: 0.5,
-                                offset: const Offset(1, 1))
-                          ]),
-                      child: Column(
-                        children: [
-                          ProfileMenuWidget(
-                              title: "Notifications",
-                              icon: const Icon(Icons.notifications),
-                              onPress: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const Notifications()),
-                                );
-                              }),
-                          const Divider(),
-                          ProfileMenuWidget(
-                              title: "Settings",
-                              icon: const Icon(Icons.settings),
-                              onPress: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Settings()),
-                                );
-                              }),
-                          const Divider(),
-                          ProfileMenuWidget(
-                              title: "About AfriMed",
-                              icon: const Icon(Icons.info),
-                              onPress: () {}),
-                        ],
-                      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              /// -- IMAGE
+              Column(
+                children: [
+                  ProfileInformation(account: account),
+                  /// -- MENU
+                  Container(
+                    margin: const EdgeInsets.only(top: 10.0),
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.blueGrey.withOpacity(0.5),
+                              blurRadius: 1,
+                              spreadRadius: 0.5,
+                              offset: const Offset(1, 1))
+                        ]),
+                    child: Column(
+                      children: [
+                        ProfileMenuWidget(
+                            title: "Notifications",
+                            icon: const Icon(Icons.notifications),
+                            onPress: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const Notifications()),
+                              );
+                            }),
+                        const Divider(),
+                        ProfileMenuWidget(
+                            title: "Settings",
+                            icon: const Icon(Icons.settings),
+                            onPress: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Settings()),
+                              );
+                            }),
+                        const Divider(),
+                        ProfileMenuWidget(
+                            title: "About AfriMed",
+                            icon: const Icon(Icons.info),
+                            onPress: () {}),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
+              ),
 
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileMenuWidget(
-                      title: "Logout",
-                      icon: const Icon(Icons.logout),
-                      textColor: Colors.red,
-                      endIcon: false,
-                      onPress: () {
-                        // Show the logout confirmation dialog
-                        showLogoutDialog(context);
-                      }),
-                )
-              ],
-            ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ProfileMenuWidget(
+                    title: "Logout",
+                    icon: const Icon(Icons.logout),
+                    textColor: Colors.red,
+                    endIcon: false,
+                    onPress: () {
+                      // Show the logout confirmation dialog
+                      showLogoutDialog(context);
+                    }),
+              )
+            ],
           ),
         ),
       ),
@@ -135,7 +130,16 @@ void showLogoutDialog(BuildContext context) {
                 textStyle: const TextStyle(
                     color: Colors.white, fontStyle: FontStyle.normal)),
             onPressed: () {
-              performLogout(context);
+              //perform the logout
+              //first, clear the AuthProvider then redirect to the login page
+              Provider.of<AuthProvider>(context, listen: false).logout();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginPage(),
+                ),
+                    (Route<dynamic> route) => false,
+              );
             },
             child: const Text('Yes'),
           ),
@@ -146,7 +150,7 @@ void showLogoutDialog(BuildContext context) {
 }
 
 // Function to perform the logout
-void performLogout(context) async {
+/*void performLogout(context) async {
   FirebaseAuth auth = FirebaseAuth.instance;
   await auth.signOut().whenComplete(() {
     Navigator.pushAndRemoveUntil(
@@ -159,5 +163,4 @@ void performLogout(context) async {
 
     // Close the app when navigating back from the login page
     //SystemNavigator.pop();
-  });
-}
+  });*/

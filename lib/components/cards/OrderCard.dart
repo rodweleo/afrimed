@@ -11,13 +11,18 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
-      margin: const EdgeInsets.only(top: 8.0),
+      margin: const EdgeInsets.only(top: 5.0),
       decoration: BoxDecoration(
-        color: Colors.blueGrey.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(5.0)
-      ),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5.0),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.blueGrey.shade500.withOpacity(0.5),
+                blurRadius: 2.5,
+                spreadRadius: 2.5,
+                offset: const Offset(1, 1))
+          ]),
       child: ListTile(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,10 +30,16 @@ class OrderCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(order.createdOn.toString(), style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 14),),
+                Text(
+                  order.createdOn.toString(),
+                  style: TextStyle(
+                      color: Colors.black.withOpacity(0.5), fontSize: 14),
+                ),
                 Text(
                   'Order #${order.id}',
-                  style: const TextStyle(fontWeight: FontWeight.bold, ),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -39,15 +50,14 @@ class OrderCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(
-                    'Products: ${order.products.length}'),
-                const SizedBox(width: 10,),
+                Text('Products: ${order.products.length}'),
+                const SizedBox(
+                  width: 10,
+                ),
                 Text('Price: ${order.totalAmount.toString()}')
               ],
             ),
-            Status(
-              status: order.status
-            )
+            Status(status: order.status)
           ],
         ),
         onTap: () {

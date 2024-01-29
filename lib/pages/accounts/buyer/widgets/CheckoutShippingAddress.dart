@@ -1,5 +1,6 @@
 
 import 'package:AfriMed/pages/accounts/buyer/widgets/account_shipping_address.dart';
+import 'package:AfriMed/providers/AuthProvider.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../apis/AccountApi.dart';
@@ -61,10 +62,10 @@ class _CheckoutShippingAddressState extends State<CheckoutShippingAddress> {
 
 
   //fetching the shipping address for this given account
-  late Future<List<ShippingAddress>?> _shippingAddress;
+  late Future<List<ShippingAddress>?> _shippingAddresses;
 
   void _fetchShippingAddress() async {
-    _shippingAddress = _accountApi.fetchAccountShippingAddress(Provider.of<UserProvider>(context, listen: false).account!.id!);
+    _shippingAddresses = _accountApi.fetchAccountShippingAddress(Provider.of<AuthProvider>(context, listen: false).getCurrentAccount()!.id);
   }
 
 
@@ -214,7 +215,7 @@ class _CheckoutShippingAddressState extends State<CheckoutShippingAddress> {
         height: 10,
       ),
       FutureBuilder<List<ShippingAddress>?>(
-        future: _shippingAddress,
+        future: _shippingAddresses,
         builder: (BuildContext context, snapshot){
           if(snapshot.connectionState == ConnectionState.waiting){
             return const CircularProgressIndicator();

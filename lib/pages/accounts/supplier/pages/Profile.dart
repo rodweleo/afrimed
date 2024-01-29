@@ -1,14 +1,13 @@
 import 'package:AfriMed/components/profile/ProfileMenu.dart';
 import 'package:AfriMed/components/profile/ProfileMenuWidget.dart';
 import 'package:AfriMed/pages/auth/login.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../../../../apis/AccountApi.dart';
 import '../../../../components/profile/profile_information.dart';
 import '../../../../models/Account.dart';
 import 'package:provider/provider.dart';
-import 'package:AfriMed/providers/user_provider.dart';
+
+import '../../../../providers/AuthProvider.dart';
 
 
 class Profile extends StatefulWidget {
@@ -19,13 +18,11 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  User? user = FirebaseAuth.instance.currentUser;
   final AccountApi _accountApi = AccountApi();
   late Future<Account?> account;
 
   Future<void> _loadAccount() async {
-    account = _accountApi.fetchAccountById(user!.uid);
+    account = _accountApi.fetchAccountById(Provider.of<AuthProvider>(context, listen: false).getCurrentAccount()!.id);
   }
 
   @override
@@ -36,8 +33,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
-    Account? account = userProvider.account;
+    Account? account = Provider.of<AuthProvider>(context, listen: false).getCurrentAccount();
 
     return Scaffold(
         appBar: AppBar(
@@ -58,8 +54,8 @@ class _ProfileState extends State<Profile> {
                   icon: const Icon(Icons.logout),
                   textColor: Colors.red,
                   endIcon: false,
-                  onPress: () async {
-                    await _auth.signOut();
+                  onPress: () {
+                    Provider.of<AuthProvider>(context, listen: false).logout();
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(

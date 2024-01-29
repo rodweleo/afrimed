@@ -1,9 +1,10 @@
 import 'package:AfriMed/models/ProductOrder.dart';
 import 'package:AfriMed/pages/accounts/supplier/components/OrderCard.dart';
+import 'package:AfriMed/providers/AuthProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../apis/Order_Api.dart';
-import '../../../../providers/user_provider.dart';
+
 
 class Orders extends StatefulWidget {
   const Orders({super.key});
@@ -20,7 +21,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
   final Order_Api _orderApi = Order_Api();
 
   Future<void> _fetchSupplierOrders()async {
-    _supplierOrders = _orderApi.fetchSupplierOrders(Provider.of<UserProvider>(context, listen: false).account?.id);
+    _supplierOrders = _orderApi.fetchSupplierOrders(Provider.of<AuthProvider>(context, listen: false).getCurrentAccount()?.id);
   }
   @override
   void initState() {

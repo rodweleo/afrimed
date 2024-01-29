@@ -31,6 +31,9 @@ class _SupplierRegistrationState extends State<SupplierRegistration> {
   final TextEditingController _countyController = TextEditingController();
   final TextEditingController _townController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   bool hasUploadedIdentificationDocuments = false;
   bool hasAgreedTermsAndConditions = false;
@@ -68,6 +71,8 @@ class _SupplierRegistrationState extends State<SupplierRegistration> {
         hasUploadedIdentificationDocuments: hasUploadedIdentificationDocuments,
         isVerified: false,
         imageUrl: "",
+        username: _usernameController.text,
+        password: _passwordController.text
       );
 
       final FirebaseAuth auth = FirebaseAuth.instance;
@@ -410,6 +415,76 @@ class _SupplierRegistrationState extends State<SupplierRegistration> {
                       ),
                   ],
                 ),
+
+              SizedBox(
+                width: 250,
+                child: TextFormField(
+                  controller: _usernameController,
+                  obscureText: false,
+                  onChanged: (value){
+                    setState(() {
+                      _usernameController.text = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your username';
+                    }
+                    return null; // Return null if the input is valid
+                  },
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey)),
+                    labelText: 'Name',
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 250,
+                child: TextFormField(
+                  controller: _passwordController,
+                  obscureText: false,
+                  onChanged: (value){
+                    setState(() {
+                      _passwordController.text = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null; // Return null if the input is valid
+                  },
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey)),
+                    labelText: 'Name',
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 250,
+                child: TextFormField(
+                  controller: _confirmPasswordController,
+                  obscureText: false,
+                  onChanged: (value){
+                    setState(() {
+                      _confirmPasswordController.text = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null; // Return null if the input is valid
+                  },
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueGrey)),
+                    labelText: 'Name',
+                  ),
+                ),
+              ),
               Row(
                 children: [
                   Checkbox(

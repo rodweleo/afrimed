@@ -1,9 +1,10 @@
 import 'package:AfriMed/apis/AccountApi.dart';
 import 'package:AfriMed/pages/accounts/buyer/BuyerAccount.dart';
 import 'package:AfriMed/pages/accounts/supplier/SupplierAccount.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:AfriMed/providers/AuthProvider.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import '../../models/Account.dart';
 import 'login.dart';
 
 class Authenticator extends StatefulWidget {
@@ -20,22 +21,17 @@ class _AuthenticatorState extends State<Authenticator> {
     _checkAuthentication();
   }
 
-  Future<void> _checkAuthentication() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    print(user);
-    await Future.delayed(Duration.zero); // Ensure the build is complete
-
-    if (user == null) {
+  void _checkAuthentication() async {
+    //get the provider of the authentication to check the information
+     Account? account = Provider.of<AuthProvider>(context, listen: false).getCurrentAccount();
+    await Future.delayed(Duration.zero);
+    if (account == null) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const LoginPage()),
       );
     } else {
-      String? role = await AccountApi().fetchUserRoleById(user.uid);
-      if (role != null) {
-        // Replace the following lines with your own logic for navigation
-        if (role == 'buyer') {
+        if (account.role == 'buyer') {
           // Navigate to buyer page
           Navigator.pushReplacement(
             context,
@@ -48,20 +44,14 @@ class _AuthenticatorState extends State<Authenticator> {
             MaterialPageRoute(builder: (context) => const SupplierAccount()),
           );
         }
-      } else {
-        // Role not available, navigate to login page
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginPage()),
-        );
-      }
+
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(child: Text('Splashscreen')),
+      body: Center(child: Text('AfriMed')),
     );
   }
 }

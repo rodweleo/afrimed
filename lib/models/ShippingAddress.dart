@@ -12,9 +12,9 @@ class ShippingAddress {
 
   factory ShippingAddress.fromMap(Map<String, dynamic> map) {
     return ShippingAddress(
-      address: map['address'],
-      county: map['county'],
-      town: map['town'],
+      address: map['address'] ?? "",
+      county: map['county'] ?? "",
+      town: map['town'] ?? "",
     );
   }
 }

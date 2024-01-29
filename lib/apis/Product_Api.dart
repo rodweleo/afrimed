@@ -88,7 +88,7 @@ class Product_Api {
   }
 
   //fetching all the products of an active supplier by
-  Future<List<Product>> fetchAllSupplierProducts(String sId) async {
+  Future<List<Product>> fetchAllSupplierProducts(String? sId) async {
 
     try {
       CollectionReference productsCollection = _firebaseFirestore.collection('products');

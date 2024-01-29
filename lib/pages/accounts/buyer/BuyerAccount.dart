@@ -1,16 +1,10 @@
-import 'package:AfriMed/models/Account.dart';
 import 'package:AfriMed/pages/accounts/buyer/pages/Profile.dart';
 import 'package:AfriMed/pages/accounts/buyer/pages/homepage.dart';
 import 'package:AfriMed/pages/accounts/buyer/pages/Orders.dart';
 import 'package:AfriMed/services/firebase_cloud_messaging.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../../apis/AccountApi.dart';
-import '../../../providers/user_provider.dart';
-
 class BuyerAccount extends StatefulWidget {
   const BuyerAccount({super.key});
 
@@ -19,29 +13,7 @@ class BuyerAccount extends StatefulWidget {
 }
 
 class _BuyerAccountState extends State<BuyerAccount> {
-  late Future<Account?> _account;
 
-  void _loadAccount() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    AccountApi accountApi = AccountApi();
-    // Use await to get the result of the future
-    _account = accountApi.fetchAccountById(user!.uid);
-
-    try {
-      // Use await to wait for the future to complete
-      Account? loadedAccount = await _account;
-
-      // Check if the loaded account is not null
-      if (loadedAccount != null) {
-        // Notify the UserProvider with the loaded account data
-        final userProvider = Provider.of<UserProvider>(context, listen: false);
-        userProvider.setAccount(loadedAccount);
-      }
-    } catch (error) {
-      // Handle any errors that occurred during the future execution
-      print("Error loading account: $error");
-    }
-  }
 
   final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
@@ -75,16 +47,20 @@ class _BuyerAccountState extends State<BuyerAccount> {
   }
 
   void _handleMessage(RemoteMessage message) {
-    if (message.data['type'] == 'order') {
-      currentPageIndex = 2;
+    switch(message.data['type']){
+      case 'order':
+        currentPageIndex = 2;
+        break;
+      default:
+      currentPageIndex = 0;
     }
+
   }
 
   @override
   void initState() {
     analytics.setAnalyticsCollectionEnabled(true);
     setupInteractiveFCMessage();
-    _loadAccount();
     super.initState();
   }
 

@@ -8,7 +8,8 @@ class Account {
   late bool hasUploadedIdentificationDocuments;
   late bool isVerified;
   late String imageUrl;
-
+  late String username;
+  late String password;
   Account({
     required this.id,
     required this.name,
@@ -19,6 +20,8 @@ class Account {
     required this.hasUploadedIdentificationDocuments,
     required this.isVerified,
     required this.imageUrl,
+    required this.username,
+    required this.password
 });
 
   factory Account.fromMap(String id,Map<String, dynamic> map) {
@@ -32,6 +35,8 @@ class Account {
       hasUploadedIdentificationDocuments: map['hasUploadedIdentificationDocuments'] ?? false,
       isVerified : map['isVerified'] ?? false,
       imageUrl: map['imageUrl'],
+      username: map['username'],
+      password: map['password']
     );
   }
 }

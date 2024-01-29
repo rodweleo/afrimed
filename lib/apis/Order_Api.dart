@@ -62,10 +62,10 @@ class Order_Api{
 }
 
   //retrieving the orders of a buyer
-  Future<List<ProductOrder>?> fetchBuyerOrders(String? buyerId) async {
+  Future<List<ProductOrder>?> fetchBuyerOrders(String buyerId) async {
     try {
-      CollectionReference productsCollection = _firebaseFirestore.collection('orders');
-      QuerySnapshot querySnapshot = await productsCollection
+      CollectionReference ordersRef = _firebaseFirestore.collection('orders');
+      QuerySnapshot querySnapshot = await ordersRef
           .where('buyerId', isEqualTo: buyerId)
           .get();
 
