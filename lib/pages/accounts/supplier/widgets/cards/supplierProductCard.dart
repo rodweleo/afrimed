@@ -92,7 +92,7 @@ class SupplierProductCard extends StatelessWidget {
                               fontStyle: FontStyle.italic,
                             ),
                           )
-                        : const Text(''),
+                        : const Text('0.0'),
                   ])
             ],
           ),
