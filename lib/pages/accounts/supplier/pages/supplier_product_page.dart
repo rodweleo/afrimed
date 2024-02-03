@@ -1,18 +1,18 @@
+import 'package:AfriMed/models/SupplierProduct.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'edit_supplier_product_page.dart';
 
-import '../../../../models/Product.dart';
-import 'EditProduct.dart';
-
-class ProductPage extends StatefulWidget {
-  const ProductPage({super.key, required this.product});
-  final Product product;
+class SupplierProductPage extends StatefulWidget {
+  const SupplierProductPage({super.key, required this.product});
+  final SupplierProduct product;
 
   @override
-  State<ProductPage> createState() => _ProductPageState();
+  State<SupplierProductPage> createState() => _SupplierProductPageState();
 }
 
-class _ProductPageState extends State<ProductPage> {
+class _SupplierProductPageState extends State<SupplierProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,29 +21,43 @@ class _ProductPageState extends State<ProductPage> {
         ),
         body: SizedBox(
           height: MediaQuery.of(context).size.height,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 200,
-                    child: CachedNetworkImage(
-                      placeholder: (context, url) => const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                      imageUrl: widget.product.imageUrl!,
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CarouselSlider(
+                        items: widget.product.images!
+                            .map((item) => SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width / 3,
+                                height: 10,
+                                child: CachedNetworkImage(
+                                  placeholder: (context, url) => SizedBox(
+                                      height: 10,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: const CircularProgressIndicator()),
+                                  errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                                  imageUrl: item,
+                                  fit: BoxFit.fill,
+                                ),
+                              )
+                          ),
+                        ))
+                            .toList(),
+                        options: CarouselOptions(
+                            autoPlay: true,
+                            autoPlayAnimationDuration: const Duration(milliseconds: 1000),
+                            disableCenter: false,
+                            viewportFraction: 1.0)),
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(widget.product.name,
@@ -66,7 +80,7 @@ class _ProductPageState extends State<ProductPage> {
                               style: TextStyle(
                                   color: Colors.green,
                                   fontSize:
-                                      MediaQuery.of(context).size.height * 0.02,
+                                      MediaQuery.of(context).size.height * 0.03,
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
@@ -74,19 +88,16 @@ class _ProductPageState extends State<ProductPage> {
                               style: TextStyle(
                                   color: Colors.green,
                                   fontSize:
-                                      MediaQuery.of(context).size.height * 0.02,
+                                      MediaQuery.of(context).size.height * 0.025,
                                   fontStyle: FontStyle.italic),
                             )
                           ],
                         )
                       ],
                     ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
+                  ],
+                ),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
@@ -135,9 +146,9 @@ class _ProductPageState extends State<ProductPage> {
                           )),
                     ),
                   ],
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ));
   }

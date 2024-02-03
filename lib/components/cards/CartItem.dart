@@ -39,10 +39,10 @@ class _ShoppingCartItemState extends State<ShoppingCartItem> {
           height: 50,
           width: 50,
           imageUrl:
-          widget.cartItem.product.imageUrl!,
+          widget.cartItem.product!.thumbnail!,
           fit: BoxFit.fill,
         ),
-        title: Text(widget.cartItem.product.name.toString()),
+        title: Text(widget.cartItem.product!.name.toString()),
         subtitle: Text('Quantity: ${widget.cartItem.quantity}'),
         trailing: IconButton(
           icon: const Icon(Icons.delete),

@@ -2,7 +2,7 @@ import 'package:AfriMed/models/Account.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../pages/UserProfilePage.dart';
+import '../pages/user_profile_page.dart';
 
 class ProfileCard extends StatelessWidget {
   final Account? account;

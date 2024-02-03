@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../apis/AccountApi.dart';
 import '../../models/Account.dart';
-import '../../pages/accounts/buyer/pages/SupplierPage.dart';
+import '../../pages/accounts/buyer/pages/supplier_page.dart';
 
 class FeaturedSuppliers extends StatefulWidget {
   const FeaturedSuppliers({super.key});

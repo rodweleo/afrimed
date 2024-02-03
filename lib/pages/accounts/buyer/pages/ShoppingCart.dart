@@ -25,14 +25,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: cartProvider.getSupplierItemsInCart(widget.account.id!).length,
-          itemBuilder: (context, index) {
-            final cartItem = cartProvider.getSupplierItemsInCart(widget.account.id!)[index];
-            return ShoppingCartItem(cartItem: cartItem);
-          },
-        ),
+        child: Text('')
       ),
       bottomNavigationBar: Container(
         height: 160,
@@ -55,9 +48,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
               children: [
                 const Text('Price:',
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                Text(cartProvider
-                    .getTotal()
-                    .toString()), // Add your discount logic here
+                Text(0.toString()), // Add your discount logic here
               ],
             ),
             const SizedBox(height: 10),
@@ -69,7 +60,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'Ksh ${cartProvider.getTotal()}', // You may need to adjust this based on your discount logic
+                  'Ksh 0', // You may need to adjust this based on your discount logic
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 20),
                 ),

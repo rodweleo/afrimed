@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../pages/accounts/buyer/widgets/Offers.dart';
 import '../../pages/accounts/buyer/widgets/ProfileMenuWidget.dart';
-import '../../pages/accounts/supplier/pages/Reviews.dart';
+import '../../pages/accounts/supplier/pages/reviews_page.dart';
 
 class ProfileMenu extends StatelessWidget {
   const ProfileMenu({super.key});

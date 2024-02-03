@@ -1,6 +1,6 @@
 import 'package:AfriMed/models/CartItem.dart';
 import 'package:AfriMed/models/Product.dart';
-import 'package:AfriMed/pages/accounts/buyer/widgets/SellerInformation.dart';
+import 'package:AfriMed/models/SupplierProduct.dart';
 import 'package:AfriMed/providers/cart_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -9,16 +9,16 @@ import 'package:provider/provider.dart';
 
 class ProductPage extends StatelessWidget {
   const ProductPage({super.key, required this.product});
-  final Product product;
+  final SupplierProduct? product;
 
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
-    int cartQuantity = cartProvider.getCartItemQuantity(product);
+    int cartQuantity = cartProvider.getCartItemQuantity(product!);
 
     int productCartIndex = cartProvider
         .cartItems
-        .indexWhere((cartItem) => cartItem.product.id == product.id);
+        .indexWhere((cartItem) => cartItem.product?.id == product?.id);
 
     return Scaffold(
       appBar: AppBar(
@@ -38,7 +38,7 @@ class ProductPage extends StatelessWidget {
               height: 50,
               width: 50,
               imageUrl:
-              product.imageUrl!,
+              product!.thumbnail!,
               fit: BoxFit.fill,
             ),
           ),
@@ -55,14 +55,14 @@ class ProductPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          product.category,
+                          product!.category,
                           style: GoogleFonts.poppins(
                             fontSize: 15,
                             color: Colors.grey,
                           ),
                         ),
                         Text(
-                          product.name,
+                          product!.name,
                           style: GoogleFonts.poppins(
                             fontSize: 22,
                             fontWeight: FontWeight.w600,
@@ -74,9 +74,9 @@ class ProductPage extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    'KSh ${(((100 - product.discountPercentage) /
+                                    'KSh ${(((100 - product!.discountPercentage) /
                                         100) *
-                                        product.price)
+                                        product!.price)
                                         .roundToDouble()
                                         .toString()}',
                                     style: GoogleFonts.poppins(
@@ -88,7 +88,7 @@ class ProductPage extends StatelessWidget {
                                     width: 20,
                                   ),
                                   Text(
-                                    product.price.toString(),
+                                    product!.price.toString(),
                                     style: GoogleFonts.poppins(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w600,
@@ -101,7 +101,7 @@ class ProductPage extends StatelessWidget {
                                 ],
                               ),
                               Text(
-                                "-${product.discountPercentage}%",
+                                "-${product!.discountPercentage}%",
                                 style: GoogleFonts.poppins(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -111,7 +111,7 @@ class ProductPage extends StatelessWidget {
                             ]),
                         const SizedBox(height: 15),
                         Text(
-                          product.description,
+                          product!.description,
                           style: GoogleFonts.poppins(
                             fontSize: 15,
                             color: Colors.grey,
@@ -119,7 +119,6 @@ class ProductPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 15),
                         const Divider(),
-                        SellerInformation(product: product),
                         const Divider(),
                         //SimilarProducts(product: product)
                       ],

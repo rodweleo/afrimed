@@ -1,10 +1,10 @@
-import 'package:AfriMed/pages/accounts/buyer/BuyerAccount.dart';
+import 'package:AfriMed/pages/accounts/buyer/buyer_account.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import '../../apis/AccountApi.dart';
 import '../../models/Account.dart';
-import '../accounts/supplier/SupplierAccount.dart';
+import '../accounts/supplier/supplier_account.dart';
 import 'login.dart';
 import 'package:provider/provider.dart';
 import 'package:AfriMed/providers/user_provider.dart';

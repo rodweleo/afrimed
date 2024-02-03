@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/CartItem.dart';
-import '../models/Product.dart';
+import '../models/SupplierProduct.dart';
 
 class CartProvider extends ChangeNotifier {
   final List<CartItem> _cartItems = [];
@@ -11,7 +11,7 @@ class CartProvider extends ChangeNotifier {
   void addToCart(CartItem cartItem) {
     // Check if the product is already in the cart
     int existingIndex =
-        _cartItems.indexWhere((item) => item.product.id == cartItem.product.id);
+        _cartItems.indexWhere((item) => item.product?.id == cartItem.product?.id);
 
     if (existingIndex != -1) {
       // If the product is already in the cart, update the quantity
@@ -29,7 +29,7 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  int getCartItemQuantity(Product product) {
+  int getCartItemQuantity(SupplierProduct product) {
     try {
       CartItem cartItem = _cartItems.firstWhere(
         (item) => item.product == product,
@@ -40,17 +40,17 @@ class CartProvider extends ChangeNotifier {
     }
   }
 
-  double getTotal({String? supplierId}) {
+  /*double getTotal({String? supplierId}) {
     double totalAmount = 0.0;
 
     for (var cartItem in cartItems) {
-      if (supplierId == null || cartItem.product.supplierId == supplierId) {
-        totalAmount += cartItem.product.price * cartItem.quantity;
+      if (supplierId == null || cartItem.product?.supplierId == supplierId) {
+        totalAmount += cartItem.product!.price * cartItem.quantity;
       }
     }
 
     return totalAmount;
-  }
+  }*/
 
   int getTotalAmount() {
     return _cartItems.fold(0, (sum, item) => sum + item.quantity);
@@ -58,17 +58,17 @@ class CartProvider extends ChangeNotifier {
 
 
   //get a given supplier's items from the cart
-  List<CartItem> getSupplierItemsInCart(String supplierId){
+  /*List<CartItem> getSupplierItemsInCart(String supplierId){
     List<CartItem> items = [];
 
     for (var cartItem in cartItems) {
-      if (cartItem.product.supplierId == supplierId) {
+      if (cartItem.supplier?.supplierId == supplierId) {
         items.add(cartItem);
       }
     }
 
     return items;
-  }
+  }*/
 
   //clear items from the cart
   void clearCart(){
@@ -77,6 +77,4 @@ class CartProvider extends ChangeNotifier {
   }
 
 
-
-  //get the
 }

@@ -45,7 +45,37 @@ class _DashboardState extends State<Dashboard> {
                 child: Text('An error has occurred: ${snapshot.error}')
               );
           }else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No data available.'));
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          DashboardWidget(
+                            title: 'Revenue',
+                            content: "KES 0.00",
+                            boxShadowColor: Colors.blueGrey.withOpacity(0.5),
+                            endIcon: const Icon(
+                              Icons.wallet,
+                              color: Colors.green,
+                            ), endIconBackground: Colors.lightGreen.withOpacity(0.25),
+                          ),
+                          DashboardWidget(
+                            title: 'Orders',
+                            content: snapshot.data!.length.toString(),
+                            boxShadowColor: Colors.blueGrey.withOpacity(0.5),
+                            endIcon: const Icon(
+                              Icons.shopping_bag,
+                              color: Colors.orange,
+                            ), endIconBackground: const Color(0xFFFFE0B2),
+                          ),
+                        ],
+                      )
+                    ],
+                  )),
+            );
           } else{
             return Container(
               height: MediaQuery.of(context).size.height,
@@ -60,8 +90,7 @@ class _DashboardState extends State<Dashboard> {
                           children: [
                             DashboardWidget(
                               title: 'Revenue',
-                              content: snapshot.data!
-                                  .where((element) => element.status == 'completed').toString(),
+                              content: "KES 0.00",
                               boxShadowColor: Colors.blueGrey.withOpacity(0.5),
                               endIcon: const Icon(
                                 Icons.wallet,

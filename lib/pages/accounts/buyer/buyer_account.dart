@@ -1,6 +1,6 @@
-import 'package:AfriMed/pages/accounts/buyer/pages/Profile.dart';
+import 'package:AfriMed/pages/accounts/buyer/pages/profile_page.dart';
 import 'package:AfriMed/pages/accounts/buyer/pages/homepage.dart';
-import 'package:AfriMed/pages/accounts/buyer/pages/Orders.dart';
+import 'package:AfriMed/pages/accounts/buyer/pages/orders_page.dart';
 import 'package:AfriMed/services/firebase_cloud_messaging.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';

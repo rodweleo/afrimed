@@ -1,11 +1,13 @@
 import 'package:AfriMed/models/Account.dart';
+import 'package:AfriMed/pages/accounts/supplier/widgets/cards/supplierProductCard.dart';
 import 'package:AfriMed/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../apis/Product_Api.dart';
-import '../../../../components/cards/ProductCard.dart';
+import '../../../../components/cards/platform_product_card.dart';
 import '../../../../models/CartItem.dart';
 import '../../../../models/Product.dart';
+import '../../../../models/SupplierProduct.dart';
 import 'ShoppingCart.dart';
 
 class SupplierPage extends StatefulWidget {
@@ -21,19 +23,18 @@ class _SupplierPageState extends State<SupplierPage> {
 
   @override
   void initState() {
-
     super.initState();
   }
 
-  Future<List<Product>> _loadSupplierProducts() async {
+  Future<List<SupplierProduct>> _loadSupplierProducts() async {
     Product_Api productApi = Product_Api();
 
     // Getting the current active supplier Id
-    List<Product> allProducts =
+    List<SupplierProduct> allProducts =
     await productApi.fetchAllSupplierProducts(widget.account.id!);
 
     // Filter products based on the search query
-    List<Product> filteredProducts = allProducts
+    List<SupplierProduct> filteredProducts = allProducts
         .where((product) =>
         product.name.toLowerCase().contains(searchQuery.toLowerCase()))
         .toList();
@@ -45,7 +46,7 @@ class _SupplierPageState extends State<SupplierPage> {
   @override
   Widget build(BuildContext context) {
     //get the elements in the cart that are a given supplier's
-    List<CartItem> items = Provider.of<CartProvider>(context, listen: false).getSupplierItemsInCart(widget.account.id!);
+    //List<CartItem> items = Provider.of<CartProvider>(context, listen: false).getSupplierItemsInCart(widget.account.id!);
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -72,8 +73,7 @@ class _SupplierPageState extends State<SupplierPage> {
                       right: 4,
                       child: Padding(
                         padding: const EdgeInsets.all(2.0),
-                        child: Text(items.fold<int>(0, (sum, item) => sum + (item.quantity ?? 0)).toString()
-                            .toString(), style: TextStyle(
+                        child: Text(0.toString(), style: TextStyle(
                             fontSize: MediaQuery.of(context).size.height * 0.02,
                             fontWeight: FontWeight.bold,
                             color: Colors.white
@@ -201,7 +201,7 @@ class _SupplierPageState extends State<SupplierPage> {
                       );
                     }, icon: const Icon(Icons.sort),
                   )]),
-                  FutureBuilder<List<Product>>(
+                  FutureBuilder<List<SupplierProduct>>(
                       future: _loadSupplierProducts(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -209,7 +209,7 @@ class _SupplierPageState extends State<SupplierPage> {
                         } else if (snapshot.hasError) {
                           return Center(child: Text('Error: ${snapshot.error}'));
                         } else {
-                          List<Product> supplierProducts = snapshot.data!;
+                          List<SupplierProduct> supplierProducts = snapshot.data!;
                           return Expanded(
                             child: GridView.builder(
                               shrinkWrap: true,
@@ -220,8 +220,8 @@ class _SupplierPageState extends State<SupplierPage> {
                               ),
                               itemCount: supplierProducts.length,
                               itemBuilder: (context, index) {
-                                Product product = supplierProducts[index];
-                                return ProductCard(product: product);
+                                SupplierProduct product = supplierProducts[index];
+                                return SupplierProductCard(product: product);
                               },
                             ),
                           );

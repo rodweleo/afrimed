@@ -1,7 +1,7 @@
-import 'Product.dart';
+import 'package:AfriMed/models/SupplierProduct.dart';
 
 class CartItem {
-  final Product product;
+  final SupplierProduct? product;
   int quantity;
 
   CartItem({required this.product, this.quantity = 1});

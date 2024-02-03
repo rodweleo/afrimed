@@ -3,7 +3,7 @@ import 'package:AfriMed/components/activities/recent_activities.dart';
 import 'package:flutter/material.dart';
 import '../../../../models/Account.dart';
 import '../widgets/Offers.dart';
-import 'SupplierPage.dart';
+import 'supplier_page.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});

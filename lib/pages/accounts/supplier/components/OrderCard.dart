@@ -1,5 +1,5 @@
 import 'package:AfriMed/models/ProductOrder.dart';
-import 'package:AfriMed/pages/accounts/supplier/pages/OrderDetailsPage.dart';
+import 'package:AfriMed/pages/accounts/supplier/pages/order_details_page.dart';
 import 'package:flutter/material.dart';
 
 class OrderCard extends StatelessWidget {

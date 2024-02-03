@@ -1,6 +1,6 @@
 import 'package:AfriMed/apis/AccountApi.dart';
-import 'package:AfriMed/pages/accounts/buyer/BuyerAccount.dart';
-import 'package:AfriMed/pages/accounts/supplier/SupplierAccount.dart';
+import 'package:AfriMed/pages/accounts/buyer/buyer_account.dart';
+import 'package:AfriMed/pages/accounts/supplier/supplier_account.dart';
 import 'package:AfriMed/pages/auth/register.dart';
 import 'package:AfriMed/providers/AuthProvider.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
@@ -29,11 +29,16 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  'AfriMed',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: MediaQuery.of(context).size.height * 0.04),
+                Row(
+                    children: [
+        
+                      Text(
+                        'AfriMed',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: MediaQuery.of(context).size.height * 0.04),
+                      ),
+                    ]
                 ),
                 const SizedBox(
                   height: 50,
@@ -65,9 +70,9 @@ class _LoginPageState extends State<LoginPage> {
                           labelText: 'Username',
                           suffixIcon: _usernameController.text.isNotEmpty
                               ? const Icon(
-                                  Icons.done,
-                                  color: Colors.green,
-                                )
+                            Icons.done,
+                            color: Colors.green,
+                          )
                               : null),
                     ),
                     const SizedBox(
@@ -87,9 +92,9 @@ class _LoginPageState extends State<LoginPage> {
                           prefixIcon: const Icon(Icons.vpn_key_rounded),
                           suffixIcon: _passwordController.text.isNotEmpty
                               ? const Icon(
-                                  Icons.done,
-                                  color: Colors.green,
-                                )
+                            Icons.done,
+                            color: Colors.green,
+                          )
                               : null),
                     ),
                     const SizedBox(
@@ -103,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                               foregroundColor: Colors.white,
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(5))),
+                                  BorderRadius.all(Radius.circular(5))),
                               textStyle: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -117,41 +122,41 @@ class _LoginPageState extends State<LoginPage> {
                                 const SnackBar(
                                     content: Text('Processing Data')),
                               );
-
+        
                               //login with username and password
                               AccountApi accountApi = AccountApi();
                               Account? account = await accountApi
                                   .signInWithUsernameAndPassword(
-                                      _usernameController.text,
-                                      _passwordController.text);
+                                  _usernameController.text,
+                                  _passwordController.text);
                               if (account != null) {
                                 //this means the account has been found successfully, redirect to the appropriate account page
                                 switch (account.role) {
                                   case 'buyer':
-                                    //set the auth provider to contain the details of the current account
+                                  //set the auth provider to contain the details of the current account
                                     Provider.of<AuthProvider>(context,
-                                            listen: false)
+                                        listen: false)
                                         .setLoggedInAccount(account);
                                     Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const BuyerAccount()),
-                                      (Route<dynamic> route) => false,
+                                          const BuyerAccount()),
+                                          (Route<dynamic> route) => false,
                                     );
-
+        
                                     break;
                                   case 'supplier':
-                                    //set the auth provider to contain the details of the current account
+                                  //set the auth provider to contain the details of the current account
                                     Provider.of<AuthProvider>(context,
-                                            listen: false)
+                                        listen: false)
                                         .setLoggedInAccount(account);
                                     Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const SupplierAccount()),
-                                      (Route<dynamic> route) => false,
+                                          const SupplierAccount()),
+                                          (Route<dynamic> route) => false,
                                     );
                                     break;
                                   default:
@@ -159,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const LoginPage()),
+                                          const LoginPage()),
                                     );
                                 }
                               }

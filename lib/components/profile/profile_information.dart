@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/Account.dart';
-import '../../pages/accounts/buyer/pages/EditProfile.dart';
+import '../../pages/accounts/buyer/pages/edit_profile_page.dart';
 
 
 class ProfileInformation extends StatelessWidget {

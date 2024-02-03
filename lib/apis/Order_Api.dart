@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/CartItem.dart';
 import '../models/OrderProduct.dart';
-import 'package:provider/provider.dart';
 import '../models/ProductOrder.dart';
 import '../models/ShippingAddress.dart';
-import '../providers/cart_provider.dart';
 import 'package:flutter/material.dart';
 
 class Order_Api{
@@ -23,15 +21,15 @@ class Order_Api{
       'supplierId': supplierId,
       'products': supplierCartItem.map((cartItem) =>
           OrderProduct(
-            productId: cartItem.product.id,
-            name: cartItem.product.name,
-            supplierId: cartItem.product.supplierId,
+            productId: cartItem.product!.id,
+            name: cartItem.product!.name,
+            supplierId: cartItem.product!.supplierId,
             orderQuantity: cartItem.quantity,
-            totalAmount: cartItem.product.price * cartItem.quantity,
-            imageURL: cartItem.product.imageUrl!
+            totalAmount: cartItem.product!.price * cartItem.quantity,
+              thumbnail: cartItem.product!.thumbnail!
           ).toMap())
           .toList(),
-      'totalAmount': Provider.of<CartProvider>(context, listen: false).getTotal(supplierId: supplierId),
+      'totalAmount': 0,
       'shippingAddress' : {
         'address': shippingAddress?.address,
         'town': shippingAddress?.town,

@@ -1,26 +1,26 @@
 import 'package:AfriMed/apis/AccountApi.dart';
+import 'package:AfriMed/models/SupplierProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../../../models/Account.dart';
-import '../../../../models/Product.dart';
 
-class SellerInformation extends StatefulWidget {
-  const SellerInformation({super.key, required this.product});
 
-  final Product product;
+class SupplierInformation extends StatefulWidget {
+  const SupplierInformation({super.key, required this.product});
+
+  final SupplierProduct? product;
 
   @override
-  State<SellerInformation> createState() => _SellerInformationState();
+  State<SupplierInformation> createState() => _SupplierInformationState();
 }
 
-class _SellerInformationState extends State<SellerInformation> {
+class _SupplierInformationState extends State<SupplierInformation> {
   //fetch the details of the supplier using the id in the product object
   late Future<Account?> _supplier;
 
   void _fetchSupplierDetails() async {
     AccountApi accountApi = AccountApi();
-    _supplier = accountApi.fetchAccountById(widget.product.supplierId);
+    _supplier = accountApi.fetchAccountById(widget.product?.supplierId);
   }
 
   @override

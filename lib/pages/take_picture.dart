@@ -1,5 +1,5 @@
 import 'package:camera/camera.dart';
-import 'package:AfriMed/pages/accounts/supplier/pages/AddProduct.dart';
+import 'package:AfriMed/pages/accounts/supplier/pages/add_platform_product.dart';
 import 'package:flutter/material.dart';
 
 class TakePicture extends StatefulWidget {
@@ -70,10 +70,8 @@ class _TakePictureState extends State<TakePicture> {
                 // If the picture was taken, display it on a new screen.
                 await Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => AddProductForm(
-                      // Pass the automatically generated path to
-                      // the AddProductForm widget.
-                      productImagePath: image.path,
+                    builder: (context) => const AddProductForm(
+
                     ),
                   ),
                 );

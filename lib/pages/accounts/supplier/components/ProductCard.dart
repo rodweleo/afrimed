@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../../../models/Product.dart';
+
+import '../../../../models/SupplierProduct.dart';
 
 class ProductCard extends StatefulWidget {
   const ProductCard({super.key, required this.product});
-  final Product product;
+  final SupplierProduct product;
   static const kTransparentImage =
       "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAApklEQVR42mP8//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
 
@@ -38,15 +39,15 @@ class _ProductCardState extends State<ProductCard> {
               borderRadius: BorderRadius.circular(7.5),
               child: CachedNetworkImage(
                 placeholder: (context, url) => const SizedBox(
-                    height: 20,
-                    width: 20,
+                    height: 10,
+                    width: 10,
                     child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
                 height: 100,
                 width: 100,
                 imageUrl:
-                widget.product.imageUrl!,
-                fit: BoxFit.cover,
+                widget.product.thumbnail!,
+                fit: BoxFit.fill,
               ),
             ),
             Column(
@@ -55,7 +56,7 @@ class _ProductCardState extends State<ProductCard> {
               children: [
                 Text(
                   widget.product.name,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.1, fontWeight: FontWeight.bold),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

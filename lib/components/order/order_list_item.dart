@@ -21,8 +21,8 @@ class OrderListItem extends StatelessWidget {
           height: 50,
           width: 50,
           imageUrl:
-          orderProduct.imageURL,
-          fit: BoxFit.cover,
+          orderProduct.thumbnail,
+          fit: BoxFit.fill,
         ),
       ),
       title: Row(

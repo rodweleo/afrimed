@@ -1,5 +1,5 @@
 import 'package:AfriMed/models/ProductOrder.dart';
-import 'package:AfriMed/pages/accounts/buyer/pages/OrderDetailsPage.dart';
+import 'package:AfriMed/pages/accounts/buyer/pages/order_details_page.dart';
 import 'package:flutter/material.dart';
 
 import '../ui/status.dart';

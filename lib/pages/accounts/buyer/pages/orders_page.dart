@@ -1,7 +1,7 @@
 import 'package:AfriMed/apis/Order_Api.dart';
 import 'package:AfriMed/components/cards/OrderCard.dart';
 import 'package:AfriMed/models/ProductOrder.dart';
-import 'package:AfriMed/pages/accounts/buyer/pages/Suppliers.dart';
+import 'package:AfriMed/pages/accounts/buyer/pages/suppliers_page.dart';
 import 'package:AfriMed/providers/AuthProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

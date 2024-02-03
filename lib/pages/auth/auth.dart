@@ -1,6 +1,5 @@
-import 'package:AfriMed/apis/AccountApi.dart';
-import 'package:AfriMed/pages/accounts/buyer/BuyerAccount.dart';
-import 'package:AfriMed/pages/accounts/supplier/SupplierAccount.dart';
+import 'package:AfriMed/pages/accounts/buyer/buyer_account.dart';
+import 'package:AfriMed/pages/accounts/supplier/supplier_account.dart';
 import 'package:AfriMed/providers/AuthProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -1,4 +1,4 @@
-import 'package:AfriMed/pages/accounts/buyer/BuyerAccount.dart';
+import 'package:AfriMed/pages/accounts/buyer/buyer_account.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -53,7 +53,7 @@ class _OrderSuccessfulState extends State<OrderSuccessful> {
                     children: [
                       Column(
                         children: [
-                          Text(Provider.of<CartProvider>(context, listen: false).getTotal().toString(),
+                          Text(0.toString(),
                               style: GoogleFonts.poppins(
                                   textStyle: const TextStyle(
                                       fontWeight: FontWeight.bold,

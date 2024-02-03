@@ -30,7 +30,7 @@ class _SimilarProductsState extends State<SimilarProducts> {
       itemBuilder: (context, index) => CircleAvatar(
           radius: 10,
           backgroundImage: NetworkImage(
-              widget.product.imageUrl!)),
+              widget.product.thumbnail!)),
     );
   }
 }

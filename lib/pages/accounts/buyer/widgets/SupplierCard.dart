@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../models/Account.dart';
-import '../pages/SupplierPage.dart';
+import '../pages/supplier_page.dart';
 
 class SupplierCard extends StatefulWidget {
   final Account account;

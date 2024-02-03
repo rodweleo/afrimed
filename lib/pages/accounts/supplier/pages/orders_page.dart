@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../apis/Order_Api.dart';
 
-
 class Orders extends StatefulWidget {
   const Orders({super.key});
 
@@ -17,12 +16,15 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late Future<List<ProductOrder>?> _supplierOrders;
 
-
   final Order_Api _orderApi = Order_Api();
 
-  Future<void> _fetchSupplierOrders()async {
-    _supplierOrders = _orderApi.fetchSupplierOrders(Provider.of<AuthProvider>(context, listen: false).getCurrentAccount()?.id);
+  Future<void> _fetchSupplierOrders() async {
+    _supplierOrders = _orderApi.fetchSupplierOrders(
+        Provider.of<AuthProvider>(context, listen: false)
+            .getCurrentAccount()
+            ?.id);
   }
+
   @override
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
@@ -44,9 +46,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-              onPressed: () {
-
-              },
+              onPressed: () {},
               icon: const Icon(Icons.notifications_active_outlined))
         ],
         bottom: TabBar(
@@ -67,21 +67,30 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
       body: TabBarView(controller: _tabController, children: [
         FutureBuilder<List<ProductOrder>?>(
           future: _supplierOrders,
-          builder: (context, snapshot){
-            if(ConnectionState.waiting == snapshot.connectionState){
-              return const CircularProgressIndicator();
-            }else if(snapshot.hasError){
+          builder: (context, snapshot) {
+            if (ConnectionState.waiting == snapshot.connectionState) {
+              return const Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(width: 10.0,),
+                    Text('Fetching orders...')
+                  ],
+                ),
+              );
+            } else if (snapshot.hasError) {
               return Text('An error has occurred: ${snapshot.error}');
-            }else if(!snapshot.hasData || snapshot.data!.isEmpty){
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Text('No orders available!');
-            }else{
+            } else {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index){
-                      return OrderCard(order: snapshot.data![index]);
-                    },
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return OrderCard(order: snapshot.data![index]);
+                  },
                 ),
               );
             }
@@ -89,20 +98,22 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
         ),
         FutureBuilder<List<ProductOrder>?>(
           future: _supplierOrders,
-          builder: (context, snapshot){
-            if(ConnectionState.waiting == snapshot.connectionState){
+          builder: (context, snapshot) {
+            if (ConnectionState.waiting == snapshot.connectionState) {
               return const CircularProgressIndicator();
-            }else if(snapshot.hasError){
+            } else if (snapshot.hasError) {
               return Text('An error has occurred: ${snapshot.error}');
-            }else if(!snapshot.hasData || snapshot.data!.isEmpty){
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Text('No orders available!');
-            }else{
-              List<ProductOrder> pendingOrders = snapshot.data!.where((order) => order.status == 'PENDING').toList();
+            } else {
+              List<ProductOrder> pendingOrders = snapshot.data!
+                  .where((order) => order.status == 'PENDING')
+                  .toList();
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView.builder(
                   itemCount: pendingOrders.length,
-                  itemBuilder: (context, index){
+                  itemBuilder: (context, index) {
                     return OrderCard(order: pendingOrders[index]);
                   },
                 ),
@@ -112,19 +123,21 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
         ),
         FutureBuilder<List<ProductOrder>?>(
           future: _supplierOrders,
-          builder: (context, snapshot){
-            if(ConnectionState.waiting == snapshot.connectionState){
+          builder: (context, snapshot) {
+            if (ConnectionState.waiting == snapshot.connectionState) {
               return const CircularProgressIndicator();
-            }else if(snapshot.hasError){
+            } else if (snapshot.hasError) {
               return Text('An error has occurred: ${snapshot.error}');
-            }else if(!snapshot.hasData || snapshot.data!.isEmpty){
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Text('No orders available!');
-            }else{
+            } else {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView.builder(
-                  itemCount: snapshot.data!.where((order) => order.status == 'IN TRANSIT').length,
-                  itemBuilder: (context, index){
+                  itemCount: snapshot.data!
+                      .where((order) => order.status == 'IN TRANSIT')
+                      .length,
+                  itemBuilder: (context, index) {
                     return OrderCard(order: snapshot.data![index]);
                   },
                 ),

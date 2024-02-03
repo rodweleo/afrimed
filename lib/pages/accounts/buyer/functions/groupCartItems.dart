@@ -1,11 +1,11 @@
 import '../../../../models/CartItem.dart';
 
-Map<String, List<CartItem>> groupCartItems(cartItems){
+/*Map<String, List<CartItem>> groupCartItems(cartItems){
   Map<String, List<CartItem>> groupedCartItems = {};
   for(var i = 0; i < cartItems.length; i++){
     //check products in the cart and group them per supplier
     CartItem cartItem = cartItems[i];
-    String sId = cartItem.product.supplierId;
+    String sId = cartItem.product!.supplierId;
 
     if(groupedCartItems.containsKey(sId)){
       // If yes, add the cart item to the existing list
@@ -17,4 +17,4 @@ Map<String, List<CartItem>> groupCartItems(cartItems){
   }
 
   return groupedCartItems;
-}
+}*/

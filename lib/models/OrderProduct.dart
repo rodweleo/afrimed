@@ -5,11 +5,11 @@ class OrderProduct {
   final String supplierId;
   final int orderQuantity;
   final double totalAmount;
-  final String imageURL;
+  final String thumbnail;
 
   OrderProduct({
     required this.name,
-    required this.imageURL,
+    required this.thumbnail,
     required this.productId,
     required this.supplierId,
     required this.orderQuantity,
@@ -23,7 +23,7 @@ class OrderProduct {
       'supplierId': supplierId,
       'orderQuantity': orderQuantity,
       'totalAmount': totalAmount,
-      'productImageURL': imageURL
+      'thumbnail': thumbnail
     };
   }
 
@@ -33,7 +33,7 @@ class OrderProduct {
         name = map['name'],
         supplierId = map['supplierId'],
         orderQuantity = map['orderQuantity'],
-        imageURL = map['productImageURL'],
+        thumbnail = map['thumbnail'],
         totalAmount = map['totalAmount'].toDouble();
 
 }

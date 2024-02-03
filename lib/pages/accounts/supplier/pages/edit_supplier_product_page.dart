@@ -1,20 +1,24 @@
-import 'dart:io';
-import 'package:camera/camera.dart';
-import 'package:AfriMed/pages/take_picture.dart';
+import 'package:AfriMed/models/SupplierProduct.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../models/Product.dart';
+import '../../../../apis/Product_Api.dart';
+import '../../../../providers/AuthProvider.dart';
+import 'package:provider/provider.dart';
 
 class EditProduct extends StatefulWidget {
   EditProduct({super.key, required this.product});
-  Product product;
+  SupplierProduct product;
 
   @override
   State<EditProduct> createState() => _EditProductState();
 }
 
 class _EditProductState extends State<EditProduct> {
+  final ImagePicker imagePicker = ImagePicker();
+
   //creating the form key
   final _editProductKey = GlobalKey<FormState>();
   final List<String> _productCategories = [
@@ -34,20 +38,17 @@ class _EditProductState extends State<EditProduct> {
   final TextEditingController _productStockController = TextEditingController();
   final TextEditingController _productDiscountPercentageController =
   TextEditingController();
-  String productImagePath = "";
-  final bool _isAddingProduct = false;
+  String thumbnail = "";
+  List images = [];
+  bool _isAddingProduct = false;
+
   @override
   void dispose() {
     _productNameController.dispose();
-    _productNameController.clear();
     _productDescriptionController.dispose();
-    _productDescriptionController.clear();
     _productPriceController.dispose();
-    _productPriceController.clear();
     _productStockController.dispose();
-    _productStockController.clear();
     _productDiscountPercentageController.dispose();
-    _productDiscountPercentageController.clear();
     super.dispose();
   }
 
@@ -60,57 +61,56 @@ class _EditProductState extends State<EditProduct> {
     _productDiscountPercentageController.text = widget.product.discountPercentage.toString();
     _productStockController.text = widget.product.stock.toString();
 
-    //widget.product.imageUrl = productImagePath;
-
+    //initializing the default thumbnail to the product's default image
+    thumbnail = widget.product.thumbnail ?? "";
+    images = widget.product.images ?? [];
     super.initState();
   }
 
-  /*Future<String?> _addProduct() async {
+  Future<String?> _updateProduct() async {
     //make the state to be submitting state
     setState(() {
       _isAddingProduct = true;
     });
 
-    Product edittedProduct = Product(
+    SupplierProduct editedProduct = SupplierProduct(
         id: '',
         name: _productNameController.text,
         category: _productCategory,
         description: _productDescriptionController.text,
-        imageUrl: widget.productImagePath,
+        thumbnail: widget.product.thumbnail,
+        images: images,
         price: double.parse(_productPriceController.text),
         discountPercentage:
         double.parse(_productDiscountPercentageController.text),
         stock: int.parse(_productStockController.text),
-        supplierId:
-        Provider.of<UserProvider>(context, listen: false).user!.uid);
+        supplierId: Provider.of<AuthProvider>(context, listen: false).getCurrentAccount()!.id!
+    );
 
     //try adding the product into the database
     Product_Api productApi = Product_Api();
-    String? feedback = '';
-    /*String? feedback =
-        await productApi.createProduct(newProduct, File(widget.productImagePath));
-*/
+    String? feedback =
+        await productApi.updateSupplierProduct(editedProduct);
     return feedback;
-  }*/
+  }
 
   void _pickProductImageFromGallery() async {
-    final ImagePicker picker = ImagePicker();
+
     try {
-      final productImage = await picker.pickImage(
-        source: ImageSource.gallery,
-      );
+      final List selectedImages = await imagePicker.pickMultiImage();
 
-      if (productImage != null) {
-        setState(() {
-          productImagePath = productImage.path;
-        });
-      } else {
-        return;
+      if (selectedImages.isNotEmpty) {
+        //iterate through the array and extract the path then push them to the image file path list
+        for(int i = 0; i < selectedImages.length; i++){
+          String imagePath = selectedImages[i].path;
+
+          //add the image path to the
+          images.add(imagePath);
+        }
       }
-    } catch (e) {
-      // Handle exceptions related to image picking
-      print('Error picking image: $e');
 
+      setState(() {});
+    } catch (e) {
       // Provide a more user-friendly error message
       showDialog(
         context: context,
@@ -134,71 +134,6 @@ class _EditProductState extends State<EditProduct> {
 
   }
 
-  void _displayImageSourceList(){
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          content: SizedBox(
-            height: 100,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children:[
-                  GestureDetector(
-                    onTap: () async {
-                      // Obtain a list of the available cameras on the device.
-                      final cameras = await availableCameras();
-                      // Get a specific camera from the list of available cameras.
-                      final camera = cameras[1];
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => TakePicture(
-                            // Pass the automatically generated path to
-                            // the AddProductForm widget.
-                            camera: camera,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Row(
-                      children: [
-                        Icon(Icons.photo_camera, size: MediaQuery.of(context).size.height * 0.035,),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text('Camera', style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.height * 0.025,
-                            color: Colors.blueGrey
-                        ),)
-                      ],
-                    ),
-                  ),
-                  const Divider(),
-                  GestureDetector(
-                    onTap: (){
-                      _pickProductImageFromGallery();
-                    },
-                    child: Row(
-                      children: [
-                        Icon(Icons.photo, size: MediaQuery.of(context).size.height * 0.03,),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text('Gallery', style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.height * 0.025,
-                            color: Colors.blueGrey
-                        ),)
-                      ],
-                    ),
-                  )
-                ]
-            ),
-          ),
-        );
-      },
-    );
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -286,7 +221,7 @@ class _EditProductState extends State<EditProduct> {
                   },
                   keyboardType: TextInputType.multiline,
                   maxLines: 3,
-                  maxLength: 100,
+                  maxLength: 200,
                   decoration: const InputDecoration(
                     labelText: 'Description',
                     border: OutlineInputBorder(
@@ -330,81 +265,7 @@ class _EditProductState extends State<EditProduct> {
                 const SizedBox(
                   height: 15,
                 ),
-                /*TextFormField(
-                  controller: _productManufacturingDateController,
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1950),
-                        //DateTime.now() - not to allow to choose before today.
-                        lastDate: DateTime(2100));
 
-                    if (pickedDate != null) {
-                      print(
-                          pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                      String formattedDate =
-                      DateFormat('yyyy-MM-dd').format(pickedDate);
-                      print(
-                          formattedDate); //formatted date output using intl package =>  2021-03-16
-                      setState(() {
-                        _productManufacturingDateController.text =
-                            formattedDate; //set output date to TextField value.
-                      });
-                    } else {}
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Manufacture Date',
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(width: 1.0, style: BorderStyle.solid, color: Colors.black)
-                    ),
-                  ),
-                  obscureText: false,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter the product's manufacturing date";
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 15,),
-                TextFormField(
-                  controller: _productExpiryDateController,
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime(int.parse(_productManufacturingDateController.text)),
-                        firstDate: DateTime(1950),
-                        //DateTime.now() - not to allow to choose before today.
-                        lastDate: DateTime(2100));
-
-                    if (pickedDate != null) {
-                      print(
-                          pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                      String formattedDate =
-                      DateFormat('yyyy-MM-dd').format(pickedDate);
-                      print(
-                          formattedDate); //formatted date output using intl package =>  2021-03-16
-                      setState(() {
-                        _productExpiryDateController.text =
-                            formattedDate; //set output date to TextField value.
-                      });
-                    } else {}
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Expiry Date',
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(width: 1.0, style: BorderStyle.solid, color: Colors.black)
-                    ),
-                  ),
-                  obscureText: false,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter the product's expiry date";
-                    }
-                    return null;
-                  },
-                ),*/
                 const SizedBox(
                   height: 15,
                 ),
@@ -458,8 +319,7 @@ class _EditProductState extends State<EditProduct> {
                 const SizedBox(
                   height: 15,
                 ),
-                productImagePath == ""
-                    ? GestureDetector(
+                widget.product.images!.isEmpty ? GestureDetector(
                   child: Container(
                       width: MediaQuery.of(context).size.width,
                       padding: const EdgeInsets.all(16.0),
@@ -489,70 +349,56 @@ class _EditProductState extends State<EditProduct> {
                         ],
                       )),
                   onTap: () {
-                    _displayImageSourceList();
+                    _pickProductImageFromGallery();
                   },
-                )
-                    : SizedBox(
-                    width: double.infinity,
-                    child: Stack(children: [
-                      Column(
-                        children: [
-                          Container(
-                            height: MediaQuery.of(context).size.height / 5,
+                ) : Stack(
+                  children: [
+                    CarouselSlider(
+                        items: widget.product.images!
+                            .map((item) => SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width / 3,
+                                height: 10,
+                                child: CachedNetworkImage(
+                                  placeholder: (context, url) => SizedBox(
+                                      height: 10,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: const CircularProgressIndicator()),
+                                  errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                                  imageUrl: item,
+                                  fit: BoxFit.fill,
+                                ),
+                              )
+                          ),
+                        ))
+                            .toList(),
+                        options: CarouselOptions(
+                            autoPlay: false,
+                            autoPlayAnimationDuration: const Duration(milliseconds: 1000),
+                            disableCenter: false,
+                            viewportFraction: 1.0)),
+                    Positioned(
+                      top: 0,
+                        right: 0,
+                        child: Container(
                             decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.black.withOpacity(0.5)),
-                                borderRadius: BorderRadius.circular(5.0)),
-                            child: Image.file(File(productImagePath),
-                                fit: BoxFit.cover),
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          GestureDetector(
-                              onTap: () {
-                                _displayImageSourceList();
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(8.0),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color:
-                                        Colors.black.withOpacity(0.5),
-                                        width: 1),
-                                    borderRadius:
-                                    BorderRadius.circular(5.0)),
-                                child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(productImagePath
-                                          .split("/")
-                                          .last),
-                                      const Icon(
-                                        Icons.edit_document,
-                                        color: Colors.blueGrey,
-                                      )
-                                    ]),
-                              ))
-                        ],
-                      ),
-                      Positioned(
-                          top: 0,
-                          right: 0,
-                          child: GestureDetector(
-                            onTap:(){
-                              _pickProductImageFromGallery();
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.red.withOpacity(0.8),
-                                  borderRadius: BorderRadius.circular(50.0)),
-                              child: const Icon(Icons.close, color: Colors.white),
+                                color: Colors.white.withOpacity(0.75),
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft : Radius.circular(12.5),
+                              )
                             ),
-                          ))
-                    ])),
+                            child: IconButton(
+                              onPressed: (){
+                                _pickProductImageFromGallery();
+                              },
+                              icon: const Icon(Icons.edit, color: Colors.green,),
+                            )))
+                  ],
+                ),
                 const SizedBox(
                   height: 30,
                 ),
@@ -567,11 +413,11 @@ class _EditProductState extends State<EditProduct> {
                             BorderRadius.all(Radius.circular(5)))),
                     onPressed: () async {
                       // Validate returns true if the form is valid, or false otherwise.
-                      /*if (_addProductKey.currentState!.validate()) {
+                      if (_editProductKey.currentState!.validate()) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Processing Data')),
                         );
-                        String? feedback = await _addProduct();
+                        String? feedback = await _updateProduct();
                         if (feedback != null) {
                           setState(() {
                             _isAddingProduct = false;
@@ -581,9 +427,9 @@ class _EditProductState extends State<EditProduct> {
                           );
 
                           //reset the whole form
-                          _addProductKey.currentState!.reset();
+                          _editProductKey.currentState!.reset();
                         }
-                      }*/
+                      }
                     },
                     child: _isAddingProduct
                         ? const CircularProgressIndicator(

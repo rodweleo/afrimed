@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:AfriMed/pages/accounts/buyer/BuyerAccount.dart';
+import 'package:AfriMed/pages/accounts/buyer/buyer_account.dart';
 import 'package:AfriMed/pages/auth/login.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';

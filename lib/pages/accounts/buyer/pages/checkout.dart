@@ -49,16 +49,18 @@ class _CheckoutState extends State<Checkout> {
 
     //in cases where the products have different suppliers,
     //we need to group the products per supplier then send the order
-    Map<String, List<CartItem>> modifiedCartItems = groupCartItems(
-        Provider.of<CartProvider>(context, listen: false).cartItems);
+    /*Map<String, List<CartItem>> modifiedCartItems = groupCartItems(
+        Provider.of<CartProvider>(context, listen: false).cartItems);*/
 
     Order_Api orderApi = Order_Api();
 
-    String? feedback = await orderApi.createOrder(
+    /*String? feedback = await orderApi.createOrder(
         Provider.of<AuthProvider>(context, listen: false).getCurrentAccount()!.id,
         modifiedCartItems,
         selectedShippingAddress,
-        context);
+        context);*/
+
+    String feedback = "Ordering";
 
     if(feedback != null){
       //clear the cart provider
@@ -157,7 +159,7 @@ class _CheckoutState extends State<Checkout> {
                       'Total Price:',
                     ),
                     Text(
-                      'KSh ${cartProvider.getTotal().toStringAsFixed(2)}',
+                      'KSh 0',
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 20),
                     ),
