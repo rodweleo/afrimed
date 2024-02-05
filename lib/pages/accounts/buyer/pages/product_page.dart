@@ -1,5 +1,4 @@
 import 'package:AfriMed/models/CartItem.dart';
-import 'package:AfriMed/models/Product.dart';
 import 'package:AfriMed/models/SupplierProduct.dart';
 import 'package:AfriMed/providers/cart_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';

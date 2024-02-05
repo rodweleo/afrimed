@@ -1,4 +1,3 @@
-import 'package:AfriMed/components/cards/CartItem.dart';
 import 'package:AfriMed/models/Account.dart';
 import 'package:AfriMed/pages/accounts/buyer/pages/checkout.dart';
 import 'package:AfriMed/providers/cart_provider.dart';
@@ -23,8 +22,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
         title: const Text('My Bag'),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
+      body: const Padding(
+        padding: EdgeInsets.all(8.0),
         child: Text('')
       ),
       bottomNavigationBar: Container(
@@ -52,16 +51,16 @@ class _ShoppingCartState extends State<ShoppingCart> {
               ],
             ),
             const SizedBox(height: 10),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Total Amount to Pay:',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
                   'Ksh 0', // You may need to adjust this based on your discount logic
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ],

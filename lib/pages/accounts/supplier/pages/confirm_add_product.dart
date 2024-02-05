@@ -406,7 +406,7 @@ class _ConfirmAddProductState extends State<ConfirmAddProduct> {
                                               0.05,
                                           color: Colors.lightGreen),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     Text(
@@ -426,7 +426,7 @@ class _ConfirmAddProductState extends State<ConfirmAddProduct> {
 
                                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SupplierProductsPage()),);
                                   },
-                                  child: Text('No', style: TextStyle(
+                                  child: const Text('No', style: TextStyle(
                                       fontWeight: FontWeight.w900,
                                       color:
                                       Colors.black)),

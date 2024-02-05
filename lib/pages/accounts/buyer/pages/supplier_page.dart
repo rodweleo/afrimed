@@ -1,12 +1,7 @@
 import 'package:AfriMed/models/Account.dart';
 import 'package:AfriMed/pages/accounts/supplier/widgets/cards/supplierProductCard.dart';
-import 'package:AfriMed/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../../../apis/Product_Api.dart';
-import '../../../../components/cards/platform_product_card.dart';
-import '../../../../models/CartItem.dart';
-import '../../../../models/Product.dart';
 import '../../../../models/SupplierProduct.dart';
 import 'ShoppingCart.dart';
 

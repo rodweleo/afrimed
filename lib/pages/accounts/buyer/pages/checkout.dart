@@ -1,5 +1,4 @@
 import 'package:AfriMed/components/success_page/OrderSuccessful.dart';
-import 'package:AfriMed/pages/accounts/buyer/functions/groupCartItems.dart';
 import 'package:AfriMed/pages/accounts/buyer/widgets/CheckoutPaymentInformation.dart';
 import 'package:AfriMed/pages/accounts/buyer/widgets/CheckoutShippingAddress.dart';
 import 'package:AfriMed/providers/AuthProvider.dart';
@@ -8,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../../apis/Order_Api.dart';
 import '../../../../models/Account.dart';
-import '../../../../models/CartItem.dart';
 import 'package:AfriMed/providers/cart_provider.dart';
 import '../../../../models/ShippingAddress.dart';
 
@@ -62,31 +60,17 @@ class _CheckoutState extends State<Checkout> {
 
     String feedback = "Ordering";
 
-    if(feedback != null){
-      //clear the cart provider
-      //Provider.of<CartProvider>(context, listen: false).clearCart();
-      Navigator.of(context).pop();
+    //clear the cart provider
+    //Provider.of<CartProvider>(context, listen: false).clearCart();
+    Navigator.of(context).pop();
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const OrderSuccessful(),
-        ),
-      );
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: const Text('Something went wrong.'),
-            action: SnackBarAction(
-              label: 'Retry',
-              onPressed: (){
-                _createOrder();
-              },
-            ),
-        )
-      );
-    }
-
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const OrderSuccessful(),
+      ),
+    );
+  
 
 
 
@@ -152,15 +136,15 @@ class _CheckoutState extends State<Checkout> {
                   ],
                 ),
                 const SizedBox(height: 5),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       'Total Price:',
                     ),
                     Text(
                       'KSh 0',
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                   ],

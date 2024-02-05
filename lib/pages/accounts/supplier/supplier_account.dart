@@ -59,7 +59,7 @@ class _SupplierAccountState extends State<SupplierAccount> {
           onTap: _onItemTapped,
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.white,
-          selectedLabelStyle: TextStyle(
+          selectedLabelStyle: const TextStyle(
             fontWeight: FontWeight.bold
           ),
         ));

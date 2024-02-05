@@ -1,4 +1,3 @@
-import '../../../../models/CartItem.dart';
 
 /*Map<String, List<CartItem>> groupCartItems(cartItems){
   Map<String, List<CartItem>> groupedCartItems = {};
