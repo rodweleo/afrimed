@@ -6,14 +6,14 @@ import '../../../../apis/Product_Api.dart';
 import '../../../../models/Product.dart';
 
 
-class AddProductForm extends StatefulWidget {
-  const AddProductForm({super.key});
+class AddPlatformProduct extends StatefulWidget {
+  const AddPlatformProduct({super.key});
 
   @override
-  State<AddProductForm> createState() => _AddProductFormState();
+  State<AddPlatformProduct> createState() => _AddPlatformProductState();
 }
 
-class _AddProductFormState extends State<AddProductForm> {
+class _AddPlatformProductState extends State<AddPlatformProduct> {
   //creating the form key
   final _addProductKey = GlobalKey<FormState>();
   final List<String> _productCategories = [
@@ -29,11 +29,6 @@ class _AddProductFormState extends State<AddProductForm> {
   String _productCategory = "";
   final TextEditingController _productDescriptionController =
       TextEditingController();
-  final TextEditingController _productPriceController = TextEditingController();
-  final TextEditingController _productStockController = TextEditingController();
-  final TextEditingController _productDiscountPercentageController =
-      TextEditingController();
-
   //THE IMAGES FOR EACH PRODUCT
   final ImagePicker imagePicker = ImagePicker();
   List imageFileList = [];
@@ -43,9 +38,6 @@ class _AddProductFormState extends State<AddProductForm> {
   void dispose() {
     _productNameController.dispose();
     _productDescriptionController.dispose();
-    _productPriceController.dispose();
-    _productStockController.dispose();
-    _productDiscountPercentageController.dispose();
     super.dispose();
   }
 
@@ -83,7 +75,7 @@ class _AddProductFormState extends State<AddProductForm> {
 
       if (selectedImages.isNotEmpty) {
         //iterate through the array and extract the path then push them to the image file path list
-        for(var i = 0; i <= selectedImages.length; i++){
+        for(var i = 0; i < selectedImages.length; i++){
           String imagePath = selectedImages[i].path;
 
           //add the image path to the
@@ -99,7 +91,7 @@ class _AddProductFormState extends State<AddProductForm> {
         builder: (context) {
           return AlertDialog(
             title: const Text('Error'),
-            content: const Text('Failed to pick an image. Please try again.'),
+            content: Text('Failed to pick an image: $e'),
             actions: [
               TextButton(
                 onPressed: () {
@@ -221,81 +213,6 @@ class _AddProductFormState extends State<AddProductForm> {
                   ),
                   const SizedBox(
                     height: 15,
-                  ),
-                  TextFormField(
-                    controller: _productPriceController,
-                    onChanged: (value) {
-                      _productPriceController.text = value;
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'Price',
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1.0,
-                              style: BorderStyle.solid,
-                              color: Colors.black)),
-                    ),
-                    obscureText: false,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter the product's price";
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  TextFormField(
-                    controller: _productDiscountPercentageController,
-                    onChanged: (value) {
-                      _productDiscountPercentageController.text = value;
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'Discount Percentage',
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1.0,
-                              style: BorderStyle.solid,
-                              color: Colors.black)),
-                    ),
-                    obscureText: false,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter the product's discount percentage";
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  TextFormField(
-                    controller: _productStockController,
-                    onChanged: (value) {
-                      _productStockController.text = value;
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'Stock',
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1.0,
-                              style: BorderStyle.solid,
-                              color: Colors.black)),
-                    ),
-                    obscureText: false,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter the product's stock";
-                      }
-                      return null;
-                    },
                   ),
                   const SizedBox(
                     height: 15,

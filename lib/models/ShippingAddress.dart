@@ -3,12 +3,8 @@ class ShippingAddress {
   final String town;
   final String county;
 
-
   ShippingAddress(
-      {
-        required this.address,
-      required this.county,
-      required this.town});
+      {required this.address, required this.county, required this.town});
 
   factory ShippingAddress.fromMap(Map<String, dynamic> map) {
     return ShippingAddress(

@@ -2,6 +2,8 @@ import 'package:AfriMed/models/CartItem.dart';
 import 'package:AfriMed/models/SupplierProduct.dart';
 import 'package:AfriMed/providers/cart_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_options.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -28,18 +30,33 @@ class ProductPage extends StatelessWidget {
           SizedBox(
             height: MediaQuery.of(context).size.height * .35,
             width: double.infinity,
-            child: CachedNetworkImage(
-              placeholder: (context, url) => const SizedBox(
-                  height: 10,
-                  width: 10,
-                  child: CircularProgressIndicator()),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-              height: 50,
-              width: 50,
-              imageUrl:
-              product!.thumbnail!,
-              fit: BoxFit.fill,
-            ),
+            child: CarouselSlider(
+                items: product?.images!
+                    .map((item) => SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: ClipRRect(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 3,
+                        height: 10,
+                        child: CachedNetworkImage(
+                          placeholder: (context, url) => SizedBox(
+                              height: 10,
+                              width: MediaQuery.of(context).size.width,
+                              child: const CircularProgressIndicator()),
+                          errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                          imageUrl: item,
+                          fit: BoxFit.fill,
+                        ),
+                      )
+                  ),
+                ))
+                    .toList(),
+                options: CarouselOptions(
+                    autoPlay: true,
+                    autoPlayAnimationDuration: const Duration(milliseconds: 1000),
+                    disableCenter: false,
+                    viewportFraction: 1.0)),
           ),
           Expanded(
             child: Stack(
@@ -117,9 +134,6 @@ class ProductPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 15),
-                        const Divider(),
-                        const Divider(),
-                        //SimilarProducts(product: product)
                       ],
                     ),
                   ),
@@ -147,9 +161,9 @@ class ProductPage extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  disabledBackgroundColor: Colors.grey,
+                  disabledBackgroundColor: Theme.of(context).colorScheme.secondary,
                     disabledForegroundColor: Colors.white.withOpacity(0.5),
-                    backgroundColor: Colors.blueGrey,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     foregroundColor: Colors.white,
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(5)))),

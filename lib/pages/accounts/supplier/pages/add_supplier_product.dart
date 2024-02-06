@@ -26,7 +26,7 @@ class _AddProductState extends State<AddProduct> {
     // Filter products based on the search query
     List<Product?> filteredProducts = allProducts
         .where((product) =>
-        (product!.name.toLowerCase() + product.description.toLowerCase() + product.name.toLowerCase() + product.category.toLowerCase()).contains(searchController.text.toLowerCase()))
+        (product!.name.toLowerCase() + product.description.toLowerCase() + product.category.toLowerCase()).contains(searchController.text.toLowerCase()))
         .toList();
 
     return filteredProducts;

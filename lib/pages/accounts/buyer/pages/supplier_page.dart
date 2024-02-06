@@ -1,9 +1,13 @@
 import 'package:AfriMed/models/Account.dart';
+import 'package:AfriMed/pages/accounts/buyer/pages/product_page.dart';
 import 'package:AfriMed/pages/accounts/supplier/widgets/cards/supplierProductCard.dart';
 import 'package:flutter/material.dart';
 import '../../../../apis/Product_Api.dart';
+import 'package:provider/provider.dart';
+import '../../../../models/CartItem.dart';
 import '../../../../models/SupplierProduct.dart';
-import 'ShoppingCart.dart';
+import '../../../../providers/cart_provider.dart';
+import 'shopping_cart_page.dart';
 
 class SupplierPage extends StatefulWidget {
   const SupplierPage({super.key, required this.account});
@@ -41,7 +45,7 @@ class _SupplierPageState extends State<SupplierPage> {
   @override
   Widget build(BuildContext context) {
     //get the elements in the cart that are a given supplier's
-    //List<CartItem> items = Provider.of<CartProvider>(context, listen: false).getSupplierItemsInCart(widget.account.id!);
+    List<CartItem> items = Provider.of<CartProvider>(context, listen: true).getSupplierItemsInCart(widget.account.id!);
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -68,7 +72,7 @@ class _SupplierPageState extends State<SupplierPage> {
                       right: 4,
                       child: Padding(
                         padding: const EdgeInsets.all(2.0),
-                        child: Text(0.toString(), style: TextStyle(
+                        child: Text(items.length.toString(), style: TextStyle(
                             fontSize: MediaQuery.of(context).size.height * 0.02,
                             fontWeight: FontWeight.bold,
                             color: Colors.white
@@ -107,7 +111,11 @@ class _SupplierPageState extends State<SupplierPage> {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20)),
                               Text(widget
-                                  .account.businessInfo.businessCategory),
+                                  .account.businessInfo.businessCategory,
+                                  style: const TextStyle(
+                                    overflow: TextOverflow.ellipsis
+                                  ),
+                              ),
                             ],
                           ),
                           Column(
@@ -138,8 +146,8 @@ class _SupplierPageState extends State<SupplierPage> {
                     children: [
                       Expanded(
                         child:  SizedBox(
-                          height: 40,
-                          child: TextField(
+                          height: 50,
+                          child: TextFormField(
                             controller: _searchBoxController,
                             onChanged: (String? value){
                               setState(() {
@@ -147,7 +155,8 @@ class _SupplierPageState extends State<SupplierPage> {
                               });
                             },
                             decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
+                              border: OutlineInputBorder(
+                              ),
                               hintText: 'Search product...',
                               contentPadding: EdgeInsets.symmetric(horizontal: 10), // Optional padding
                               alignLabelWithHint: true,
@@ -155,47 +164,7 @@ class _SupplierPageState extends State<SupplierPage> {
                           ),
                         ),
                       ),
-                    IconButton(onPressed: (){
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Sort products by:'),
-                            content: const Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children:[
-                                Text('Alphabets (A-Z)'),
-                                Text('Date of Expiration'),
-                              ]
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  // Dismiss the dialog
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.black,
-                                    foregroundColor: Colors.white,
-                                    shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                                    textStyle: const TextStyle(
-                                        color: Colors.white, fontStyle: FontStyle.normal)),
-                                onPressed: () {
-                                  print('Sorting');
-                                },
-                                child: const Text('Sort'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    }, icon: const Icon(Icons.sort),
-                  )]),
+                    ]),
                   FutureBuilder<List<SupplierProduct>>(
                       future: _loadSupplierProducts(),
                       builder: (context, snapshot) {
@@ -206,17 +175,20 @@ class _SupplierPageState extends State<SupplierPage> {
                         } else {
                           List<SupplierProduct> supplierProducts = snapshot.data!;
                           return Expanded(
-                            child: GridView.builder(
+                            child: ListView.builder(
                               shrinkWrap: true,
-                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2, // Set the number of columns here
-                                crossAxisSpacing: 8.0,
-                                mainAxisSpacing: 8.0,
-                              ),
                               itemCount: supplierProducts.length,
                               itemBuilder: (context, index) {
                                 SupplierProduct product = supplierProducts[index];
-                                return SupplierProductCard(product: product);
+                                return GestureDetector(
+                                  onTap: (){
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => ProductPage(product: product)),
+                                    );
+                                  },
+                                    child: SupplierProductCard(product: product)
+                                );
                               },
                             ),
                           );

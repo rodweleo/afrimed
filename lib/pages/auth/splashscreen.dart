@@ -6,14 +6,14 @@ import 'package:provider/provider.dart';
 import '../../models/Account.dart';
 import 'login.dart';
 
-class Authenticator extends StatefulWidget {
-  const Authenticator({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
   @override
-  _AuthenticatorState createState() => _AuthenticatorState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _AuthenticatorState extends State<Authenticator> {
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();

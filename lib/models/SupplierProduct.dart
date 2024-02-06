@@ -22,6 +22,21 @@ class SupplierProduct {
         required this.supplierId
       });
 
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'category': category,
+      'description': description,
+      'thumbnail': thumbnail,
+      'images': images,
+      'discountPercentage': discountPercentage,
+      'price': price,
+      'stock': stock,
+      'supplierId': supplierId,
+    };
+  }
+
   factory SupplierProduct.fromMap(Map<String, dynamic> map) {
     return SupplierProduct(
         id: map['id'],

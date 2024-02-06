@@ -23,8 +23,13 @@ class _BuyerAccountState extends State<BuyerAccount> {
     const Orders(),
      const Profile(),
   ];
-  int currentPageIndex = 0;
+  int _selectedIndex = 0;
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
 
   // It is assumed that all messages contain a data field with the key 'type'
@@ -49,10 +54,10 @@ class _BuyerAccountState extends State<BuyerAccount> {
   void _handleMessage(RemoteMessage message) {
     switch(message.data['type']){
       case 'order':
-        currentPageIndex = 2;
+        _selectedIndex = 2;
         break;
       default:
-      currentPageIndex = 0;
+        _selectedIndex = 0;
     }
 
   }
@@ -72,46 +77,34 @@ class _BuyerAccountState extends State<BuyerAccount> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-          body: _pages[currentPageIndex],
-          bottomNavigationBar: NavigationBar(
-            onDestinationSelected: (int index) async {
-              await analytics.logEvent(
-                name: 'pages_tracked',
-                parameters: {
-                  "page_name": pageNames[index],
-                  "page_index": index,
-                }
-              );
-              setState(() {
-                currentPageIndex = index;
-              });
-            },
-            indicatorColor: Colors.black54,
-            selectedIndex: currentPageIndex,
-            destinations: const <Widget>[
-              NavigationDestination(
-                selectedIcon: Icon(
-                  Icons.home,
-                  color: Colors.white,
-                ),
-                icon: Icon(Icons.home_outlined),
+          body: _pages[_selectedIndex],
+          bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            type: BottomNavigationBarType.fixed,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.dashboard_outlined, color: Colors.white,),
                 label: 'Home',
+                activeIcon: Icon(Icons.dashboard),
               ),
-
-              NavigationDestination(
-                selectedIcon: Icon(Icons.shopping_bag_sharp, color: Colors.white),
-                icon: Icon(Icons.shopping_bag),
-                label: 'Orders',
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.shopping_bag_outlined, color: Colors.white,),
+                  label: 'Orders',
+                  activeIcon: Icon(Icons.shopping_bag)
               ),
-              NavigationDestination(
-                selectedIcon: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-                icon: Icon(Icons.person_sharp),
-                label: 'Profile',
-              ),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.person_outlined, color: Colors.white,),
+                  label: 'Profile',
+                  activeIcon: Icon(Icons.person)
+              )
             ],
+            unselectedItemColor: Colors.white,
+            onTap: _onItemTapped,
+            currentIndex: _selectedIndex,
+            selectedItemColor: Theme.of(context).colorScheme.primary,
+            selectedLabelStyle: const TextStyle(
+                fontWeight: FontWeight.bold
+            ),
           )),
     );
   }

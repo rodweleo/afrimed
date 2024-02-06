@@ -1,10 +1,10 @@
+import 'package:AfriMed/models/ShoppingOrder.dart';
 import 'package:AfriMed/pages/accounts/supplier/widgets/DashboardWidget.dart';
 import 'package:AfriMed/providers/AuthProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../apis/Order_Api.dart';
 import '../../../../models/Account.dart';
-import '../../../../models/ProductOrder.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -16,7 +16,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   //retrieve the supplier's orders and display them here
   final Order_Api orderApi = Order_Api();
-  late Future<List<ProductOrder>?> _supplierOrders;
+  late Future<List<ShoppingOrder>?> _supplierOrders;
 
   void _handleFetchRequest(){
     _supplierOrders = orderApi.fetchSupplierOrders(Provider.of<AuthProvider>(context, listen: false).getCurrentAccount()?.id);
@@ -37,7 +37,7 @@ class _DashboardState extends State<Dashboard> {
           automaticallyImplyLeading: false,),
       body: FutureBuilder(
         future: _supplierOrders,
-        builder: (context, AsyncSnapshot<List<ProductOrder>?>snapshot){
+        builder: (context, AsyncSnapshot<List<ShoppingOrder>?>snapshot){
           if(ConnectionState.waiting == snapshot.connectionState){
             return const CircularProgressIndicator();
           } else if(snapshot.hasError){

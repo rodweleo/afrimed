@@ -1,14 +1,13 @@
-import 'package:AfriMed/models/ProductOrder.dart';
+import 'package:AfriMed/models/ShoppingOrder.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../components/order/order_details.dart';
 import '../../../../components/order/order_summary.dart';
 
 class OrderDetailsPage extends StatelessWidget {
-  final ProductOrder productOrder;
+  const OrderDetailsPage({super.key, required this.order});
 
-  const OrderDetailsPage({super.key, required this.productOrder});
-
+  final ShoppingOrder order;
   @override
   Widget build(BuildContext context) {
     void cancelOrder() {
@@ -25,11 +24,11 @@ class OrderDetailsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              OrderDetails(productOrder: productOrder),
+              OrderDetails(order: order),
               Column(children: [
                 Container(
                     margin: const EdgeInsets.only(bottom: 20.0),
-                    child: OrderSummary(productOrder: productOrder,)),
+                    child: OrderSummary(order: order,)),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(

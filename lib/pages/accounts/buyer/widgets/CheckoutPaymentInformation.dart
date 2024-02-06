@@ -1,7 +1,26 @@
 import 'package:flutter/material.dart';
 
-class CheckoutPaymentInformation extends StatelessWidget {
-  const CheckoutPaymentInformation({super.key});
+class CheckoutPaymentInformation extends StatefulWidget {
+  const CheckoutPaymentInformation({super.key, required this.onPaymentMethodSelected});
+
+  final Function onPaymentMethodSelected;
+
+  @override
+  State<CheckoutPaymentInformation> createState() => _CheckoutPaymentInformationState();
+}
+
+class _CheckoutPaymentInformationState extends State<CheckoutPaymentInformation> {
+
+  String selectedPaymentMethod="";
+  void selectPaymentMethod(String paymentMethod){
+    setState((){
+      selectedPaymentMethod = paymentMethod;
+    });
+
+    //update the selected payment method
+    widget.onPaymentMethodSelected(selectedPaymentMethod);
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,42 +31,26 @@ class CheckoutPaymentInformation extends StatelessWidget {
           'Payment Method',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          padding: const EdgeInsets.only(top: 0, bottom: 16.0, left: 16.0, right: 16.0),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blueGrey.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 2,
-                )
-              ]
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Jane Doe', style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.height * 0.02)),
-                  const Text('qwert'),
-                  TextButton(
-                      onPressed: (){
-                        print('Change the shipping address information');
-                      }, child: Text('Change', style: TextStyle(
-                      color: Colors.red.shade300,
-                      fontWeight: FontWeight.bold
-                  ))),
-                ],
-              ),
-
-            ],
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          //display the various options for payment; a. M-Pesa b. Credit
+          children: [
+            ListTile(
+              leading: Radio(value: 'M-Pesa', groupValue: selectedPaymentMethod, onChanged: (value){
+                //the radio button for the mpesa payment method
+                selectPaymentMethod('M-Pesa');
+              }),
+              title: Text('M-Pesa', style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.height * 0.02)),
+            ),
+            const Divider(),
+            ListTile(
+              leading: Radio(value: 'Credit', groupValue: selectedPaymentMethod, onChanged: (value){
+                //the radio button for the mpesa payment method
+                selectPaymentMethod('Credit');
+              }),
+              title: Text('Credit', style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.height * 0.02)),
+            )
+          ],
         )
       ],
     );

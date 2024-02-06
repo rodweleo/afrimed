@@ -1,4 +1,6 @@
 import 'package:AfriMed/components/success_page/OrderSuccessful.dart';
+import 'package:AfriMed/models/CartItem.dart';
+import 'package:AfriMed/models/ShoppingOrder.dart';
 import 'package:AfriMed/pages/accounts/buyer/widgets/CheckoutPaymentInformation.dart';
 import 'package:AfriMed/pages/accounts/buyer/widgets/CheckoutShippingAddress.dart';
 import 'package:AfriMed/providers/AuthProvider.dart';
@@ -9,17 +11,23 @@ import '../../../../apis/Order_Api.dart';
 import '../../../../models/Account.dart';
 import 'package:AfriMed/providers/cart_provider.dart';
 import '../../../../models/ShippingAddress.dart';
+import 'package:intl/intl.dart';
 
 class Checkout extends StatefulWidget {
-  const Checkout({super.key});
-
+  Checkout({super.key, required this.account});
+  Account account;
   @override
   State<Checkout> createState() => _CheckoutState();
 }
 
 class _CheckoutState extends State<Checkout> {
+
+
   ShippingAddress? selectedShippingAddress;
-  void _createOrder() async {
+  String selectedPaymentMethod = "";
+  String paymentStatus = "";
+
+  void _createOrder(String buyerId, String supplierId, List<CartItem> products, double totalAmount) async {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -45,34 +53,36 @@ class _CheckoutState extends State<Checkout> {
           );
         });
 
-    //in cases where the products have different suppliers,
-    //we need to group the products per supplier then send the order
-    /*Map<String, List<CartItem>> modifiedCartItems = groupCartItems(
-        Provider.of<CartProvider>(context, listen: false).cartItems);*/
-
     Order_Api orderApi = Order_Api();
 
-    /*String? feedback = await orderApi.createOrder(
-        Provider.of<AuthProvider>(context, listen: false).getCurrentAccount()!.id,
-        modifiedCartItems,
-        selectedShippingAddress,
-        context);*/
-
-    String feedback = "Ordering";
-
-    //clear the cart provider
-    //Provider.of<CartProvider>(context, listen: false).clearCart();
-    Navigator.of(context).pop();
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const OrderSuccessful(),
-      ),
+    ShoppingOrder newOrder = ShoppingOrder(
+      id: "",
+      buyerId: buyerId,
+      supplierId: supplierId,
+      products: products,
+      totalAmount: totalAmount,
+      paymentMethod: selectedPaymentMethod,
+      paymentStatus: paymentStatus,
+      discount: 0.0,
+      shippingAddress: selectedShippingAddress,
+      status: 'PENDING',
+      createdOn: DateFormat.yMMMEd().format(DateTime.now()),
     );
-  
+    String? orderId = await orderApi.createOrder(newOrder);
 
+    if(orderId != null){
 
+      //if the order has been successfully made, clear the cart
+      Provider.of<CartProvider>(context, listen: false).clearCart();
+
+      //redirect the user to an informative page telling them that the order has been successfully created
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OrderSuccessful(newOrder: newOrder, orderId: orderId,),
+        ),
+      );
+    }
 
   }
 
@@ -80,15 +90,21 @@ class _CheckoutState extends State<Checkout> {
     setState(() {
       selectedShippingAddress = address;
     });
+  }
 
-    print(selectedShippingAddress);
+  //method to update the payment method when the radio buttons are clicked
+  void updatePaymentMethod(String paymentMethod){
+    setState(() {
+      selectedPaymentMethod = paymentMethod;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context);
-    final accountProvider = Provider.of<AuthProvider>(context);
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    final accountProvider = Provider.of<AuthProvider>(context, listen: false);
     Account? account = accountProvider.getCurrentAccount();
+
     return Scaffold(
       appBar: AppBar(title: const Text('Checkout'), centerTitle: true),
       body: Padding(
@@ -102,9 +118,8 @@ class _CheckoutState extends State<Checkout> {
                   account: account,
                   onAddressSelected: updateSelectedAddress,),
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 3,
-                child: const CheckoutPaymentInformation(),
+              CheckoutPaymentInformation(
+                onPaymentMethodSelected: updatePaymentMethod,
               ),
             ]
           ),
@@ -117,10 +132,7 @@ class _CheckoutState extends State<Checkout> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Order Summary',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
+              const Divider(),
               Column(children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -129,22 +141,22 @@ class _CheckoutState extends State<Checkout> {
                       'Total Items:',
                     ),
                     Text(
-                      cartProvider.getTotalAmount().toString(),
+                      cartProvider.getSupplierItemsInCart(widget.account.id!).length.toString(),
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                   ],
                 ),
                 const SizedBox(height: 5),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Total Price:',
                     ),
                     Text(
-                      'KSh 0',
-                      style: TextStyle(
+                      'KES ${cartProvider.getSupplierItemsTotalAmount(widget.account.id!).toString()}',
+                      style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                   ],
@@ -152,16 +164,14 @@ class _CheckoutState extends State<Checkout> {
               ]),
               TextButton(
                 onPressed: () {
-                  _createOrder();
+                  _createOrder(account!.id!, widget.account.id!, cartProvider.getSupplierItemsInCart(widget.account.id!), cartProvider.getSupplierItemsTotalAmount(widget.account.id!));
                 },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                ),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(5)))),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

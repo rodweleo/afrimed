@@ -1,10 +1,11 @@
 import 'package:AfriMed/apis/Order_Api.dart';
 import 'package:AfriMed/components/cards/OrderCard.dart';
-import 'package:AfriMed/models/ProductOrder.dart';
 import 'package:AfriMed/pages/accounts/buyer/pages/suppliers_page.dart';
 import 'package:AfriMed/providers/AuthProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../models/ShoppingOrder.dart';
 
 class Orders extends StatefulWidget {
   const Orders({super.key});
@@ -15,7 +16,7 @@ class Orders extends StatefulWidget {
 
 class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  late Future<List<ProductOrder>?> _buyerOrders;
+  late Future<List<ShoppingOrder>?> _buyerOrders;
 
   @override
   void initState() {
@@ -74,7 +75,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
             color: Colors.blueGrey.shade200.withOpacity(0.3),
             child: FutureBuilder(
               future: _buyerOrders,
-              builder: (context, AsyncSnapshot<List<ProductOrder>?> snapshot) {
+              builder: (context, AsyncSnapshot<List<ShoppingOrder>?> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
@@ -85,9 +86,9 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ListView.builder(
-                      itemCount: snapshot.data?.where((productOrder) => productOrder.status == "completed").length,
+                      itemCount: snapshot.data?.where((order) => order.status == "completed").length,
                       itemBuilder: (context, index) {
-                        ProductOrder productOrder = snapshot.data![index];
+                        ShoppingOrder order = snapshot.data![index];
                         return Container(
                           margin: const EdgeInsets.only(top: 5.0),
 
@@ -103,7 +104,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                               )
                             ]
                           ),
-                          child: OrderCard(order: productOrder,),
+                          child: OrderCard(order: order,),
                         );
                       },
                     ),
@@ -116,7 +117,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
             color: Colors.blueGrey.shade200.withOpacity(0.3),
             child: FutureBuilder(
               future: _buyerOrders,
-              builder: (context, AsyncSnapshot<List<ProductOrder>?> snapshot) {
+              builder: (context, AsyncSnapshot<List<ShoppingOrder>?> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
@@ -131,11 +132,11 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                       snapshot.data!.where((order) => order.status == 'COMPLETED').length,
                       itemBuilder: (BuildContext context, int index) {
                         // Filter the orders based on completion status
-                        List<ProductOrder> completedOrders = snapshot.data!
+                        List<ShoppingOrder> completedOrders = snapshot.data!
                             .where((order) => order.status == 'COMPLETED')
                             .toList();
-                        ProductOrder productOrder = completedOrders[index];
-                        return OrderCard(order: productOrder);
+                        ShoppingOrder order = completedOrders[index];
+                        return OrderCard(order: order);
                       },
                     ),
                   );
@@ -147,7 +148,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
             color: Colors.blueGrey.shade200.withOpacity(0.3),
             child: FutureBuilder(
               future: _buyerOrders,
-              builder: (context, AsyncSnapshot<List<ProductOrder>?> snapshot) {
+              builder: (context, AsyncSnapshot<List<ShoppingOrder>?> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
@@ -162,11 +163,11 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                       snapshot.data!.where((order) => order.status == 'PENDING' || order.status == 'IN PROGRESS').length,
                       itemBuilder: (BuildContext context, int index) {
                         // Filter the orders based on completion status
-                        List<ProductOrder> completedOrders = snapshot.data!
+                        List<ShoppingOrder> completedOrders = snapshot.data!
                             .where((order) => order.status == 'PENDING')
                             .toList();
-                        ProductOrder productOrder = completedOrders[index];
-                        return OrderCard(order: productOrder);
+                        ShoppingOrder order = completedOrders[index];
+                        return OrderCard(order: order);
                       },
                     ),
                   );

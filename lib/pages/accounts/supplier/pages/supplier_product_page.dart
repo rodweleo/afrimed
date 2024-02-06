@@ -60,15 +60,21 @@ class _SupplierProductPageState extends State<SupplierProductPage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Text(widget.product.category,
+                            style: TextStyle(
+                                color: Colors.black.withOpacity(0.5),
+                                fontWeight: FontWeight.bold,
+                                fontSize:
+                                MediaQuery.of(context).size.height * 0.02)),
                         Text(widget.product.name,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize:
-                                    MediaQuery.of(context).size.height * 0.03)),
+                                    MediaQuery.of(context).size.height * 0.04)),
                         Text(
                           widget.product.description,
                           style: TextStyle(
-                              color: Colors.black.withOpacity(0.5),
+                              color: Colors.black.withOpacity(0.75),
                               fontSize: MediaQuery.of(context).size.height * 0.02,
                               decoration: TextDecoration.none),
                         ),
@@ -88,15 +94,35 @@ class _SupplierProductPageState extends State<SupplierProductPage> {
                               style: TextStyle(
                                   color: Colors.green,
                                   fontSize:
-                                      MediaQuery.of(context).size.height * 0.025,
+                                  MediaQuery.of(context).size.height * 0.02,
                                   fontStyle: FontStyle.italic),
                             )
                           ],
-                        )
+                        ),
+                        Row(
+                          children: [
+                            Text('Stock:',
+                                style: TextStyle(
+                                    fontSize:
+                                    MediaQuery.of(context).size.height * 0.025
+                                ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(widget.product.stock.toString(), style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontSize:
+                                MediaQuery.of(context).size.height * 0.03
+                            ),)
+                          ],
+                        ),
                       ],
                     ),
+
                   ],
                 ),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -146,7 +172,8 @@ class _SupplierProductPageState extends State<SupplierProductPage> {
                           )),
                     ),
                   ],
-                )
+                ),
+
               ],
             ),
           ),

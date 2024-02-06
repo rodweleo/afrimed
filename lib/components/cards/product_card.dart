@@ -3,14 +3,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SupplierProductCard extends StatelessWidget {
+class ProductCard extends StatelessWidget {
   final SupplierProduct? product;
 
-  const SupplierProductCard({super.key, required this.product});
+  const ProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
       child: ListTile(
         leading: CachedNetworkImage(
           placeholder: (context, url) => const SizedBox(
@@ -85,8 +86,8 @@ class SupplierProductCard extends StatelessWidget {
                   width: 10,
                 ),
                 Text(product!.stock.toString(), style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic
                 ),)
               ],
             )

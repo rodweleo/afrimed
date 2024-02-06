@@ -8,6 +8,7 @@ class CartProvider extends ChangeNotifier {
 
   List<CartItem> get cartItems => _cartItems;
 
+  //function to add products to the cart
   void addToCart(CartItem cartItem) {
     // Check if the product is already in the cart
     int existingIndex =
@@ -24,11 +25,13 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  //method to remove items from the cart
   void removeFromCart(CartItem cartItem) {
     _cartItems.remove(cartItem);
     notifyListeners();
   }
 
+  //method to get the total quantity of an item in the cart
   int getCartItemQuantity(SupplierProduct product) {
     try {
       CartItem cartItem = _cartItems.firstWhere(
@@ -52,25 +55,44 @@ class CartProvider extends ChangeNotifier {
     return totalAmount;
   }*/
 
+  //method to get the total amount in cash of the items in the cart
   int getTotalAmount() {
     return _cartItems.fold(0, (sum, item) => sum + item.quantity);
   }
 
 
-  //get a given supplier's items from the cart
-  /*List<CartItem> getSupplierItemsInCart(String supplierId){
+  //method to retrieve a given supplier's products from the cart
+  List<CartItem> getSupplierItemsInCart(String supplierId){
     List<CartItem> items = [];
 
     for (var cartItem in cartItems) {
-      if (cartItem.supplier?.supplierId == supplierId) {
+      if (cartItem.product!.supplierId == supplierId) {
         items.add(cartItem);
       }
     }
-
     return items;
-  }*/
+  }
 
-  //clear items from the cart
+  //method to get the total amount worth of products in the cart for a given supplier
+  double getSupplierItemsTotalAmount(String sId){
+    //get the given supplier's items in the cart
+    List<CartItem> items = getSupplierItemsInCart(sId);
+    double totalAmount = 0.0;
+
+    if(items.isEmpty){
+      totalAmount = 0.0;
+      return totalAmount;
+    }else{
+      //iterate through the items return to get the total amount;
+      for (var cartItem in cartItems) {
+        totalAmount += cartItem.product!.price * cartItem.quantity;
+      }
+
+      return totalAmount;
+    }
+  }
+
+  //method to clear the cart's items
   void clearCart(){
     _cartItems.clear();
     notifyListeners();

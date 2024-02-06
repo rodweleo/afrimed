@@ -261,29 +261,9 @@ class _CheckoutShippingAddressState extends State<CheckoutShippingAddress> {
                 child: ListView.builder(
                     itemCount: snapshot.data?.length,
                     itemBuilder: (context, int index){
-                      return Container(
-                        margin: const EdgeInsets.only(top: 7.5),
-                        padding: const EdgeInsets.all(16.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(5.0),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.blueGrey,
-                              spreadRadius: 1.0,
-                              blurRadius: 2.0
-                            )
-                          ]
-                        ),
-                        child: Row(
-                          children: [
-                            Radio(value: snapshot.data![index], groupValue: selectedAddress, onChanged: (value){
-                              selectShippingAddress(snapshot.data![index]);
-                            }),
-                            AccountShippingAddress(shippingAddress: snapshot.data![index])
-                          ],
-                        ),
-                      );
+                      return AccountShippingAddress(shippingAddress: snapshot.data![index], leading: Radio(value: snapshot.data![index], groupValue: selectedAddress, onChanged: (value){
+                        selectShippingAddress(snapshot.data![index]);
+                      }),);
                     }),
               ),
             );

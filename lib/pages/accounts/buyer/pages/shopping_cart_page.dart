@@ -1,8 +1,8 @@
 import 'package:AfriMed/models/Account.dart';
 import 'package:AfriMed/pages/accounts/buyer/pages/checkout.dart';
+import 'package:AfriMed/pages/accounts/buyer/widgets/ShoppingCartListItems.dart';
 import 'package:AfriMed/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class ShoppingCart extends StatefulWidget {
@@ -22,9 +22,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
         title: const Text('My Bag'),
         centerTitle: true,
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Text('')
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ShoppingCartListItems(account: widget.account)
       ),
       bottomNavigationBar: Container(
         height: 160,
@@ -32,68 +32,63 @@ class _ShoppingCartState extends State<ShoppingCart> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
+            const Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Total Items:',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                Text('Total Items:',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary
+                ),),
                 Text(cartProvider
                     .cartItems.length
                     .toString()), // Add your discount logic here
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('Price:',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                Text(0.toString()), // Add your discount logic here
-              ],
-            ),
             const SizedBox(height: 10),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Total Amount to Pay:',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary
+                  ),
                 ),
                 Text(
-                  'Ksh 0', // You may need to adjust this based on your discount logic
-                  style: TextStyle(
+                  'KES ${cartProvider.getSupplierItemsTotalAmount(widget.account.id!).toString()}', // You may need to adjust this based on your discount logic
+                  style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ],
             ),
             const SizedBox(height: 10),
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Checkout()),
+                  MaterialPageRoute(builder: (context) => Checkout(account: widget.account,)),
                 );
               },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-              ),
-              child: Row(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Colors.white,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(5))),
+                  textStyle: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: MediaQuery.of(context).size.width *
+                          0.04)),
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'PROCEED TO CHECKOUT',
-                    style: GoogleFonts.poppins(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  const Icon(
+                  SizedBox(width: 10),
+                  Icon(
                     Icons.keyboard_arrow_right,
                     color: Colors.white,
                   ),

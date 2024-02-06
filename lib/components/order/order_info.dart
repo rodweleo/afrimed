@@ -1,12 +1,11 @@
+import 'package:AfriMed/models/ShoppingOrder.dart';
 import 'package:flutter/material.dart';
-
-import '../../models/ProductOrder.dart';
 import '../../../../components/ui/status.dart';
 
 class OrderInfo extends StatelessWidget {
-  const OrderInfo({super.key, required this.productOrder});
+  OrderInfo({super.key, required this.order});
 
-  final ProductOrder productOrder;
+  ShoppingOrder order;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -17,16 +16,16 @@ class OrderInfo extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Order #${productOrder.id}',
+              'Order #${order.id}',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize:
                   MediaQuery.of(context).size.height * 0.0225),
             ),
-            Status(status: productOrder.status)
+            Status(status: order.status)
           ],
         ),
-        Text(productOrder.createdOn.toString(), style: TextStyle(
+        Text(order.createdOn.toString(), style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black.withOpacity(0.5)
         )),

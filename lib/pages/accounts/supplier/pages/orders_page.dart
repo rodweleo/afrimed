@@ -1,9 +1,9 @@
-import 'package:AfriMed/models/ProductOrder.dart';
 import 'package:AfriMed/pages/accounts/supplier/components/OrderCard.dart';
 import 'package:AfriMed/providers/AuthProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../apis/Order_Api.dart';
+import '../../../../models/ShoppingOrder.dart';
 
 class Orders extends StatefulWidget {
   const Orders({super.key});
@@ -14,7 +14,7 @@ class Orders extends StatefulWidget {
 
 class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  late Future<List<ProductOrder>?> _supplierOrders;
+  late Future<List<ShoppingOrder>?> _supplierOrders;
 
   final Order_Api _orderApi = Order_Api();
 
@@ -65,7 +65,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
         ),
       ),
       body: TabBarView(controller: _tabController, children: [
-        FutureBuilder<List<ProductOrder>?>(
+        FutureBuilder<List<ShoppingOrder>?>(
           future: _supplierOrders,
           builder: (context, snapshot) {
             if (ConnectionState.waiting == snapshot.connectionState) {
@@ -96,7 +96,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
             }
           },
         ),
-        FutureBuilder<List<ProductOrder>?>(
+        FutureBuilder<List<ShoppingOrder>?>(
           future: _supplierOrders,
           builder: (context, snapshot) {
             if (ConnectionState.waiting == snapshot.connectionState) {
@@ -106,7 +106,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Text('No orders available!');
             } else {
-              List<ProductOrder> pendingOrders = snapshot.data!
+              List<ShoppingOrder> pendingOrders = snapshot.data!
                   .where((order) => order.status == 'PENDING')
                   .toList();
               return Padding(
@@ -121,7 +121,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
             }
           },
         ),
-        FutureBuilder<List<ProductOrder>?>(
+        FutureBuilder<List<ShoppingOrder>?>(
           future: _supplierOrders,
           builder: (context, snapshot) {
             if (ConnectionState.waiting == snapshot.connectionState) {

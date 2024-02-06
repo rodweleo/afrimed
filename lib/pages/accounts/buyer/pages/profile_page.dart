@@ -26,79 +26,81 @@ class _ProfileState extends State<Profile> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              /// -- IMAGE
-              Column(
-                children: [
-                  ProfileInformation(account: account),
-                  /// -- MENU
-                  Container(
-                    margin: const EdgeInsets.only(top: 10.0),
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.blueGrey.withOpacity(0.5),
-                              blurRadius: 1,
-                              spreadRadius: 0.5,
-                              offset: const Offset(1, 1))
-                        ]),
-                    child: Column(
-                      children: [
-                        ProfileMenuWidget(
-                            title: "Notifications",
-                            icon: const Icon(Icons.notifications),
-                            onPress: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const Notifications()),
-                              );
-                            }),
-                        const Divider(),
-                        ProfileMenuWidget(
-                            title: "Settings",
-                            icon: const Icon(Icons.settings),
-                            onPress: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Settings()),
-                              );
-                            }),
-                        const Divider(),
-                        ProfileMenuWidget(
-                            title: "About AfriMed",
-                            icon: const Icon(Icons.info),
-                            onPress: () {}),
-                      ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                /// -- IMAGE
+                Column(
+                  children: [
+                    ProfileInformation(account: account),
+                    /// -- MENU
+                    Container(
+                      margin: const EdgeInsets.only(top: 10.0),
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10.0),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.blueGrey.withOpacity(0.5),
+                                blurRadius: 1,
+                                spreadRadius: 0.5,
+                                offset: const Offset(1, 1))
+                          ]),
+                      child: Column(
+                        children: [
+                          ProfileMenuWidget(
+                              title: "Notifications",
+                              icon: const Icon(Icons.notifications),
+                              onPress: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const Notifications()),
+                                );
+                              }),
+                          const Divider(),
+                          ProfileMenuWidget(
+                              title: "Settings",
+                              icon: const Icon(Icons.settings),
+                              onPress: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Settings()),
+                                );
+                              }),
+                          const Divider(),
+                          ProfileMenuWidget(
+                              title: "About AfriMed",
+                              icon: const Icon(Icons.info),
+                              onPress: () {}),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ProfileMenuWidget(
-                    title: "Logout",
-                    icon: const Icon(Icons.logout),
-                    textColor: Colors.red,
-                    endIcon: false,
-                    onPress: () {
-                      // Show the logout confirmation dialog
-                      showLogoutDialog(context);
-                    }),
-              )
-            ],
+                  ],
+                ),
+        
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileMenuWidget(
+                      title: "Logout",
+                      icon: const Icon(Icons.logout),
+                      textColor: Colors.red,
+                      endIcon: false,
+                      onPress: () {
+                        // Show the logout confirmation dialog
+                        showLogoutDialog(context);
+                      }),
+                )
+              ],
+            ),
           ),
         ),
       ),

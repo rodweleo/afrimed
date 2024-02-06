@@ -6,6 +6,7 @@ import '../../../../apis/AccountApi.dart';
 import '../../../../components/profile/profile_information.dart';
 import '../../../../models/Account.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../providers/AuthProvider.dart';
 
 
@@ -61,7 +62,7 @@ class _ProfileState extends State<Profile> {
                         MaterialPageRoute(
                           builder: (context) => const LoginPage(),
                         ),
-                        (Route<dynamic> route) => false,
+                            (Route<dynamic> route) => false,
                       );
                     })
               ],

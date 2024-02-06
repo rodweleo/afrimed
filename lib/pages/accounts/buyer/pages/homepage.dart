@@ -104,12 +104,7 @@ class _HomepageState extends State<Homepage> {
                   ),
                 ),
               ),
-              const ListTile(
-                title: Text('Recent Activities', style: TextStyle(
-                    fontWeight: FontWeight.bold
-                ),),
-                subtitle: RecentActivities(),
-              )
+
             ],
           ),
         ),

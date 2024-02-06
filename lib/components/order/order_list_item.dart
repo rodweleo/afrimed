@@ -1,12 +1,12 @@
+import 'package:AfriMed/models/CartItem.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/OrderProduct.dart';
 
 class OrderListItem extends StatelessWidget {
-  const OrderListItem({super.key, required this.orderProduct});
+  OrderListItem({super.key, required this.product});
 
-  final OrderProduct orderProduct;
+  CartItem product;
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -21,15 +21,15 @@ class OrderListItem extends StatelessWidget {
           height: 50,
           width: 50,
           imageUrl:
-          orderProduct.thumbnail,
+          product.product!.thumbnail!,
           fit: BoxFit.fill,
         ),
       ),
       title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(orderProduct.name, style: TextStyle(color: Colors.black.withOpacity(0.75), fontSize: MediaQuery.of(context).size.height * 0.02)),
-          Text('KSh ${orderProduct.totalAmount.toString()}', style: TextStyle(color: Colors.black, fontSize: MediaQuery.of(context).size.height * 0.02, fontWeight: FontWeight.bold),),
+          Text(product.product!.name, style: TextStyle(color: Colors.black.withOpacity(0.75), fontSize: MediaQuery.of(context).size.height * 0.02)),
+          Text('KSh ${(product.quantity * product.product!.price).toString()}', style: TextStyle(color: Colors.black, fontSize: MediaQuery.of(context).size.height * 0.02, fontWeight: FontWeight.bold),),
         ]
       ),
       subtitle: Row(
@@ -37,7 +37,7 @@ class OrderListItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text('Qty: ${orderProduct.orderQuantity}', style: TextStyle(color: Colors.black.withOpacity(0.5)))
+              Text('Qty: ${product.quantity}', style: TextStyle(color: Colors.black.withOpacity(0.5)))
             ],
           ),
         ],

@@ -98,21 +98,31 @@ class Product_Api {
   Future<String?> updateSupplierProduct (SupplierProduct product) async {
 
     // Reference to the FireStore collection
-    CollectionReference productsReference = _firebaseFirestore.collection(
-        'products');
+    CollectionReference productsCollection = _firebaseFirestore.collection(
+        'users/${product.supplierId}/products');
 
     // Data to be added, including nested fields like location
     Map<String, dynamic> updatedProduct = {
-      'id': product.id,
-      'name': product.name,
-      'description': product.description,
-      'category': product.category,
       'price': product.price,
       'discountPercentage': product.discountPercentage,
       'stock': product.stock,
     };
 
-    try {
+    try{
+      QuerySnapshot querySnapshot = await productsCollection.where("id", isEqualTo: product.id).get();
+
+      //the product reference id
+      String pId =querySnapshot.docs.first.id.toString();
+
+      await productsCollection.doc(pId).update(updatedProduct);
+      return 'Product edited successfully!';
+    }catch(e){
+      return e.toString();
+    }
+
+    return(product.supplierId);
+
+    /*try {
       //step 1: save the details of the product to obtain the product id from the db
       DocumentReference docRef = await productsReference.add(updatedProduct);
 
@@ -155,7 +165,7 @@ class Product_Api {
       return "Product added successfully";
     } catch (e) {
       return 'An error has occurred: $e';
-    }
+    }*/
   }
 
   //fetching all the products of an active supplier by
@@ -177,7 +187,7 @@ class Product_Api {
   }
 
   //fetching the product depending on the entered criteria
-  Future<List<Product?>> fetchProducts () async {
+  Future<List<Product>> fetchProducts () async {
     try {
       CollectionReference productsCollection = _firebaseFirestore.collection(
           'products');

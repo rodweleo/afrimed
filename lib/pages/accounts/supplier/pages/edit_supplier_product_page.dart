@@ -74,7 +74,7 @@ class _EditProductState extends State<EditProduct> {
     });
 
     SupplierProduct editedProduct = SupplierProduct(
-        id: '',
+        id: widget.product.id,
         name: _productNameController.text,
         category: _productCategory,
         description: _productDescriptionController.text,
@@ -84,7 +84,7 @@ class _EditProductState extends State<EditProduct> {
         discountPercentage:
         double.parse(_productDiscountPercentageController.text),
         stock: int.parse(_productStockController.text),
-        supplierId: Provider.of<AuthProvider>(context, listen: false).getCurrentAccount()!.id!
+        supplierId: widget.product.supplierId
     );
 
     //try adding the product into the database
@@ -319,86 +319,35 @@ class _EditProductState extends State<EditProduct> {
                 const SizedBox(
                   height: 15,
                 ),
-                widget.product.images!.isEmpty ? GestureDetector(
-                  child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Colors.black.withOpacity(0.5),
-                              style: BorderStyle.solid),
-                          borderRadius: BorderRadius.circular(5.0)),
-                      child: Column(
-                        children: [
-                          const Icon(
-                            Icons.cloud_upload,
-                            size: 50,
-                            color: Colors.blueGrey,
-                          ),
-                          const Text(
-                            'Upload product image',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16),
-                          ),
-                          Text(
-                            'Try to upload the image of your product here',
-                            style: TextStyle(
-                                color: Colors.black.withOpacity(0.5)),
-                          )
-                        ],
-                      )),
-                  onTap: () {
-                    _pickProductImageFromGallery();
-                  },
-                ) : Stack(
-                  children: [
-                    CarouselSlider(
-                        items: widget.product.images!
-                            .map((item) => SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width / 3,
-                                height: 10,
-                                child: CachedNetworkImage(
-                                  placeholder: (context, url) => SizedBox(
-                                      height: 10,
-                                      width: MediaQuery.of(context).size.width,
-                                      child: const CircularProgressIndicator()),
-                                  errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                                  imageUrl: item,
-                                  fit: BoxFit.fill,
-                                ),
-                              )
-                          ),
-                        ))
-                            .toList(),
-                        options: CarouselOptions(
-                            autoPlay: false,
-                            autoPlayAnimationDuration: const Duration(milliseconds: 1000),
-                            disableCenter: false,
-                            viewportFraction: 1.0)),
-                    Positioned(
-                      top: 0,
-                        right: 0,
-                        child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.75),
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft : Radius.circular(12.5),
-                              )
-                            ),
-                            child: IconButton(
-                              onPressed: (){
-                                _pickProductImageFromGallery();
-                              },
-                              icon: const Icon(Icons.edit, color: Colors.green,),
-                            )))
-                  ],
-                ),
+               CarouselSlider(
+                   items: widget.product.images!
+                       .map((item) => SizedBox(
+                     width: MediaQuery.of(context).size.width,
+                     child: ClipRRect(
+                         borderRadius: BorderRadius.circular(10.0),
+                         child: SizedBox(
+                           width: MediaQuery.of(context).size.width / 3,
+                           height: 10,
+                           child: CachedNetworkImage(
+                             placeholder: (context, url) => SizedBox(
+                                 height: 10,
+                                 width: MediaQuery.of(context).size.width,
+                                 child: const CircularProgressIndicator()),
+                             errorWidget: (context, url, error) =>
+                             const Icon(Icons.error),
+                             imageUrl: item,
+                             fit: BoxFit.fill,
+                           ),
+                         )
+                     ),
+                   ))
+                       .toList(),
+                   options: CarouselOptions(
+                       autoPlay: false,
+                       autoPlayAnimationDuration: const Duration(milliseconds: 1000),
+                       disableCenter: false,
+                       viewportFraction: 1.0))
+                    ,
                 const SizedBox(
                   height: 30,
                 ),

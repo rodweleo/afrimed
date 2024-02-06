@@ -31,7 +31,7 @@ class _SupplierAccountState extends State<SupplierAccount> {
     return Scaffold(
         body: _pages[_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.black.withOpacity(0.75),
+          backgroundColor: Theme.of(context).colorScheme.secondary,
           type: BottomNavigationBarType.fixed,
           items: const [
             BottomNavigationBarItem(
@@ -58,7 +58,7 @@ class _SupplierAccountState extends State<SupplierAccount> {
           unselectedItemColor: Colors.white,
           onTap: _onItemTapped,
           currentIndex: _selectedIndex,
-          selectedItemColor: Colors.white,
+          selectedItemColor: Theme.of(context).colorScheme.primary,
           selectedLabelStyle: const TextStyle(
             fontWeight: FontWeight.bold
           ),

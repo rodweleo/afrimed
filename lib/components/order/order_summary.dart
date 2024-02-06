@@ -1,9 +1,10 @@
-import 'package:AfriMed/models/ProductOrder.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/ShoppingOrder.dart';
+
 class OrderSummary extends StatelessWidget {
-  const OrderSummary({super.key, required this.productOrder});
-  final ProductOrder productOrder;
+  OrderSummary({super.key, required this.order});
+  ShoppingOrder order;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,7 +32,7 @@ class OrderSummary extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      productOrder.totalAmount.toString(),
+                      order.totalAmount.toString(),
                       style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -76,7 +77,7 @@ class OrderSummary extends StatelessWidget {
               fontSize: MediaQuery.of(context).size.height * 0.025,
               color: Colors.black.withOpacity(0.5)
             ),),
-              Text(productOrder.totalAmount.toString(), style: TextStyle(
+              Text(order.totalAmount.toString(), style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: MediaQuery.of(context).size.height * 0.025,
 

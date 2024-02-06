@@ -1,12 +1,15 @@
+import 'package:AfriMed/models/ShoppingOrder.dart';
 import 'package:AfriMed/pages/accounts/buyer/buyer_account.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import '../../providers/cart_provider.dart';
+import '../../providers/AuthProvider.dart';
 
 class OrderSuccessful extends StatefulWidget {
-  const OrderSuccessful({super.key});
+  OrderSuccessful({super.key, required this.newOrder, required this.orderId});
+
+  ShoppingOrder newOrder;
+  String orderId;
 
   @override
   State<OrderSuccessful> createState() => _OrderSuccessfulState();
@@ -17,9 +20,9 @@ class _OrderSuccessfulState extends State<OrderSuccessful> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Overview',
-            style: GoogleFonts.poppins(
-                textStyle: const TextStyle(fontWeight: FontWeight.bold))),
+        title: const Text(
+          'Order Overview',
+        ),
         centerTitle: true,
       ),
       body: Column(
@@ -30,104 +33,255 @@ class _OrderSuccessfulState extends State<OrderSuccessful> {
                 fit: BoxFit.fill),
           ),
           SizedBox(
-            height: 300,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  Text(
+                  const Text(
                     'Thank you for your order!',
-                    style: GoogleFonts.poppins(
-                        textStyle: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 22)),
                     textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold
+                    ),
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                      'The order confirmation will be sent to your phone number and email address.',
-                      style: GoogleFonts.poppins(),
-                      textAlign: TextAlign.center),
+                  const Text(
+                    'Your order has been received successfully!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
                   const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        children: [
-                          Text(0.toString(),
-                              style: GoogleFonts.poppins(
-                                  textStyle: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14))),
-                          Text('Total Amount',
-                              style: GoogleFonts.poppins(
-                                  textStyle: const TextStyle(
-                                      color: Colors.black38, fontSize: 12)))
-                        ],
+                      Text('Order Details', style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: MediaQuery.of(context).size.width * 0.045
+                      ),),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Table(
+                          border: TableBorder.all(color: Colors.transparent),
+                          children: [
+                            TableRow(children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Order number:',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(widget.orderId, style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),),
+                                ],
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Total Items Orders:',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(widget.newOrder.products.length.toString(), style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),),
+                                ],
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Total Amount:',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(widget.newOrder.totalAmount.toString(), style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),),
+                                ],
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Date:',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary)),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(widget.newOrder.createdOn, style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                                ],
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Email Address:',
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary)),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(Provider.of<AuthProvider>(context).getCurrentAccount()!.id!, style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                                ],
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Payment Method:',
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary)),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(widget.newOrder.paymentMethod, style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                                ],
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Payment Status:',
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary)),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(widget.newOrder.paymentStatus, style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                                ],
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Est Delivery:',
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary)),
+                                ],
+                              ),
+                              const Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('24Hrs', style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                                ],
+                              ),
+                            ]),
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          Text('x${Provider.of<CartProvider>(context, listen: false).cartItems.length.toString()}',
-                              style: GoogleFonts.poppins(
-                                  textStyle: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14))),
-                          Text('Items Ordered',
-                              style: GoogleFonts.poppins(
-                                  textStyle: const TextStyle(
-                                      color: Colors.black38, fontSize: 12)))
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text('11.06 - 14.06',
-                              style: GoogleFonts.poppins(
-                                  textStyle: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14))),
-                          Text('Est. Delivery',
-                              style: GoogleFonts.poppins(
-                                  textStyle: const TextStyle(
-                                      color: Colors.black38, fontSize: 12)))
-                        ],
-                      )
                     ],
                   ),
                   const SizedBox(height: 30),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: (MediaQuery.of(context).size.width - 30) / 2,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromRGBO(255, 255, 255, 0.5),
-                        foregroundColor: Colors.black,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:BorderRadius.all(Radius.circular(5.0)))),
-                            onPressed: (){
-                            },
-                            child: const Text('VIEW ORDER')),
-                      ),
-                      SizedBox(
-                        width: (MediaQuery.of(context).size.width - 30) / 2,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blueGrey,
-                                foregroundColor: Colors.white,
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(5)))),
-                            onPressed: (){
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(builder: (context) => const BuyerAccount()),
-                                    (Route<dynamic> route) => false,
-                              );
-                            },
-                            child: const Text('CONTINUE SHOPPING')),
-                      )
-                    ]
-                  )
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: (MediaQuery.of(context).size.width - 30) / 2,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                  Colors.white,
+                                  foregroundColor: Colors.white,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(5.0)))),
+                              onPressed: () {},
+                              child: const Text('VIEW ORDER', style: TextStyle(
+                                color: Colors.black
+                              ))),
+                        ),
+                        SizedBox(
+                          width: (MediaQuery.of(context).size.width - 30) / 2,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                  foregroundColor: Colors.white,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(5)))),
+                              onPressed: () {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const BuyerAccount()),
+                                  (Route<dynamic> route) => false,
+                                );
+                              },
+                              child: const Text('GO HOME')),
+                        )
+                      ])
                 ],
               ),
             ),

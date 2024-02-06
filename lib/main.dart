@@ -1,8 +1,9 @@
-import 'package:AfriMed/pages/auth/auth.dart';
+import 'package:AfriMed/pages/auth/splashscreen.dart';
 import 'package:AfriMed/providers/AuthProvider.dart';
 import 'package:AfriMed/services/firebase_cloud_messaging.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -34,11 +35,35 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'AfriMed',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors. blueGrey),
           useMaterial3: true,
+          // Define the default brightness and colors.
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.blue,
+            secondary: Colors.grey,
+            // ···
+            brightness: Brightness.light,
+          ),
+
+          // Define the default `TextTheme`. Use this to specify the default
+          // text styling for headlines, titles, bodies of text, and more.
+          textTheme: TextTheme(
+            displayLarge: TextStyle(
+              fontSize: MediaQuery.of(context).size.width * 0.05,
+              fontWeight: FontWeight.bold,
+            ),
+            // ···
+            titleLarge: GoogleFonts.poppins(
+              fontSize: MediaQuery.of(context).size.width * 0.04,
+              fontWeight: FontWeight.bold
+            ),
+            bodyMedium: GoogleFonts.poppins(
+              fontSize: MediaQuery.of(context).size.width * 0.035,
+            ),
+            displaySmall: GoogleFonts.poppins(),
+          ),
         ),
         debugShowCheckedModeBanner: false,
-        home: const Authenticator(),
+        home: const SplashScreen(),
       ),
     );
   }

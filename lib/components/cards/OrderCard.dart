@@ -1,11 +1,11 @@
-import 'package:AfriMed/models/ProductOrder.dart';
+import 'package:AfriMed/models/ShoppingOrder.dart';
 import 'package:AfriMed/pages/accounts/buyer/pages/order_details_page.dart';
 import 'package:flutter/material.dart';
 
 import '../ui/status.dart';
 
 class OrderCard extends StatelessWidget {
-  final ProductOrder order;
+  final ShoppingOrder order;
 
   const OrderCard({super.key, required this.order});
 
@@ -65,7 +65,7 @@ class OrderCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => OrderDetailsPage(productOrder: order)),
+                builder: (context) => OrderDetailsPage(order: order)),
           );
         },
       ),

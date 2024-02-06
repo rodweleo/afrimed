@@ -1,11 +1,11 @@
 import 'package:AfriMed/components/order/order_list_item.dart';
+import 'package:AfriMed/models/CartItem.dart';
 import 'package:flutter/material.dart';
-import '../../models/OrderProduct.dart';
 
 class OrderProducts extends StatelessWidget {
-  const OrderProducts({super.key, required this.orderProducts});
+  const OrderProducts({super.key, required this.products});
 
-  final List<OrderProduct> orderProducts;
+  final List<CartItem> products;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -14,9 +14,9 @@ class OrderProducts extends StatelessWidget {
         SizedBox(
           height: 150,
           child: ListView.builder(
-              itemCount: orderProducts.length,
+              itemCount: products.length,
               itemBuilder: (context, index){
-                return OrderListItem(orderProduct: orderProducts[index],);
+                return OrderListItem(product: products[index],);
               }),
         ),
         const Divider(),
