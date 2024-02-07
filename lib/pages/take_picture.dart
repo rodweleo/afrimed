@@ -1,5 +1,4 @@
 import 'package:camera/camera.dart';
-import 'package:AfriMed/pages/accounts/admin/pages/add_platform_product.dart';
 import 'package:flutter/material.dart';
 
 class TakePicture extends StatefulWidget {

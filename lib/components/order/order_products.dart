@@ -9,8 +9,12 @@ class OrderProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Divider(),
+        Text('Order Products [${products.length}]',
+        style: TextStyle(
+          fontWeight: FontWeight.bold
+        ),),
         SizedBox(
           height: 150,
           child: ListView.builder(
@@ -19,7 +23,6 @@ class OrderProducts extends StatelessWidget {
                 return OrderListItem(product: products[index],);
               }),
         ),
-        const Divider(),
       ],
     );
   }

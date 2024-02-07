@@ -14,11 +14,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    _checkAuthentication();
-  }
+
 
   void _checkAuthentication() async {
     //get the provider of the authentication to check the information
@@ -48,9 +44,36 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 3), () {
+      _checkAuthentication();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text('AfriMed')),
+    return Scaffold(
+      body: Center(
+        child: Image.asset("assets/images/launcher.png",),
+      ),
+      bottomNavigationBar: SizedBox(
+        height: 75,
+        child: Column(
+          children: [
+            Text('AfriMed', textAlign: TextAlign.center, style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width * 0.075,
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.bold
+            ),),
+            Text('${DateTime.now().year.toString()}. All Rights Reserved. ', textAlign: TextAlign.center, style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width * 0.04,
+                color: Theme.of(context).colorScheme.secondary,
+                fontWeight: FontWeight.bold
+            ),)
+          ],
+        ),
+      ),
     );
   }
 }

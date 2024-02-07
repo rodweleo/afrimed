@@ -226,7 +226,7 @@ class _RegisterState extends State<Register> {
               //create button for register
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black, // background (button) color
+                  backgroundColor: Theme.of(context).colorScheme.primary, // background (button) color
                   foregroundColor: Colors.white,
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
@@ -261,10 +261,10 @@ class _RegisterState extends State<Register> {
                         MaterialPageRoute(builder: (context) => const LoginPage()),
                       );
                     },
-                    child: const Text(
+                    child: Text(
                       'Sign In',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
+                          fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),
                     ), // Text displayed on the button
                   ),
                 ],

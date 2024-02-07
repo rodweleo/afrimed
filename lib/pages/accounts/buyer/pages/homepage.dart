@@ -1,5 +1,4 @@
 import 'package:AfriMed/apis/AccountApi.dart';
-import 'package:AfriMed/components/activities/recent_activities.dart';
 import 'package:flutter/material.dart';
 import '../../../../models/Account.dart';
 import '../widgets/Offers.dart';

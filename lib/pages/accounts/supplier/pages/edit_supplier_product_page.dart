@@ -5,8 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../apis/Product_Api.dart';
-import '../../../../providers/AuthProvider.dart';
-import 'package:provider/provider.dart';
 
 class EditProduct extends StatefulWidget {
   EditProduct({super.key, required this.product});

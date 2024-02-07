@@ -10,24 +10,25 @@ class OrderInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Order #${order.id}',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize:
-                  MediaQuery.of(context).size.height * 0.0225),
-            ),
-            Status(status: order.status)
-          ],
+        Text(
+          'Order #${order.id}',
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize:
+              MediaQuery.of(context).size.height * 0.0225),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Status(status: order.status),
+        const SizedBox(
+          height: 10,
         ),
         Text(order.createdOn.toString(), style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.black.withOpacity(0.5)
+            color: Theme.of(context).colorScheme.secondary
         )),
       ],
     );

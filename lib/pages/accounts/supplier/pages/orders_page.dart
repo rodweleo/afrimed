@@ -14,12 +14,11 @@ class Orders extends StatefulWidget {
 
 class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  late Future<List<ShoppingOrder>?> _supplierOrders;
 
   final Order_Api _orderApi = Order_Api();
 
-  Future<void> _fetchSupplierOrders() async {
-    _supplierOrders = _orderApi.fetchSupplierOrders(
+  Future<List<ShoppingOrder>?> _fetchSupplierOrders() async {
+    return _orderApi.fetchSupplierOrders(
         Provider.of<AuthProvider>(context, listen: false)
             .getCurrentAccount()
             ?.id);
@@ -27,7 +26,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _fetchSupplierOrders();
     super.initState();
   }
@@ -53,31 +52,30 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
           controller: _tabController,
           tabs: const [
             Tab(
-              text: 'Total Orders',
+              text: 'All',
             ),
             Tab(
-              text: 'Pending Orders',
+              text: 'Delivered',
             ),
             Tab(
-              text: 'Placed Orders',
+              text: 'In Transit',
+            ),
+            Tab(
+              text: 'Pending',
             ),
           ],
         ),
       ),
       body: TabBarView(controller: _tabController, children: [
         FutureBuilder<List<ShoppingOrder>?>(
-          future: _supplierOrders,
+          future: _fetchSupplierOrders(),
           builder: (context, snapshot) {
             if (ConnectionState.waiting == snapshot.connectionState) {
               return const Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(),
-                    SizedBox(width: 10.0,),
-                    Text('Fetching orders...')
-                  ],
-                ),
+                child: SizedBox(
+                    height: 10,
+                    width: 10,
+                    child: CircularProgressIndicator()),
               );
             } else if (snapshot.hasError) {
               return Text('An error has occurred: ${snapshot.error}');
@@ -97,24 +95,29 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
           },
         ),
         FutureBuilder<List<ShoppingOrder>?>(
-          future: _supplierOrders,
+          future: _fetchSupplierOrders(),
           builder: (context, snapshot) {
             if (ConnectionState.waiting == snapshot.connectionState) {
-              return const CircularProgressIndicator();
+              return const Center(
+                child: SizedBox(
+                    height: 10,
+                    width: 10,
+                    child: CircularProgressIndicator()),
+              );
             } else if (snapshot.hasError) {
               return Text('An error has occurred: ${snapshot.error}');
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Text('No orders available!');
             } else {
-              List<ShoppingOrder> pendingOrders = snapshot.data!
-                  .where((order) => order.status == 'PENDING')
+              List<ShoppingOrder> deliveredOrders = snapshot.data!
+                  .where((order) => order.status == 'DELIVERED')
                   .toList();
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView.builder(
-                  itemCount: pendingOrders.length,
+                  itemCount: deliveredOrders.length,
                   itemBuilder: (context, index) {
-                    return OrderCard(order: pendingOrders[index]);
+                    return OrderCard(order: deliveredOrders[index]);
                   },
                 ),
               );
@@ -122,15 +125,21 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
           },
         ),
         FutureBuilder<List<ShoppingOrder>?>(
-          future: _supplierOrders,
+          future: _fetchSupplierOrders(),
           builder: (context, snapshot) {
             if (ConnectionState.waiting == snapshot.connectionState) {
-              return const CircularProgressIndicator();
+              return const Center(
+                child: SizedBox(
+                    height: 10,
+                    width: 10,
+                    child: CircularProgressIndicator()),
+              );
             } else if (snapshot.hasError) {
               return Text('An error has occurred: ${snapshot.error}');
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Text('No orders available!');
             } else {
+
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView.builder(
@@ -138,7 +147,39 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                       .where((order) => order.status == 'IN TRANSIT')
                       .length,
                   itemBuilder: (context, index) {
-                    return OrderCard(order: snapshot.data![index]);
+                    return OrderCard(order: snapshot.data!
+                        .where((order) => order.status == 'IN TRANSIT').toList()[index]);
+                  },
+                ),
+              );
+            }
+          },
+        ),
+        FutureBuilder<List<ShoppingOrder>?>(
+          future: _fetchSupplierOrders(),
+          builder: (context, snapshot) {
+            if (ConnectionState.waiting == snapshot.connectionState) {
+              return const Center(
+                child: SizedBox(
+                    height: 10,
+                    width: 10,
+                    child: CircularProgressIndicator()),
+              );
+            } else if (snapshot.hasError) {
+              return Text('An error has occurred: ${snapshot.error}');
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Text('No orders available!');
+            } else {
+
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView.builder(
+                  itemCount: snapshot.data!
+                      .where((order) => order.status == 'PENDING' || order.status == 'CONFIRMED')
+                      .length,
+                  itemBuilder: (context, index) {
+                    return OrderCard(order: snapshot.data!
+                        .where((order) => order.status == 'PENDING' || order.status == 'CONFIRMED').toList()[index]);
                   },
                 ),
               );

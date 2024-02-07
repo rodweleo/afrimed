@@ -11,7 +11,11 @@ class Status extends StatelessWidget {
     Color textColor;
 
     switch (status) {
-      case 'COMPLETED':
+      case 'CONFIRMED':
+        backgroundColor = Colors.lightGreen.shade200;
+        textColor = Colors.green;
+        break;
+      case 'DELIVERED':
         backgroundColor = Colors.lightGreen.shade200;
         textColor = Colors.green;
         break;

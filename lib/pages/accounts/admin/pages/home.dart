@@ -48,7 +48,7 @@ class Home extends StatelessWidget {
                 },
                 child: Card(
                   child: Padding(
-                    padding: EdgeInsets.all(20.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: Column(
                       children: [
                         const Icon(Icons.add_circle_outline_rounded),

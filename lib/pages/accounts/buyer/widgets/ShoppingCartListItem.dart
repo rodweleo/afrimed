@@ -23,7 +23,7 @@ class ShoppingCartListItem extends StatelessWidget {
         subtitle: Row(
           children: [
             Text('Qty: ${cartItem.quantity}'),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             Text('Amount: ${(cartItem.quantity * cartItem.product!.price).round().toString()}')
@@ -38,7 +38,7 @@ class ShoppingCartListItem extends StatelessWidget {
             onPressed: (){
               //remove the product from the cart
             },
-            icon: Icon(Icons.delete, color: Colors.red,),
+            icon: const Icon(Icons.delete, color: Colors.red,),
           ),
         ),
       ),

@@ -28,6 +28,9 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
   }
 
+  //for the revenue part of the supplier, we need to add all the amount where the payment is completed
+
+
   @override
   Widget build(BuildContext context) {
     Account? account = Provider.of<AuthProvider>(context, listen: false).account;
@@ -45,6 +48,7 @@ class _DashboardState extends State<Dashboard> {
                 child: Text('An error has occurred: ${snapshot.error}')
               );
           }else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            List<ShoppingOrder>? orderList = snapshot.data!;
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(
@@ -55,7 +59,7 @@ class _DashboardState extends State<Dashboard> {
                         children: [
                           DashboardWidget(
                             title: 'Revenue',
-                            content: "KES 0.00",
+                            content: 0.toString(),
                             boxShadowColor: Colors.blueGrey.withOpacity(0.5),
                             endIcon: const Icon(
                               Icons.wallet,

@@ -81,4 +81,69 @@ class Order_Api{
       return null;
     }
   }
+
+
+  //cancelling an order
+  Future<String> cancelOrder(String orderId) async{
+    try{
+      CollectionReference ordersReference = _firebaseFirestore.collection('orders');
+
+      //update the order with the id
+      await ordersReference.doc(orderId).update({
+        'status': 'CANCELLED'
+      });
+
+      return 'Order has been cancelled.';
+    }catch(e){
+      return 'An error has occurred: $e';
+    }
+  }
+
+  //confirming an order
+  Future<String> confirmOrder(String orderId) async {
+    try{
+      CollectionReference ordersReference = _firebaseFirestore.collection('orders');
+
+      //update the order with the id
+      await ordersReference.doc(orderId).update({
+        'status': 'CONFIRMED'
+      });
+
+      return 'Order has been confirmed.';
+    }catch(e){
+      return 'An error has occurred: $e';
+    }
+  }
+
+  Future<String> transportOrder(String orderId) async{
+    try{
+      CollectionReference ordersReference = _firebaseFirestore.collection('orders');
+
+      //update the order with the id
+      await ordersReference.doc(orderId).update({
+        'status': 'IN TRANSIT'
+      });
+
+      return 'Order has been put on transit.';
+    }catch(e){
+      return 'An error has occurred: $e';
+    }
+  }
+
+  Future<String> deliverOrder(String orderId) async{
+    try{
+      CollectionReference ordersReference = _firebaseFirestore.collection('orders');
+
+      //update the order with the id
+      await ordersReference.doc(orderId).update({
+        'status': 'DELIVERED'
+      });
+
+      return 'Order has been delivered.';
+    }catch(e){
+      return 'An error has occurred: $e';
+    }
+  }
+
+
 }

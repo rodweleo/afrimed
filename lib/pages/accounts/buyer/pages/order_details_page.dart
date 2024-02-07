@@ -11,9 +11,15 @@ class OrderDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void cancelOrder() {
+
+      //cancel the order
+      //this means we will change the status of the order to cancelled
       print('Cancelling order...');
     }
 
+    Future<void> reorder() async {
+      print('Re-ordering...');
+    }
     return Scaffold(
         appBar: AppBar(
           title: const Text('Order Details'),
@@ -26,32 +32,54 @@ class OrderDetailsPage extends StatelessWidget {
             children: [
               OrderDetails(order: order),
               Column(children: [
-                Container(
-                    margin: const EdgeInsets.only(bottom: 20.0),
-                    child: OrderSummary(order: order,)),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.redAccent,
-                        foregroundColor: Colors.white,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                        textStyle: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.02)),
-                    onPressed: () {
-                      cancelOrder();
-                    },
-                    child: const Text('CANCEL ORDER'),
-                  ),
-                )
+                OrderSummary(order: order,),
+
               ])
             ],
           ),
-        ));
+        ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: order.status != 'DELIVERED' ? SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+                foregroundColor: Colors.white,
+                shape: const RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(10))),
+                textStyle: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize:
+                    MediaQuery.of(context).size.height * 0.02)),
+            onPressed: order.status == 'PENDING' ? () {
+              cancelOrder();
+            } : null,
+            child: const Text('CANCEL ORDER'),
+          ),
+        ) : SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+                foregroundColor: Colors.white,
+                shape: const RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(10))),
+                textStyle: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize:
+                    MediaQuery.of(context).size.height * 0.02)),
+            onPressed: () {
+              reorder();
+            } ,
+            child: const Text('RE-ORDER'),
+          ),
+        ),
+      ),
+    );
   }
 }
