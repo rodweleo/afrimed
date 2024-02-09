@@ -57,12 +57,15 @@ class _SupplierProductPageState extends State<SupplierProductPage> {
                             autoPlayAnimationDuration: const Duration(milliseconds: 1000),
                             disableCenter: false,
                             viewportFraction: 1.0)),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(widget.product.category,
                             style: TextStyle(
-                                color: Colors.black.withOpacity(0.5),
+                                color: Theme.of(context).colorScheme.secondary,
                                 fontWeight: FontWeight.bold,
                                 fontSize:
                                 MediaQuery.of(context).size.height * 0.02)),
@@ -71,13 +74,6 @@ class _SupplierProductPageState extends State<SupplierProductPage> {
                                 fontWeight: FontWeight.bold,
                                 fontSize:
                                     MediaQuery.of(context).size.height * 0.04)),
-                        Text(
-                          widget.product.description,
-                          style: TextStyle(
-                              color: Colors.black.withOpacity(0.75),
-                              fontSize: MediaQuery.of(context).size.height * 0.02,
-                              decoration: TextDecoration.none),
-                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -86,7 +82,7 @@ class _SupplierProductPageState extends State<SupplierProductPage> {
                               style: TextStyle(
                                   color: Colors.green,
                                   fontSize:
-                                      MediaQuery.of(context).size.height * 0.03,
+                                  MediaQuery.of(context).size.height * 0.03,
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
@@ -102,21 +98,43 @@ class _SupplierProductPageState extends State<SupplierProductPage> {
                         Row(
                           children: [
                             Text('Stock:',
-                                style: TextStyle(
-                                    fontSize:
-                                    MediaQuery.of(context).size.height * 0.025
-                                ),
+                              style: TextStyle(
+                                  fontSize:
+                                  MediaQuery.of(context).size.height * 0.02,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
                             ),
                             const SizedBox(
                               width: 10,
                             ),
                             Text(widget.product.stock.toString(), style: TextStyle(
-                                fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.bold,
                                 fontSize:
-                                MediaQuery.of(context).size.height * 0.03
+                                MediaQuery.of(context).size.height * 0.02
                             ),)
                           ],
                         ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Description:',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            Text(
+                              widget.product.description,
+                              style: TextStyle(
+                                fontSize: MediaQuery.of(context).size.height * .02,
+                              ),
+                            )
+                          ],
+                        ),
+
                       ],
                     ),
 
@@ -126,31 +144,6 @@ class _SupplierProductPageState extends State<SupplierProductPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                              foregroundColor: Colors.white,
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)))),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => EditProduct(product: widget.product,)),
-                            );
-                          },
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.edit_document),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text('Edit Product'),
-                            ],
-                          )),
-                    ),
                     SizedBox(
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -168,6 +161,31 @@ class _SupplierProductPageState extends State<SupplierProductPage> {
                                 width: 10,
                               ),
                               Text('Delete Product'),
+                            ],
+                          )),
+                    ),
+                    SizedBox(
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              foregroundColor: Colors.white,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(5)))),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => EditProduct(product: widget.product,)),
+                            );
+                          },
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.edit_document),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text('Edit Product'),
                             ],
                           )),
                     ),

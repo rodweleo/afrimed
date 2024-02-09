@@ -43,11 +43,6 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
       appBar: AppBar(
         title: const Text('Orders'),
         automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.notifications_active_outlined))
-        ],
         bottom: TabBar(
           controller: _tabController,
           tabs: const [

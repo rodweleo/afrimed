@@ -3,6 +3,7 @@ import 'package:AfriMed/pages/accounts/buyer/buyer_account.dart';
 import 'package:AfriMed/pages/accounts/supplier/supplier_account.dart';
 import 'package:AfriMed/pages/auth/register.dart';
 import 'package:AfriMed/providers/AuthProvider.dart';
+import 'package:AfriMed/services/ToastService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/Account.dart';
@@ -173,63 +174,70 @@ class _LoginPageState extends State<LoginPage> {
 
                               //login with username and password
                               AccountApi accountApi = AccountApi();
-                              Account? account = await accountApi
-                                  .signInWithUsernameAndPassword(
-                                      _usernameController.text,
-                                      _passwordController.text);
-                              if (account != null) {
-                                //this means the account has been found successfully, redirect to the appropriate account page
-                                switch (account.role) {
-                                  case 'buyer':
+                              try{
+                                Account? account = await accountApi
+                                    .signInWithUsernameAndPassword(
+                                    _usernameController.text,
+                                    _passwordController.text);
+                                if (account != null) {
+                                  //this means the account has been found successfully, redirect to the appropriate account page
+                                  switch (account.role) {
+                                    case 'buyer':
                                     //set the auth provider to contain the details of the current account
-                                    Provider.of<AuthProvider>(context,
-                                            listen: false)
-                                        .setLoggedInAccount(account);
-                                    Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const BuyerAccount()),
-                                      (Route<dynamic> route) => false,
-                                    );
+                                      Provider.of<AuthProvider>(context,
+                                          listen: false)
+                                          .setLoggedInAccount(account);
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                            const BuyerAccount()),
+                                            (Route<dynamic> route) => false,
+                                      );
 
-                                    break;
-                                  case 'supplier':
+                                      break;
+                                    case 'supplier':
                                     //set the auth provider to contain the details of the current account
-                                    Provider.of<AuthProvider>(context,
-                                            listen: false)
-                                        .setLoggedInAccount(account);
-                                    Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const SupplierAccount()),
-                                      (Route<dynamic> route) => false,
-                                    );
-                                    break;
+                                      Provider.of<AuthProvider>(context,
+                                          listen: false)
+                                          .setLoggedInAccount(account);
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                            const SupplierAccount()),
+                                            (Route<dynamic> route) => false,
+                                      );
+                                      break;
 
-                                  case 'admin':
+                                    case 'admin':
                                     //set the auth provider to contain the details of the current account
-                                    Provider.of<AuthProvider>(context,
-                                            listen: false)
-                                        .setLoggedInAccount(account);
-                                    Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const AdminAccount()),
-                                      (Route<dynamic> route) => false,
-                                    );
-                                    break;
-                                  default:
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const LoginPage()),
-                                    );
+                                      Provider.of<AuthProvider>(context,
+                                          listen: false)
+                                          .setLoggedInAccount(account);
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                            const AdminAccount()),
+                                            (Route<dynamic> route) => false,
+                                      );
+                                      break;
+                                    default:
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                            const LoginPage()),
+                                      );
+                                  }
+                                }else{
+                                  ToastService.showErrorToast(context, 'Matching account details not found.');
                                 }
+                              }catch(e){
+                                ToastService.showErrorToast(context, 'Something went wrong. Try again.');
                               }
+
                             }
                           },
                           child: const Text('Login'),

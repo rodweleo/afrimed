@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../models/Account.dart';
-import '../../../auth/VerifyAccount.dart';
 
 
 class SupplierRegistration extends StatefulWidget {
@@ -95,14 +94,7 @@ class _SupplierRegistrationState extends State<SupplierRegistration> {
           });
           // Handle code sent to the user's phone.
           // Prompt the user to enter the code.
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => VerifyAccount(
-                      verificationId: verificationId,
-                      account: newAccount,
-                    )),
-          );
+
         },
         codeAutoRetrievalTimeout: (String verificationId) {
           // Auto-retrieval timeout. Handle the situation if needed.

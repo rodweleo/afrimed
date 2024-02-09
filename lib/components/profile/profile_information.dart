@@ -18,7 +18,7 @@ class ProfileInformation extends StatelessWidget {
               borderRadius: BorderRadius.circular(7.5),
               child: account!.imageUrl == "" ? Container(
                 decoration: BoxDecoration(
-                  color: Colors.blueGrey.shade500.withOpacity(0.5),
+                  color: Colors.grey.withOpacity(0.35),
                   borderRadius: BorderRadius.circular(100.0)
                 ),
                 child: Padding(
@@ -26,6 +26,7 @@ class ProfileInformation extends StatelessWidget {
                   child: Icon(
                     Icons.person,
                     size: MediaQuery.of(context).size.height * 0.2,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ) : CachedNetworkImage(
@@ -50,7 +51,7 @@ class ProfileInformation extends StatelessWidget {
                     height: 35,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
-                        color: Colors.blueGrey),
+                        color: Theme.of(context).colorScheme.primary),
                     child: IconButton(
                       onPressed: (){
                         Navigator.push(

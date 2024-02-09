@@ -45,4 +45,25 @@ class ToastService {
       ),
     );
   }
+
+  //making an error snack-bar
+  static showErrorToast(BuildContext context, String message) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: Text(message, style: TextStyle(
+            fontSize: MediaQuery.of(context).size.width * 0.038
+        ),),
+        duration:
+        const Duration(seconds: 3), // Adjust the duration as needed
+        behavior: SnackBarBehavior.floating,
+        padding: const EdgeInsets.all(8.0),
+        showCloseIcon: true,
+        backgroundColor: Colors.redAccent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
+  }
 }

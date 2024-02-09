@@ -12,7 +12,12 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  late Future<List<Account>> _suppliers;
+  AccountApi accountApi = AccountApi();
+
+
+  Future<List<Account>> _loadSuppliers() async {
+    return accountApi.fetchAllSuppliers();
+  }
 
   @override
   void initState() {
@@ -20,91 +25,73 @@ class _HomepageState extends State<Homepage> {
     _loadSuppliers();
   }
 
-  Future<void> _loadSuppliers() async {
-    AccountApi accountApi = AccountApi();
-    _suppliers = accountApi.fetchAllSuppliers();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.only(top:10.0),
-          color: Colors.blueGrey.shade200.withOpacity(0.5),
-          child: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(15.0),
-                child: Offers(),
-              ),
-              ListTile(
-                title: const Text('Featured suppliers', style: TextStyle(
-                    fontWeight: FontWeight.bold
-                ),),
-                subtitle: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.blueGrey.withOpacity(0.5),
-                          spreadRadius: 2.5,
-                          blurRadius: 7,
-                          offset: const Offset(0,5), // changes position of shadow
-                        ),
-                      ]
-                  ),
-                  child: FutureBuilder<List<Account>>(
-                    key: const Key("suppliersBuilder"),
-                    future: _suppliers,
-                    builder: (context, AsyncSnapshot<List<Account>> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else if (snapshot.data!.isEmpty) {
-                        return const Center(child: Text('No suppliers found.'));
-                      } else {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            Account account = snapshot.data![index];
-                            return ListTile(
-                                leading: account.imageUrl != ""
-                                    ? CircleAvatar(
-                                    radius: 20,
-                                    backgroundImage: NetworkImage(account.imageUrl))
-                                    : const CircleAvatar(
-                                  radius: 20,
-                                  child: Icon(Icons.person),
-                                ),
-                                title: Text(
-                                  account.name,
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                subtitle: Text(account.businessInfo.businessCategory),
-                                onTap: () {
-                                  // Handle tap, navigate to supplier details page, etc.
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          SupplierPage(account: account),
-                                    ),
-                                  );
-                                });
-                          },
-                        );
-                      }
-                    },
-                  ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            padding: const EdgeInsets.all(10.0),
+            color: Colors.blueGrey.shade200.withOpacity(0.5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Offers(),
+                const SizedBox(
+                  height: 10,
                 ),
-              ),
-
-            ],
+                const Text('Featured Suppliers:', style: TextStyle(
+                  fontWeight: FontWeight.bold
+                ),),
+                FutureBuilder(
+                  key: const Key("suppliersBuilder"),
+                  future: _loadSuppliers(),
+                  builder: (context, AsyncSnapshot<List<Account>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (snapshot.data!.isEmpty) {
+                      return const Center(child: Text('No suppliers found.'));
+                    } else {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Account account = snapshot.data![index];
+                          return ListTile(
+                              leading: account.imageUrl != ""
+                                  ? CircleAvatar(
+                                  radius: 20,
+                                  backgroundImage: NetworkImage(account.imageUrl))
+                                  : const CircleAvatar(
+                                radius: 20,
+                                child: Icon(Icons.person),
+                              ),
+                              title: Text(
+                                account.name,
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(account.businessInfo.businessCategory),
+                              onTap: () {
+                                // Handle tap, navigate to supplier details page, etc.
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        SupplierPage(account: account),
+                                  ),
+                                );
+                              });
+                        },
+                      );
+                    }
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),

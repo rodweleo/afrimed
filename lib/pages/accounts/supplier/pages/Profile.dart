@@ -39,7 +39,7 @@ class _ProfileState extends State<Profile> {
           title: const Text('Profile'),
           automaticallyImplyLeading: false,
         ),
-        body: SingleChildScrollView(
+        body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -47,6 +47,9 @@ class _ProfileState extends State<Profile> {
               children: [
                 Column(children: [
                   ProfileInformation(account: account),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   const ProfileMenu(),
                 ]),
                 ProfileMenuWidget(

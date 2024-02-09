@@ -1,13 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
 import '../../../../models/CartItem.dart';
+import '../../../../providers/cart_provider.dart';
+import 'package:provider/provider.dart';
 
 class ShoppingCartListItem extends StatelessWidget {
   ShoppingCartListItem({super.key, required this.cartItem});
   CartItem cartItem;
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
     return Card(
       child: ListTile(
         leading: CachedNetworkImage(
@@ -37,6 +39,7 @@ class ShoppingCartListItem extends StatelessWidget {
           child: IconButton(
             onPressed: (){
               //remove the product from the cart
+              cartProvider.removeFromCart(cartItem);
             },
             icon: const Icon(Icons.delete, color: Colors.red,),
           ),

@@ -27,6 +27,7 @@ class CartProvider extends ChangeNotifier {
 
   //method to remove items from the cart
   void removeFromCart(CartItem cartItem) {
+    // Check if the product is already in the cart
     _cartItems.remove(cartItem);
     notifyListeners();
   }

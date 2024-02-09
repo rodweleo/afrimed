@@ -68,12 +68,16 @@ class _SupplierPageState extends State<SupplierPage> {
                     },
                   ),
                   Positioned(
-                      top: -1,
-                      right: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
+                      top: 0,
+                      right: 2,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
+                          borderRadius: BorderRadius.circular(10.0)
+                        ),
+                        padding: const EdgeInsets.all(5.0),
                         child: Text(items.length.toString(), style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.height * 0.02,
+                            fontSize: MediaQuery.of(context).size.height * 0.015,
                             fontWeight: FontWeight.bold,
                             color: Colors.white
                         ),),
@@ -83,7 +87,7 @@ class _SupplierPageState extends State<SupplierPage> {
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                decoration: const BoxDecoration(color: Colors.blueGrey),
+                decoration: BoxDecoration(color: Colors.grey.withOpacity(0.25)),
                 child: widget.account.imageUrl != ""
                     ? CircleAvatar(
                         radius: 20,
@@ -91,6 +95,7 @@ class _SupplierPageState extends State<SupplierPage> {
                     : Icon(
                         Icons.person,
                         size: MediaQuery.of(context).size.height * 0.075,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
               ),
             ),
@@ -102,6 +107,7 @@ class _SupplierPageState extends State<SupplierPage> {
                     padding: const EdgeInsets.all(6.0),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +117,7 @@ class _SupplierPageState extends State<SupplierPage> {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20)),
                               Text(widget
-                                  .account.businessInfo.businessCategory,
+                                  .account.contact.email,
                                   style: const TextStyle(
                                     overflow: TextOverflow.ellipsis
                                   ),
@@ -124,10 +130,6 @@ class _SupplierPageState extends State<SupplierPage> {
                                 Text(
                                     widget.account.contact.phoneNumber
                                         .toString(),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14)),
-                                Text(widget.account.contact.email,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14)),

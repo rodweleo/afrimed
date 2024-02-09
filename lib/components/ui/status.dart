@@ -19,6 +19,10 @@ class Status extends StatelessWidget {
         backgroundColor = Colors.lightGreen.shade200;
         textColor = Colors.green;
         break;
+      case 'IN TRANSIT':
+        backgroundColor = const Color(0xFFFFE0B2);
+        textColor = Colors.orange;
+        break;
       case 'IN PROGRESS':
         backgroundColor = const Color(0xFFFFE0B2);
         textColor = Colors.orange;

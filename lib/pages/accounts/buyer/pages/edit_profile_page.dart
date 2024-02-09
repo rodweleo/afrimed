@@ -167,7 +167,7 @@ class _EditProfileState extends State<EditProfile> {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     foregroundColor: Colors.white,
                     shape: const RoundedRectangleBorder(
                         borderRadius:

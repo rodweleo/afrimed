@@ -24,123 +24,126 @@ class ProductPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 1,
           ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * .35,
-            width: double.infinity,
-            child: CarouselSlider(
-                items: product?.images!
-                    .map((item) => SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: ClipRRect(
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width / 3,
-                        height: 10,
-                        child: CachedNetworkImage(
-                          placeholder: (context, url) => SizedBox(
-                              height: 10,
-                              width: MediaQuery.of(context).size.width,
-                              child: const CircularProgressIndicator()),
-                          errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                          imageUrl: item,
-                          fit: BoxFit.fill,
-                        ),
-                      )
-                  ),
-                ))
-                    .toList(),
-                options: CarouselOptions(
-                    autoPlay: true,
-                    autoPlayAnimationDuration: const Duration(milliseconds: 1000),
-                    disableCenter: false,
-                    viewportFraction: 1.0)),
-          ),
-          Expanded(
-            child: Stack(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 40, right: 14, left: 14),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: SingleChildScrollView(
-                    child: Column(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              CarouselSlider(
+                  items: product?.images!
+                      .map((item) => SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width / 3,
+                          height: 10,
+                          child: CachedNetworkImage(
+                            placeholder: (context, url) => SizedBox(
+                                height: 10,
+                                width: MediaQuery.of(context).size.width,
+                                child: const CircularProgressIndicator()),
+                            errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                            imageUrl: item,
+                            fit: BoxFit.fill,
+                          ),
+                        )
+                    ),
+                  ))
+                      .toList(),
+                  options: CarouselOptions(
+                      autoPlay: true,
+                      autoPlayAnimationDuration: const Duration(milliseconds: 1000),
+                      disableCenter: false,
+                      viewportFraction: 1.0)),
+              const SizedBox(
+                height: 10,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product!.category,
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * .02,
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    Text(
+                      product!.name,
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * .05,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'KSh ${(((100 - product!.discountPercentage) /
+                                    100) *
+                                    product!.price)
+                                    .roundToDouble()
+                                    .toString()}',
+                                style: TextStyle(
+                                    fontSize: MediaQuery.of(context).size.height * .03,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              Text(
+                                product!.price.toString(),
+                                style: GoogleFonts.poppins(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.red,
+                                    decoration: TextDecoration.lineThrough,
+                                    decorationColor: Colors.red,
+                                    decorationThickness: 2),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            "-${product!.discountPercentage}%",
+                            style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                fontStyle: FontStyle.italic,
+                                color: Colors.green),
+                          ),
+                        ]),
+                    const SizedBox(height: 15),
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          product!.category,
-                          style: GoogleFonts.poppins(
-                            fontSize: 15,
-                            color: Colors.grey,
+                          'Description:',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: MediaQuery.of(context).size.height * .02,
                           ),
                         ),
-                        Text(
-                          product!.name,
-                          style: GoogleFonts.poppins(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    'KSh ${(((100 - product!.discountPercentage) /
-                                        100) *
-                                        product!.price)
-                                        .roundToDouble()
-                                        .toString()}',
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.green),
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Text(
-                                    product!.price.toString(),
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                        fontStyle: FontStyle.italic,
-                                        color: Colors.red,
-                                        decoration: TextDecoration.lineThrough,
-                                        decorationColor: Colors.red,
-                                        decorationThickness: 2),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                "-${product!.discountPercentage}%",
-                                style: GoogleFonts.poppins(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    fontStyle: FontStyle.italic,
-                                    color: Colors.green),
-                              ),
-                            ]),
-                        const SizedBox(height: 15),
                         Text(
                           product!.description,
-                          style: GoogleFonts.poppins(
-                            fontSize: 15,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        const SizedBox(height: 15),
+                        )
                       ],
                     ),
-                  ),
+                    const SizedBox(height: 15),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
       bottomNavigationBar: Container(
         height: 70,
@@ -149,11 +152,11 @@ class ProductPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(children: [
-              IconButton(icon: const Icon(Icons.remove), onPressed: () {
+              IconButton(icon: const Icon(Icons.remove), onPressed: product?.stock == 0 ? null : () {
                 cartProvider.removeFromCart(CartItem(product: product));
               }),
               Text(cartQuantity.toString()),
-              IconButton(icon: const Icon(Icons.add), onPressed: () {
+              IconButton(icon: const Icon(Icons.add), onPressed: product?.stock == 0 ? null : () {
                 cartProvider.addToCart(CartItem(product: product));
               })
             ]),
@@ -166,7 +169,7 @@ class ProductPage extends StatelessWidget {
                     foregroundColor: Colors.white,
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(5)))),
-                onPressed: () {
+                onPressed: product?.stock == 0 ? null : () {
                   //check whether the product is in the shopping cart
                   if (productCartIndex != -1) {
                     return;
