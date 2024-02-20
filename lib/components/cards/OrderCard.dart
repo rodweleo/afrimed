@@ -54,7 +54,7 @@ class OrderCard extends StatelessWidget {
                 const SizedBox(
                   width: 10,
                 ),
-                Text('Price: ${order.totalAmount.toString()}')
+                Text('Price: ${order.totalAmount.ceil().toString()}')
               ],
             ),
             Status(status: order.status)

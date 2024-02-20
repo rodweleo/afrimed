@@ -23,9 +23,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ShoppingCartListItems(account: widget.account)
-      ),
+          padding: const EdgeInsets.all(8.0),
+          child: ShoppingCartListItems(account: widget.account)),
       bottomNavigationBar: Container(
         height: 160,
         color: Colors.white,
@@ -36,12 +35,12 @@ class _ShoppingCartState extends State<ShoppingCart> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Total Items:',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary
-                ),),
-                Text(cartProvider
-                    .cartItems.length
+                Text(
+                  'Total Items:',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                ),
+                Text(cartProvider.cartItems.length
                     .toString()), // Add your discount logic here
               ],
             ),
@@ -51,9 +50,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
               children: [
                 Text(
                   'Total Amount to Pay:',
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary
-                  ),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
                 ),
                 Text(
                   'KES ${cartProvider.getSupplierItemsTotalAmount(widget.account.id!).toString()}', // You may need to adjust this based on your discount logic
@@ -64,29 +62,34 @@ class _ShoppingCartState extends State<ShoppingCart> {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Checkout(account: widget.account,)),
-                );
-              },
+              onPressed: cartProvider
+                      .getSupplierItemsInCart(widget.account.id!)
+                      .isEmpty
+                  ? null
+                  : () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Checkout(
+                                  account: widget.account,
+                                )),
+                      );
+                    },
               style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   foregroundColor: Colors.white,
                   shape: const RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(5))),
+                      borderRadius: BorderRadius.all(Radius.circular(5))),
                   textStyle: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: MediaQuery.of(context).size.width *
-                          0.04)),
+                      fontSize: MediaQuery.of(context).size.width * 0.04)),
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'PROCEED TO CHECKOUT',
-                    ),
+                  ),
                   SizedBox(width: 10),
                   Icon(
                     Icons.keyboard_arrow_right,

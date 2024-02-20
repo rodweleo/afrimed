@@ -16,14 +16,13 @@ class ProductPage extends StatelessWidget {
     final cartProvider = Provider.of<CartProvider>(context);
     int cartQuantity = cartProvider.getCartItemQuantity(product!);
 
-    int productCartIndex = cartProvider
-        .cartItems
+    int productCartIndex = cartProvider.cartItems
         .indexWhere((cartItem) => cartItem.product?.id == product?.id);
 
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
-          ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -32,29 +31,30 @@ class ProductPage extends StatelessWidget {
               CarouselSlider(
                   items: product?.images!
                       .map((item) => SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width / 3,
-                          height: 10,
-                          child: CachedNetworkImage(
-                            placeholder: (context, url) => SizedBox(
-                                height: 10,
-                                width: MediaQuery.of(context).size.width,
-                                child: const CircularProgressIndicator()),
-                            errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                            imageUrl: item,
-                            fit: BoxFit.fill,
-                          ),
-                        )
-                    ),
-                  ))
+                            width: MediaQuery.of(context).size.width,
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width / 3,
+                                  height: 10,
+                                  child: CachedNetworkImage(
+                                    placeholder: (context, url) =>
+                                        const SizedBox(
+                                            height: 50,
+                                            width: 50,
+                                            child: CircularProgressIndicator()),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                    imageUrl: item,
+                                    fit: BoxFit.fill,
+                                  ),
+                                )),
+                          ))
                       .toList(),
                   options: CarouselOptions(
                       autoPlay: true,
-                      autoPlayAnimationDuration: const Duration(milliseconds: 1000),
+                      autoPlayAnimationDuration:
+                          const Duration(milliseconds: 1000),
                       disableCenter: false,
                       viewportFraction: 1.0)),
               const SizedBox(
@@ -67,10 +67,9 @@ class ProductPage extends StatelessWidget {
                     Text(
                       product!.category,
                       style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * .02,
-                        color: Theme.of(context).colorScheme.secondary,
-                        fontWeight: FontWeight.bold
-                      ),
+                          fontSize: MediaQuery.of(context).size.height * .02,
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontWeight: FontWeight.bold),
                     ),
                     Text(
                       product!.name,
@@ -85,13 +84,11 @@ class ProductPage extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                'KSh ${(((100 - product!.discountPercentage) /
-                                    100) *
-                                    product!.price)
-                                    .roundToDouble()
-                                    .toString()}',
+                                'KSh ${(((100 - product!.discountPercentage) / 100) * product!.price).roundToDouble().toString()}',
                                 style: TextStyle(
-                                    fontSize: MediaQuery.of(context).size.height * .03,
+                                    fontSize:
+                                        MediaQuery.of(context).size.height *
+                                            .03,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.green),
                               ),
@@ -152,31 +149,43 @@ class ProductPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(children: [
-              IconButton(icon: const Icon(Icons.remove), onPressed: product?.stock == 0 ? null : () {
-                cartProvider.removeFromCart(CartItem(product: product));
-              }),
+              IconButton(
+                  icon: const Icon(Icons.remove),
+                  onPressed: product?.stock == 0
+                      ? null
+                      : () {
+                          cartProvider
+                              .removeFromCart(CartItem(product: product));
+                        }),
               Text(cartQuantity.toString()),
-              IconButton(icon: const Icon(Icons.add), onPressed: product?.stock == 0 ? null : () {
-                cartProvider.addToCart(CartItem(product: product));
-              })
+              IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: product?.stock == 0
+                      ? null
+                      : () {
+                          cartProvider.addToCart(CartItem(product: product));
+                        })
             ]),
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  disabledBackgroundColor: Theme.of(context).colorScheme.secondary,
+                    disabledBackgroundColor:
+                        Theme.of(context).colorScheme.secondary,
                     disabledForegroundColor: Colors.white.withOpacity(0.5),
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     foregroundColor: Colors.white,
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(5)))),
-                onPressed: product?.stock == 0 ? null : () {
-                  //check whether the product is in the shopping cart
-                  if (productCartIndex != -1) {
-                    return;
-                  } else {
-                    cartProvider.addToCart(CartItem(product: product));
-                  }
-                },
+                onPressed: product?.stock == 0
+                    ? null
+                    : () {
+                        //check whether the product is in the shopping cart
+                        if (productCartIndex != -1) {
+                          return;
+                        } else {
+                          cartProvider.addToCart(CartItem(product: product));
+                        }
+                      },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

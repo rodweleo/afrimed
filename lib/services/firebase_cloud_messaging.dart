@@ -9,29 +9,7 @@ class FCMService {
     //getting the fcm token
     final fcmToken = await _firebaseMessaging.getToken();
     print('FCM Token: $fcmToken');
-
-    // getting the initial message
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      // Handle incoming messages when the app is in the foreground
-      //print("Message data: ${message.data}");
-      if (message.notification != null) {
-        //print('Message also contained a notification: ${message.notification?.body}');
-      }
-
-      handleRemoteMessage(message);
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      // Handle when the app is opened from a background state
-      //print("Message data on open: ${message.data}");
-      handleRemoteMessage( message);
-    });
-
-    //handling background messages
-    FirebaseMessaging.onBackgroundMessage((message) => firebaseMessagingBackgroundHandler(message));
-
   }
-
 
   void handleRemoteMessage(RemoteMessage message) {
     if (message.data['type'] == 'order') {

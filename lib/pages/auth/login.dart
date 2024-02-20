@@ -20,6 +20,14 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  bool visiblePassword = false;
+  bool isSigningIn = false;
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,12 +71,12 @@ class _LoginPageState extends State<LoginPage> {
                         });
                       },
                       decoration: InputDecoration(
-                          disabledBorder: const OutlineInputBorder(
+                          disabledBorder: const UnderlineInputBorder(
                             // width: 0.0 produces a thin "hairline" border
                             borderSide:
                                 BorderSide(color: Colors.grey, width: 2.0),
                           ),
-                          enabledBorder: OutlineInputBorder(
+                          enabledBorder: UnderlineInputBorder(
                             // width: 0.0 produces a thin "hairline" border
                             borderSide: BorderSide(
                                 color: _usernameController.text.isNotEmpty
@@ -103,14 +111,14 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextFormField(
                       controller: _passwordController,
-                      obscureText: true,
+                      obscureText: !visiblePassword,
                       onChanged: (value) {
                         setState(() {
                           _passwordController.text = value;
                         });
                       },
                       decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
+                          enabledBorder: UnderlineInputBorder(
                             // width: 0.0 produces a thin "hairline" border
                             borderSide: BorderSide(
                                 color: _passwordController.text.isNotEmpty
@@ -118,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                                     : Colors.grey,
                                 width: 2.0),
                           ),
-                          border: OutlineInputBorder(
+                          border: UnderlineInputBorder(
                               borderSide: BorderSide(
                                   color: _passwordController.text.isNotEmpty
                                       ? Colors.green
@@ -132,12 +140,16 @@ class _LoginPageState extends State<LoginPage> {
                               color: _passwordController.text.isNotEmpty
                                   ? Colors.green
                                   : Theme.of(context).colorScheme.secondary),
-                          suffixIcon: _passwordController.text.isNotEmpty
-                              ? const Icon(
-                                  Icons.done,
-                                  color: Colors.green,
-                                )
-                              : null),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                visiblePassword = !visiblePassword;
+                              });
+                            },
+                            icon: Icon(visiblePassword
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined),
+                          )),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';
@@ -166,81 +178,108 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () async {
                             //check whether there is any error in the form
                             if (_loginFormKey.currentState!.validate()) {
-                              // If the form is valid, display a snack-bar.
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Processing Data')),
-                              );
-
+                              setState(() {
+                                isSigningIn = true;
+                              });
+                              //disable the form from any changes when beind validated
+                              _loginFormKey.currentState!.deactivate();
                               //login with username and password
                               AccountApi accountApi = AccountApi();
-                              try{
+                              try {
                                 Account? account = await accountApi
                                     .signInWithUsernameAndPassword(
-                                    _usernameController.text,
-                                    _passwordController.text);
+                                        _usernameController.text,
+                                        _passwordController.text);
                                 if (account != null) {
                                   //this means the account has been found successfully, redirect to the appropriate account page
                                   switch (account.role) {
                                     case 'buyer':
-                                    //set the auth provider to contain the details of the current account
+                                      //set the auth provider to contain the details of the current account
                                       Provider.of<AuthProvider>(context,
-                                          listen: false)
+                                              listen: false)
                                           .setLoggedInAccount(account);
+                                      setState(() {
+                                        isSigningIn = false;
+                                      });
                                       Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                            const BuyerAccount()),
-                                            (Route<dynamic> route) => false,
+                                                const BuyerAccount()),
+                                        (Route<dynamic> route) => false,
                                       );
 
                                       break;
                                     case 'supplier':
-                                    //set the auth provider to contain the details of the current account
+                                      //set the auth provider to contain the details of the current account
                                       Provider.of<AuthProvider>(context,
-                                          listen: false)
+                                              listen: false)
                                           .setLoggedInAccount(account);
+                                      setState(() {
+                                        isSigningIn = false;
+                                      });
                                       Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                            const SupplierAccount()),
-                                            (Route<dynamic> route) => false,
+                                                const SupplierAccount()),
+                                        (Route<dynamic> route) => false,
                                       );
                                       break;
 
                                     case 'admin':
-                                    //set the auth provider to contain the details of the current account
+                                      //set the auth provider to contain the details of the current account
                                       Provider.of<AuthProvider>(context,
-                                          listen: false)
+                                              listen: false)
                                           .setLoggedInAccount(account);
+                                      setState(() {
+                                        isSigningIn = false;
+                                      });
                                       Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                            const AdminAccount()),
-                                            (Route<dynamic> route) => false,
+                                                const AdminAccount()),
+                                        (Route<dynamic> route) => false,
                                       );
                                       break;
                                     default:
+                                      setState(() {
+                                        isSigningIn = false;
+                                      });
+                                      _loginFormKey.currentState!.activate();
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                            const LoginPage()),
+                                                const LoginPage()),
                                       );
                                   }
-                                }else{
-                                  ToastService.showErrorToast(context, 'Matching account details not found.');
+                                } else {
+                                  setState(() {
+                                    isSigningIn = false;
+                                  });
+                                  ToastService.showErrorToast(context,
+                                      'Matching account details not found.');
                                 }
-                              }catch(e){
-                                ToastService.showErrorToast(context, 'Something went wrong. Try again.');
+                              } catch (e) {
+                                setState(() {
+                                  isSigningIn = false;
+                                });
+                                ToastService.showErrorToast(context,
+                                    'Something went wrong. Try again.');
                               }
-
                             }
                           },
-                          child: const Text('Login'),
+                          child: isSigningIn
+                              ? const SizedBox(
+                                  height: 30,
+                                  width: 30,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : const Text('Login'),
                         )),
                     Row(
                       children: [
