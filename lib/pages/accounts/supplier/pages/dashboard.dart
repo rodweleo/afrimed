@@ -89,7 +89,10 @@ class _DashboardState extends State<Dashboard> {
             List<ShoppingOrder>? orderList = snapshot.data!;
             //divide the orders as per the once with the completed payment and not completed
             List<ShoppingOrder> completedPaymentOrders = snapshot.data!
-                .where((order) => order.status == 'Completed')
+                .where((order) => order.paymentStatus == 'Completed')
+                .toList();
+            List<ShoppingOrder> notCompletedPaymentOrders = snapshot.data!
+                .where((order) => order.paymentStatus == 'Not Completed')
                 .toList();
             return Container(
               height: MediaQuery.of(context).size.height,
@@ -124,24 +127,33 @@ class _DashboardState extends State<Dashboard> {
                         ),
                       ],
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Completed Payments vs Not-Completed Payments",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: MediaQuery.of(context).size.height * 0.015),
+                    ),
                     SizedBox(
-                      height: 300,
-                      width: 10,
+                      height: 250,
                       child: PieChart(PieChartData(
-                          centerSpaceRadius: 5,
+                          centerSpaceRadius: 10,
                           borderData: FlBorderData(show: false),
                           sectionsSpace: 2,
                           sections: [
                             PieChartSectionData(
-                                value: 10.toDouble(),
-                                color: Colors.purple,
-                                radius: 100),
+                              value: completedPaymentOrders.length.toDouble(),
+                              color: Colors.green,
+                              radius: 100,
+                            ),
                             PieChartSectionData(
-                                value: 40, color: Colors.amber, radius: 100),
-                            PieChartSectionData(
-                                value: 55, color: Colors.green, radius: 100),
-                            PieChartSectionData(
-                                value: 70, color: Colors.orange, radius: 100),
+                              value:
+                                  notCompletedPaymentOrders.length.toDouble(),
+                              color: Colors.orange,
+                              radius: 100,
+                            ),
                           ])),
                     ),
                   ],
