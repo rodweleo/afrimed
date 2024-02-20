@@ -166,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () async {
                             //check whether there is any error in the form
                             if (_loginFormKey.currentState!.validate()) {
-                              // If the form is valid, display a snackbar.
+                              // If the form is valid, display a snack-bar.
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text('Processing Data')),
