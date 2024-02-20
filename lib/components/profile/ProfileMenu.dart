@@ -1,5 +1,5 @@
+import 'package:AfriMed/pages/accounts/supplier/pages/notifications.dart';
 import 'package:flutter/material.dart';
-
 import '../../pages/accounts/buyer/widgets/Offers.dart';
 import '../../pages/accounts/buyer/widgets/ProfileMenuWidget.dart';
 import '../../pages/accounts/supplier/pages/reviews_page.dart';
@@ -19,8 +19,7 @@ class ProfileMenu extends StatelessWidget {
             onPress: () async {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const Reviews()),
+                MaterialPageRoute(builder: (context) => const Notifications()),
               );
             }),
         const Divider(),
@@ -32,8 +31,7 @@ class ProfileMenu extends StatelessWidget {
             onPress: () async {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const Reviews()),
+                MaterialPageRoute(builder: (context) => const Reviews()),
               );
             }),
         const Divider(),
@@ -45,8 +43,7 @@ class ProfileMenu extends StatelessWidget {
             onPress: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const Offers()),
+                MaterialPageRoute(builder: (context) => const Offers()),
               );
             }),
       ],

@@ -9,11 +9,10 @@ import '../models/Product.dart';
 class Product_Api {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   final storageRef = FirebaseStorage.instance.ref();
-  Future<String?> createPlatformProduct (Product product) async {
-
+  Future<String?> createPlatformProduct(Product product) async {
     // Reference to the FireStore collection
-    CollectionReference productsReference = _firebaseFirestore.collection(
-        'products');
+    CollectionReference productsReference =
+        _firebaseFirestore.collection('products');
 
     // Data to be added, including nested fields like location
     Map<String, dynamic> newProduct = {
@@ -31,14 +30,12 @@ class Product_Api {
       String pId = docRef.id;
 
       //update the id of the product
-      await productsReference.doc(pId).update({
-        "id": pId
-      });
+      await productsReference.doc(pId).update({"id": pId});
 
       final productRef = storageRef.child('products_images/$pId');
 
       // Upload each image to the product's folder
-      for(int i= 0; i < product.images!.length ; i++){
+      for (int i = 0; i < product.images!.length; i++) {
         String imageName = File(product.images?[i]).uri.pathSegments.last;
         final imageRef = productRef.child(imageName);
 
@@ -66,11 +63,10 @@ class Product_Api {
   }
 
   //API TO CREATE A NEW SUPPLIER PRODUCT
-  Future<String?> createSupplierProduct (SupplierProduct product) async {
-
+  Future<String?> createSupplierProduct(SupplierProduct product) async {
     // Reference to the FireStore collection
-    CollectionReference productsReference = _firebaseFirestore.collection(
-        'users/${product.supplierId}/products');
+    CollectionReference productsReference =
+        _firebaseFirestore.collection('users/${product.supplierId}/products');
 
     // Data to be added, including nested fields like location
     Map<String, dynamic> newProduct = {
@@ -95,11 +91,10 @@ class Product_Api {
     }
   }
 
-  Future<String?> updateSupplierProduct (SupplierProduct product) async {
-
+  Future<String?> updateSupplierProduct(SupplierProduct product) async {
     // Reference to the FireStore collection
-    CollectionReference productsCollection = _firebaseFirestore.collection(
-        'users/${product.supplierId}/products');
+    CollectionReference productsCollection =
+        _firebaseFirestore.collection('users/${product.supplierId}/products');
 
     // Data to be added, including nested fields like location
     Map<String, dynamic> updatedProduct = {
@@ -108,75 +103,30 @@ class Product_Api {
       'stock': product.stock,
     };
 
-    try{
-      QuerySnapshot querySnapshot = await productsCollection.where("id", isEqualTo: product.id).get();
+    try {
+      QuerySnapshot querySnapshot =
+          await productsCollection.where("id", isEqualTo: product.id).get();
 
       //the product reference id
-      String pId =querySnapshot.docs.first.id.toString();
+      String pId = querySnapshot.docs.first.id.toString();
 
       await productsCollection.doc(pId).update(updatedProduct);
       return 'Product edited successfully!';
-    }catch(e){
+    } catch (e) {
       return e.toString();
     }
-
-    return(product.supplierId);
-
-    /*try {
-      //step 1: save the details of the product to obtain the product id from the db
-      DocumentReference docRef = await productsReference.add(updatedProduct);
-
-      //update the id of the product
-      await productsReference.doc(product.id).update({
-        'id': product.id,
-        'name': product.name,
-        'description': product.description,
-        'category': product.category,
-        'price': product.price,
-        'discountPercentage': product.discountPercentage,
-        'stock': product.stock,
-      });
-
-
-      final productRef = storageRef.child('products_images/$product');
-
-      // Upload each image to the product's folder
-      for(int i= 0; i < product.images!.length ; i++){
-        String imageName = File(product.images?[i]).uri.pathSegments.last;
-        final imageRef = productRef.child(imageName);
-
-        // Upload image to the product's folder
-        await imageRef.putFile(File(product.images?[i]));
-
-        // Get the download URL for each image
-        String imageDownloadUrl = await imageRef.getDownloadURL();
-
-        // Perform any additional actions with the download URL if needed
-
-        await docRef.update({
-          'images': FieldValue.arrayUnion([imageDownloadUrl]),
-        });
-
-        await docRef.update({
-          'thumbnail': imageDownloadUrl,
-        });
-      }
-
-      return "Product added successfully";
-    } catch (e) {
-      return 'An error has occurred: $e';
-    }*/
   }
 
   //fetching all the products of an active supplier by
   Future<List<SupplierProduct>> fetchAllSupplierProducts(String? sId) async {
-
     try {
-      CollectionReference productsCollection = _firebaseFirestore.collection('users/$sId/products');
+      CollectionReference productsCollection =
+          _firebaseFirestore.collection('users/$sId/products');
       QuerySnapshot querySnapshot = await productsCollection.get();
 
       List<SupplierProduct> productList = querySnapshot.docs
-          .map((doc) => SupplierProduct.fromMap(doc.data() as Map<String, dynamic>))
+          .map((doc) =>
+              SupplierProduct.fromMap(doc.data() as Map<String, dynamic>))
           .toList();
 
       return productList;
@@ -187,13 +137,12 @@ class Product_Api {
   }
 
   //fetching the product depending on the entered criteria
-  Future<List<Product>> fetchProducts () async {
+  Future<List<Product>> fetchProducts() async {
     try {
-      CollectionReference productsCollection = _firebaseFirestore.collection(
-          'products');
+      CollectionReference productsCollection =
+          _firebaseFirestore.collection('products');
 
       QuerySnapshot querySnapshot = await productsCollection.get();
-
 
       List<Product> productList = querySnapshot.docs
           .map((doc) => Product.fromMap(doc.data() as Map<String, dynamic>))

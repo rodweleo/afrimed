@@ -24,20 +24,25 @@ class ToastService {
       SnackBar(
         content: Row(
           children: [
-            const Icon(Icons.check_circle, color: Colors.white,),
+            const Icon(
+              Icons.check_circle,
+              color: Colors.white,
+            ),
             const SizedBox(
               width: 5,
             ),
-            Text(message, style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width * 0.038
-            ),),
+            Text(
+              message,
+              softWrap: true,
+              style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width * 0.038),
+            ),
           ],
         ),
-        duration:
-            const Duration(seconds: 3), // Adjust the duration as needed
+        duration: const Duration(seconds: 3), // Adjust the duration as needed
         behavior: SnackBarBehavior.floating,
         padding: const EdgeInsets.all(8.0),
-        showCloseIcon: true,
+        showCloseIcon: false,
         backgroundColor: Colors.green,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -51,11 +56,11 @@ class ToastService {
     final scaffold = ScaffoldMessenger.of(context);
     scaffold.showSnackBar(
       SnackBar(
-        content: Text(message, style: TextStyle(
-            fontSize: MediaQuery.of(context).size.width * 0.038
-        ),),
-        duration:
-        const Duration(seconds: 3), // Adjust the duration as needed
+        content: Text(
+          message,
+          style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.038),
+        ),
+        duration: const Duration(seconds: 3), // Adjust the duration as needed
         behavior: SnackBarBehavior.floating,
         padding: const EdgeInsets.all(8.0),
         showCloseIcon: true,

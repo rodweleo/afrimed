@@ -68,9 +68,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
             if (ConnectionState.waiting == snapshot.connectionState) {
               return const Center(
                 child: SizedBox(
-                    height: 10,
-                    width: 10,
-                    child: CircularProgressIndicator()),
+                    height: 30, width: 30, child: CircularProgressIndicator()),
               );
             } else if (snapshot.hasError) {
               return Text('An error has occurred: ${snapshot.error}');
@@ -95,9 +93,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
             if (ConnectionState.waiting == snapshot.connectionState) {
               return const Center(
                 child: SizedBox(
-                    height: 10,
-                    width: 10,
-                    child: CircularProgressIndicator()),
+                    height: 10, width: 10, child: CircularProgressIndicator()),
               );
             } else if (snapshot.hasError) {
               return Text('An error has occurred: ${snapshot.error}');
@@ -125,16 +121,13 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
             if (ConnectionState.waiting == snapshot.connectionState) {
               return const Center(
                 child: SizedBox(
-                    height: 10,
-                    width: 10,
-                    child: CircularProgressIndicator()),
+                    height: 10, width: 10, child: CircularProgressIndicator()),
               );
             } else if (snapshot.hasError) {
               return Text('An error has occurred: ${snapshot.error}');
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Text('No orders available!');
             } else {
-
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView.builder(
@@ -142,8 +135,10 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                       .where((order) => order.status == 'IN TRANSIT')
                       .length,
                   itemBuilder: (context, index) {
-                    return OrderCard(order: snapshot.data!
-                        .where((order) => order.status == 'IN TRANSIT').toList()[index]);
+                    return OrderCard(
+                        order: snapshot.data!
+                            .where((order) => order.status == 'IN TRANSIT')
+                            .toList()[index]);
                   },
                 ),
               );
@@ -156,25 +151,28 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
             if (ConnectionState.waiting == snapshot.connectionState) {
               return const Center(
                 child: SizedBox(
-                    height: 10,
-                    width: 10,
-                    child: CircularProgressIndicator()),
+                    height: 10, width: 10, child: CircularProgressIndicator()),
               );
             } else if (snapshot.hasError) {
               return Text('An error has occurred: ${snapshot.error}');
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Text('No orders available!');
             } else {
-
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView.builder(
                   itemCount: snapshot.data!
-                      .where((order) => order.status == 'PENDING' || order.status == 'CONFIRMED')
+                      .where((order) =>
+                          order.status == 'PENDING' ||
+                          order.status == 'CONFIRMED')
                       .length,
                   itemBuilder: (context, index) {
-                    return OrderCard(order: snapshot.data!
-                        .where((order) => order.status == 'PENDING' || order.status == 'CONFIRMED').toList()[index]);
+                    return OrderCard(
+                        order: snapshot.data!
+                            .where((order) =>
+                                order.status == 'PENDING' ||
+                                order.status == 'CONFIRMED')
+                            .toList()[index]);
                   },
                 ),
               );

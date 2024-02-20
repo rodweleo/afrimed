@@ -1,6 +1,7 @@
 import 'package:AfriMed/models/ShoppingOrder.dart';
 import 'package:AfriMed/pages/accounts/buyer/pages/order_details_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../ui/status.dart';
 
@@ -54,7 +55,7 @@ class OrderCard extends StatelessWidget {
                 const SizedBox(
                   width: 10,
                 ),
-                Text('Price: ${order.totalAmount.ceil().toString()}')
+                Text('Price: ${order.totalAmount.toPrecision(2)}')
               ],
             ),
             Status(status: order.status)

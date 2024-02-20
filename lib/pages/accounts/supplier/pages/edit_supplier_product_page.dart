@@ -1,4 +1,5 @@
 import 'package:AfriMed/models/SupplierProduct.dart';
+import 'package:AfriMed/services/ToastService.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,11 +32,11 @@ class _EditProductState extends State<EditProduct> {
   final TextEditingController _productNameController = TextEditingController();
   String _productCategory = "";
   final TextEditingController _productDescriptionController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController _productPriceController = TextEditingController();
   final TextEditingController _productStockController = TextEditingController();
   final TextEditingController _productDiscountPercentageController =
-  TextEditingController();
+      TextEditingController();
   String thumbnail = "";
   List images = [];
   bool _isAddingProduct = false;
@@ -56,7 +57,8 @@ class _EditProductState extends State<EditProduct> {
     _productCategory = widget.product.category ?? "";
     _productDescriptionController.text = widget.product.description ?? "";
     _productPriceController.text = widget.product.price.toString();
-    _productDiscountPercentageController.text = widget.product.discountPercentage.toString();
+    _productDiscountPercentageController.text =
+        widget.product.discountPercentage.toString();
     _productStockController.text = widget.product.stock.toString();
 
     //initializing the default thumbnail to the product's default image
@@ -80,26 +82,23 @@ class _EditProductState extends State<EditProduct> {
         images: images,
         price: double.parse(_productPriceController.text),
         discountPercentage:
-        double.parse(_productDiscountPercentageController.text),
+            double.parse(_productDiscountPercentageController.text),
         stock: int.parse(_productStockController.text),
-        supplierId: widget.product.supplierId
-    );
+        supplierId: widget.product.supplierId);
 
     //try adding the product into the database
     Product_Api productApi = Product_Api();
-    String? feedback =
-        await productApi.updateSupplierProduct(editedProduct);
+    String? feedback = await productApi.updateSupplierProduct(editedProduct);
     return feedback;
   }
 
   void _pickProductImageFromGallery() async {
-
     try {
       final List selectedImages = await imagePicker.pickMultiImage();
 
       if (selectedImages.isNotEmpty) {
         //iterate through the array and extract the path then push them to the image file path list
-        for(int i = 0; i < selectedImages.length; i++){
+        for (int i = 0; i < selectedImages.length; i++) {
           String imagePath = selectedImages[i].path;
 
           //add the image path to the
@@ -127,9 +126,7 @@ class _EditProductState extends State<EditProduct> {
           );
         },
       );
-
     }
-
   }
 
   @override
@@ -194,15 +191,15 @@ class _EditProductState extends State<EditProduct> {
                       items: _productCategories
                           .map<DropdownMenuItem<String>>(
                             (category) => DropdownMenuItem(
-                          value: category.capitalize,
-                          child: Text(category.toString()),
-                        ),
-                      )
+                              value: category.capitalize,
+                              child: Text(category.toString()),
+                            ),
+                          )
                           .toList(),
                       isExpanded: true,
                       isDense: true,
                       onChanged: (String? value) => setState(
-                            () {
+                        () {
                           if (value != null) _productCategory = value;
                         },
                       ),
@@ -263,7 +260,6 @@ class _EditProductState extends State<EditProduct> {
                 const SizedBox(
                   height: 15,
                 ),
-
                 const SizedBox(
                   height: 15,
                 ),
@@ -317,35 +313,37 @@ class _EditProductState extends State<EditProduct> {
                 const SizedBox(
                   height: 15,
                 ),
-               CarouselSlider(
-                   items: widget.product.images!
-                       .map((item) => SizedBox(
-                     width: MediaQuery.of(context).size.width,
-                     child: ClipRRect(
-                         borderRadius: BorderRadius.circular(10.0),
-                         child: SizedBox(
-                           width: MediaQuery.of(context).size.width / 3,
-                           height: 10,
-                           child: CachedNetworkImage(
-                             placeholder: (context, url) => SizedBox(
-                                 height: 10,
-                                 width: MediaQuery.of(context).size.width,
-                                 child: const CircularProgressIndicator()),
-                             errorWidget: (context, url, error) =>
-                             const Icon(Icons.error),
-                             imageUrl: item,
-                             fit: BoxFit.fill,
-                           ),
-                         )
-                     ),
-                   ))
-                       .toList(),
-                   options: CarouselOptions(
-                       autoPlay: false,
-                       autoPlayAnimationDuration: const Duration(milliseconds: 1000),
-                       disableCenter: false,
-                       viewportFraction: 1.0))
-                    ,
+                CarouselSlider(
+                    items: widget.product.images!
+                        .map((item) => SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width / 3,
+                                    height: 10,
+                                    child: CachedNetworkImage(
+                                      placeholder: (context, url) => SizedBox(
+                                          height: 10,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child:
+                                              const CircularProgressIndicator()),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
+                                      imageUrl: item,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  )),
+                            ))
+                        .toList(),
+                    options: CarouselOptions(
+                        autoPlay: false,
+                        autoPlayAnimationDuration:
+                            const Duration(milliseconds: 1000),
+                        disableCenter: false,
+                        viewportFraction: 1.0)),
                 const SizedBox(
                   height: 30,
                 ),
@@ -353,36 +351,38 @@ class _EditProductState extends State<EditProduct> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueGrey,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                         foregroundColor: Colors.white,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(5)))),
+                                BorderRadius.all(Radius.circular(5)))),
                     onPressed: () async {
                       // Validate returns true if the form is valid, or false otherwise.
                       if (_editProductKey.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Processing Data')),
-                        );
+                        setState(() {
+                          _isAddingProduct = true;
+                        });
+
                         String? feedback = await _updateProduct();
                         if (feedback != null) {
                           setState(() {
                             _isAddingProduct = false;
                           });
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(feedback)),
-                          );
+                          ToastService.showSuccessToast(context, feedback);
 
                           //reset the whole form
                           _editProductKey.currentState!.reset();
+                        } else {
+                          ToastService.showErrorToast(
+                              context, "Something went wrong. Try again");
                         }
                       }
                     },
                     child: _isAddingProduct
                         ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                        : const Text('Save Changes'),
+                            color: Colors.white,
+                          )
+                        : const Text('Submit Changes'),
                   ),
                 ),
               ],

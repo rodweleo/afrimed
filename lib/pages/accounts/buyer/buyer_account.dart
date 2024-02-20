@@ -5,6 +5,7 @@ import 'package:AfriMed/services/firebase_cloud_messaging.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+
 class BuyerAccount extends StatefulWidget {
   const BuyerAccount({super.key});
 
@@ -13,15 +14,13 @@ class BuyerAccount extends StatefulWidget {
 }
 
 class _BuyerAccountState extends State<BuyerAccount> {
-
-
   final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
-  final List pageNames = ['homepage', 'orders', 'profile'];
+  final List pageNames = ['home', 'orders', 'profile'];
   final List<Widget> _pages = [
     const Homepage(),
     const Orders(),
-     const Profile(),
+    const Profile(),
   ];
   int _selectedIndex = 0;
 
@@ -31,14 +30,12 @@ class _BuyerAccountState extends State<BuyerAccount> {
     });
   }
 
-
   // It is assumed that all messages contain a data field with the key 'type'
   Future<void> setupInteractiveFCMessage() async {
     // Get any messages which caused the application to open from
     // a terminated state.
     FCMService fcmService = FCMService();
-    RemoteMessage? initialMessage =
-    await fcmService.getMessage();
+    RemoteMessage? initialMessage = await fcmService.getMessage();
 
     // If the message also contains a data property with a "type" of "chat",
     // navigate to a chat screen
@@ -52,14 +49,13 @@ class _BuyerAccountState extends State<BuyerAccount> {
   }
 
   void _handleMessage(RemoteMessage message) {
-    switch(message.data['type']){
+    switch (message.data['type']) {
       case 'order':
         _selectedIndex = 2;
         break;
       default:
         _selectedIndex = 0;
     }
-
   }
 
   @override
@@ -68,9 +64,6 @@ class _BuyerAccountState extends State<BuyerAccount> {
     setupInteractiveFCMessage();
     super.initState();
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -83,28 +76,33 @@ class _BuyerAccountState extends State<BuyerAccount> {
             type: BottomNavigationBarType.fixed,
             items: const [
               BottomNavigationBarItem(
-                icon: Icon(Icons.dashboard_outlined, color: Colors.white,),
+                icon: Icon(
+                  Icons.home_outlined,
+                  color: Colors.white,
+                ),
                 label: 'Home',
-                activeIcon: Icon(Icons.dashboard),
+                activeIcon: Icon(Icons.home),
               ),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_bag_outlined, color: Colors.white,),
+                  icon: Icon(
+                    Icons.shopping_bag_outlined,
+                    color: Colors.white,
+                  ),
                   label: 'Orders',
-                  activeIcon: Icon(Icons.shopping_bag)
-              ),
+                  activeIcon: Icon(Icons.shopping_bag)),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.person_outlined, color: Colors.white,),
+                  icon: Icon(
+                    Icons.person_outlined,
+                    color: Colors.white,
+                  ),
                   label: 'Profile',
-                  activeIcon: Icon(Icons.person)
-              )
+                  activeIcon: Icon(Icons.person))
             ],
             unselectedItemColor: Colors.white,
             onTap: _onItemTapped,
             currentIndex: _selectedIndex,
             selectedItemColor: Theme.of(context).colorScheme.primary,
-            selectedLabelStyle: const TextStyle(
-                fontWeight: FontWeight.bold
-            ),
+            selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
           )),
     );
   }

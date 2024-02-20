@@ -32,29 +32,33 @@ class _SupplierProductPageState extends State<SupplierProductPage> {
                     CarouselSlider(
                         items: widget.product.images!
                             .map((item) => SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width / 3,
-                                height: 10,
-                                child: CachedNetworkImage(
-                                  placeholder: (context, url) => SizedBox(
-                                      height: 10,
-                                      width: MediaQuery.of(context).size.width,
-                                      child: const CircularProgressIndicator()),
-                                  errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                                  imageUrl: item,
-                                  fit: BoxFit.fill,
-                                ),
-                              )
-                          ),
-                        ))
+                                  width: MediaQuery.of(context).size.width,
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                3,
+                                        height: 10,
+                                        child: CachedNetworkImage(
+                                          placeholder: (context, url) =>
+                                              const SizedBox(
+                                                  height: 50,
+                                                  width: 50,
+                                                  child:
+                                                      CircularProgressIndicator()),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                          imageUrl: item,
+                                          fit: BoxFit.fill,
+                                        ),
+                                      )),
+                                ))
                             .toList(),
                         options: CarouselOptions(
                             autoPlay: true,
-                            autoPlayAnimationDuration: const Duration(milliseconds: 1000),
+                            autoPlayAnimationDuration:
+                                const Duration(milliseconds: 1000),
                             disableCenter: false,
                             viewportFraction: 1.0)),
                     const SizedBox(
@@ -68,7 +72,7 @@ class _SupplierProductPageState extends State<SupplierProductPage> {
                                 color: Theme.of(context).colorScheme.secondary,
                                 fontWeight: FontWeight.bold,
                                 fontSize:
-                                MediaQuery.of(context).size.height * 0.02)),
+                                    MediaQuery.of(context).size.height * 0.02)),
                         Text(widget.product.name,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -82,7 +86,7 @@ class _SupplierProductPageState extends State<SupplierProductPage> {
                               style: TextStyle(
                                   color: Colors.green,
                                   fontSize:
-                                  MediaQuery.of(context).size.height * 0.03,
+                                      MediaQuery.of(context).size.height * 0.03,
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
@@ -90,28 +94,31 @@ class _SupplierProductPageState extends State<SupplierProductPage> {
                               style: TextStyle(
                                   color: Colors.green,
                                   fontSize:
-                                  MediaQuery.of(context).size.height * 0.02,
+                                      MediaQuery.of(context).size.height * 0.02,
                                   fontStyle: FontStyle.italic),
                             )
                           ],
                         ),
                         Row(
                           children: [
-                            Text('Stock:',
+                            Text(
+                              'Stock:',
                               style: TextStyle(
-                                  fontSize:
-                                  MediaQuery.of(context).size.height * 0.02,
+                                fontSize:
+                                    MediaQuery.of(context).size.height * 0.02,
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                             ),
                             const SizedBox(
                               width: 10,
                             ),
-                            Text(widget.product.stock.toString(), style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                                fontSize:
-                                MediaQuery.of(context).size.height * 0.02
-                            ),)
+                            Text(
+                              widget.product.stock.toString(),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: MediaQuery.of(context).size.height *
+                                      0.02),
+                            )
                           ],
                         ),
                         const SizedBox(
@@ -120,27 +127,26 @@ class _SupplierProductPageState extends State<SupplierProductPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Description:',
+                            Text(
+                              'Description:',
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontWeight: FontWeight.bold
-                              ),
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold),
                             ),
                             Text(
                               widget.product.description,
                               style: TextStyle(
-                                fontSize: MediaQuery.of(context).size.height * .02,
+                                fontSize:
+                                    MediaQuery.of(context).size.height * .02,
                               ),
                             )
                           ],
                         ),
-
                       ],
                     ),
-
                   ],
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -171,11 +177,14 @@ class _SupplierProductPageState extends State<SupplierProductPage> {
                               foregroundColor: Colors.white,
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(5)))),
+                                      BorderRadius.all(Radius.circular(5)))),
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => EditProduct(product: widget.product,)),
+                              MaterialPageRoute(
+                                  builder: (context) => EditProduct(
+                                        product: widget.product,
+                                      )),
                             );
                           },
                           child: const Row(
@@ -191,7 +200,6 @@ class _SupplierProductPageState extends State<SupplierProductPage> {
                     ),
                   ],
                 ),
-
               ],
             ),
           ),

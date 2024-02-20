@@ -1,6 +1,5 @@
 import 'package:AfriMed/pages/auth/splashscreen.dart';
 import 'package:AfriMed/providers/AuthProvider.dart';
-import 'package:AfriMed/services/firebase_cloud_messaging.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,7 +13,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FCMService().initialize();
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
   );
@@ -53,9 +51,8 @@ class MyApp extends StatelessWidget {
             ),
             // ···
             titleLarge: GoogleFonts.poppins(
-              fontSize: MediaQuery.of(context).size.width * 0.04,
-              fontWeight: FontWeight.bold
-            ),
+                fontSize: MediaQuery.of(context).size.width * 0.04,
+                fontWeight: FontWeight.bold),
             bodyMedium: GoogleFonts.poppins(
               fontSize: MediaQuery.of(context).size.width * 0.035,
             ),

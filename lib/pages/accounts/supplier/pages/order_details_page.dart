@@ -9,26 +9,27 @@ class OrderDetailsPage extends StatelessWidget {
   const OrderDetailsPage({super.key, required this.order});
   final ShoppingOrder order;
 
-
-
   @override
   Widget build(BuildContext context) {
     Order_Api order_api = Order_Api();
 
     Future<void> cancelOrder() async {
       String feedback = await order_api.cancelOrder(order.id);
-      print(feedback);
+      ToastService.showSuccessToast(context, feedback);
     }
 
     Future<void> confirmOrder() async {
       String feedback = await order_api.confirmOrder(order.id);
-      print(feedback);
+      ToastService.showSuccessToast(context, feedback);
+      Future.delayed(const Duration(seconds: 3), () {
+        Navigator.pop(context);
+      });
     }
 
     void transportOrder() async {
       String feedback = await order_api.transportOrder(order.id);
       ToastService.showSuccessToast(context, feedback);
-      Future.delayed(const Duration(seconds: 3), (){
+      Future.delayed(const Duration(seconds: 3), () {
         Navigator.pop(context);
       });
     }
@@ -36,116 +37,125 @@ class OrderDetailsPage extends StatelessWidget {
     void deliverOrder() async {
       String feedback = await order_api.deliverOrder(order.id);
       ToastService.showSuccessToast(context, feedback);
-      Future.delayed(const Duration(seconds: 3), (){
+      Future.delayed(const Duration(seconds: 3), () {
         Navigator.pop(context);
       });
     }
 
-
-
-
-
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Order Details'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              OrderDetails(order: order),
-              OrderSummary(order: order,)
-            ],
-          ),
-        ),
-      bottomNavigationBar: Padding(
+      appBar: AppBar(
+        title: const Text('Order Details'),
+      ),
+      body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: order.status == "CONFIRMED" ? SizedBox(
-          width: MediaQuery.of(context).size.width / 2.25,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
-                shape: const RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(10))),
-                textStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                    fontSize:
-                    MediaQuery.of(context).size.height * 0.02)),
-            onPressed: (){
-              transportOrder();
-            },
-            child: const Text('TRANSPORT ORDER'),
-          ),
-        ): order.status == 'IN TRANSIT' ? SizedBox(
-          width: MediaQuery.of(context).size.width / 2.25,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
-                shape: const RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(10))),
-                textStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                    fontSize:
-                    MediaQuery.of(context).size.height * 0.02)),
-            onPressed: (){
-              deliverOrder();
-            },
-            child: const Text('MARK DELIVERED'),
-          ),
-        ) : order.status == "PENDING" ? Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 2.25,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
-                    foregroundColor: Colors.white,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10))),
-                    textStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                        fontSize:
-                        MediaQuery.of(context).size.height * 0.02)),
-                onPressed: (){
-                  cancelOrder();
-                },
-                child: const Text('CANCEL ORDER'),
-              ),
-            ),
-            const Spacer(),
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 2.25,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10))),
-                    textStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                        fontSize:
-                        MediaQuery.of(context).size.height * 0.02)),
-                onPressed: (){
-                  confirmOrder();
-                },
-                child: const Text('CONFIRM ORDER'),
-              ),
+            OrderDetails(order: order),
+            OrderSummary(
+              order: order,
             )
           ],
-        ) : null
+        ),
       ),
+      bottomNavigationBar: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: order.status == "CONFIRMED"
+              ? SizedBox(
+                  width: MediaQuery.of(context).size.width / 2.25,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        textStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                            fontSize:
+                                MediaQuery.of(context).size.height * 0.02)),
+                    onPressed: () {
+                      transportOrder();
+                    },
+                    child: const Text('TRANSPORT ORDER'),
+                  ),
+                )
+              : order.status == 'IN TRANSIT'
+                  ? SizedBox(
+                      width: MediaQuery.of(context).size.width / 2.25,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.white,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            textStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize:
+                                    MediaQuery.of(context).size.height * 0.02)),
+                        onPressed: () {
+                          deliverOrder();
+                        },
+                        child: const Text('MARK DELIVERED'),
+                      ),
+                    )
+                  : order.status == "PENDING"
+                      ? Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 2.25,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.redAccent,
+                                    foregroundColor: Colors.white,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                    textStyle: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.02)),
+                                onPressed: () {
+                                  cancelOrder();
+                                },
+                                child: const Text('CANCEL'),
+                              ),
+                            ),
+                            const Spacer(),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 2.25,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green,
+                                    foregroundColor: Colors.white,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                    textStyle: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.02)),
+                                onPressed: () {
+                                  confirmOrder();
+                                },
+                                child: const Text('CONFIRM'),
+                              ),
+                            )
+                          ],
+                        )
+                      : null),
     );
   }
 }
