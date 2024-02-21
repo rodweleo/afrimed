@@ -14,7 +14,6 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   AccountApi accountApi = AccountApi();
 
-
   Future<List<Account>> _loadSuppliers() async {
     return accountApi.fetchAllSuppliers();
   }
@@ -42,9 +41,10 @@ class _HomepageState extends State<Homepage> {
                 const SizedBox(
                   height: 10,
                 ),
-                const Text('Featured Suppliers:', style: TextStyle(
-                  fontWeight: FontWeight.bold
-                ),),
+                const Text(
+                  'Featured Suppliers:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 FutureBuilder(
                   key: const Key("suppliersBuilder"),
                   future: _loadSuppliers(),
@@ -64,17 +64,19 @@ class _HomepageState extends State<Homepage> {
                           return ListTile(
                               leading: account.imageUrl != ""
                                   ? CircleAvatar(
-                                  radius: 20,
-                                  backgroundImage: NetworkImage(account.imageUrl))
+                                      radius: 20,
+                                      backgroundImage:
+                                          NetworkImage(account.imageUrl))
                                   : const CircleAvatar(
-                                radius: 20,
-                                child: Icon(Icons.person),
-                              ),
+                                      radius: 20,
+                                      child: Icon(Icons.person),
+                                    ),
                               title: Text(
                                 account.name,
-                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                               ),
-                              subtitle: Text(account.businessInfo.businessCategory),
+                              subtitle: Text(account.businessName),
                               onTap: () {
                                 // Handle tap, navigate to supplier details page, etc.
                                 Navigator.push(

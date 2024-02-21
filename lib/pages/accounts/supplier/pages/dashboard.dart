@@ -40,7 +40,7 @@ class _DashboardState extends State<Dashboard> {
         Provider.of<AuthProvider>(context, listen: false).account;
     return Scaffold(
       appBar: AppBar(
-        title: Text(account!.businessInfo.businessName),
+        title: Text(account!.businessName),
         automaticallyImplyLeading: false,
       ),
       body: FutureBuilder(

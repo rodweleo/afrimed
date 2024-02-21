@@ -43,16 +43,19 @@ class _FeaturedSuppliersState extends State<FeaturedSuppliers> {
             itemBuilder: (BuildContext context, int index) {
               Account account = snapshot.data![index];
               return ListTile(
-                  leading: account.imageUrl != "" ? CircleAvatar(
-                      radius: 20, backgroundImage: NetworkImage(account.imageUrl))
+                  leading: account.imageUrl != ""
+                      ? CircleAvatar(
+                          radius: 20,
+                          backgroundImage: NetworkImage(account.imageUrl))
                       : const CircleAvatar(
-                    radius: 20, child: Icon(Icons.person),),
+                          radius: 20,
+                          child: Icon(Icons.person),
+                        ),
                   title: Text(
                     account.name,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Text(account.businessInfo.businessCategory),
-
+                  subtitle: Text(account.businessName),
                   onTap: () {
                     // Handle tap, navigate to supplier details page, etc.
                     Navigator.push(

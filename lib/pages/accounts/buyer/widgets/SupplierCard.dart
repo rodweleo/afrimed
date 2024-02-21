@@ -12,21 +12,22 @@ class SupplierCard extends StatefulWidget {
 }
 
 class _SupplierCardState extends State<SupplierCard> {
-
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
-        leading: widget.account.imageUrl != "" ? CircleAvatar(
-            radius: 20, backgroundImage: NetworkImage(widget.account.imageUrl))
-          : const CircleAvatar(
-      radius: 20, child: Icon(Icons.person),),
+        leading: widget.account.imageUrl != ""
+            ? CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(widget.account.imageUrl))
+            : const CircleAvatar(
+                radius: 20,
+                child: Icon(Icons.person),
+              ),
         title: Text(
           widget.account.name,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: Text(widget.account.businessInfo.businessCategory),
-
+        subtitle: Text(widget.account.businessName),
         onTap: () {
           // Handle tap, navigate to supplier details page, etc.
           Navigator.push(

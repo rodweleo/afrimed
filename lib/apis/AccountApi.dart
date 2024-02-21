@@ -13,10 +13,7 @@ class AccountApi {
     // Data to be added, including nested fields like location
     Map<String, dynamic> newAccount = {
       'name': account.name,
-      'businessInformation': {
-        'businessName': account.businessInfo.businessName,
-        'businessCategory': account.businessInfo.businessCategory
-      },
+      'businessName': account.businessName,
       'role': account.role,
       'contact': {
         'email': account.contact.email,
@@ -28,7 +25,7 @@ class AccountApi {
         'address': account.location.address,
       },
       'hasUploadedIdentificationDocuments':
-      account.hasUploadedIdentificationDocuments,
+          account.hasUploadedIdentificationDocuments,
       'isVerified': account.isVerified
     };
 
@@ -45,8 +42,8 @@ class AccountApi {
   }
 
   //update the shipping address of the buyers
-  Future<String?> addShippingAddress(String accountId,
-      ShippingAddress shippingAddress) async {
+  Future<String?> addShippingAddress(
+      String accountId, ShippingAddress shippingAddress) async {
     // Reference to the FireStore collection
     CollectionReference shippingAddressesReference = _firebaseFirestore
         .collection('users')
@@ -80,11 +77,6 @@ class AccountApi {
       if (doc.exists) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-        BusinessInfo businessInfo = BusinessInfo(
-          businessCategory: data['businessInformation']['businessCategory'],
-          businessName: data['businessInformation']['businessName'],
-        );
-
         Contact contact = Contact(
           email: data['contact']['email'],
           phoneNumber: data['contact']['phoneNumber'],
@@ -97,20 +89,19 @@ class AccountApi {
         );
 
         Account account = Account(
-          id: data['id'],
-          name: data['name'],
-          businessInfo: businessInfo,
-          contact: contact,
-          location: location,
-          role: data['role'],
-          // You need to get the role from data
-          hasUploadedIdentificationDocuments:
-          data['hasUploadedIdentificationDocuments'],
-          isVerified: data['isVerified'],
-          imageUrl: data['imageUrl'] ?? "",
-          username: data['username'],
-          password: data['password']
-        );
+            id: data['id'],
+            name: data['name'],
+            businessName: data["businessName"],
+            contact: contact,
+            location: location,
+            role: data['role'],
+            // You need to get the role from data
+            hasUploadedIdentificationDocuments:
+                data['hasUploadedIdentificationDocuments'],
+            isVerified: data['isVerified'],
+            imageUrl: data['imageUrl'] ?? "",
+            username: data['username'],
+            password: data['password']);
 
         return account;
       } else {
@@ -133,7 +124,7 @@ class AccountApi {
       QuerySnapshot querySnapshot = await shippingAddressesReference.get();
 
       List<ShippingAddress> shippingAddressList =
-      querySnapshot.docs.map((DocumentSnapshot document) {
+          querySnapshot.docs.map((DocumentSnapshot document) {
         Map<String, dynamic> data = document.data() as Map<String, dynamic>;
         return ShippingAddress(
           address: data['address'] ?? '',
@@ -152,19 +143,14 @@ class AccountApi {
 
   Future<List<Account>> fetchAllSuppliers() async {
     CollectionReference usersCollection =
-    _firebaseFirestore.collection("users");
+        _firebaseFirestore.collection("users");
 
     try {
       QuerySnapshot querySnapshot =
-      await usersCollection.where('role', isEqualTo: 'supplier').get();
+          await usersCollection.where('role', isEqualTo: 'supplier').get();
 
       List<Account> supplierList = querySnapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-
-        BusinessInfo businessInfo = BusinessInfo(
-          businessCategory: data['businessInformation']['businessCategory'],
-          businessName: data['businessInformation']['businessName'],
-        );
 
         Contact contact = Contact(
           email: data['contact']['email'],
@@ -178,19 +164,18 @@ class AccountApi {
         );
 
         return Account(
-          id: data['id'],
-          name: data['name'],
-          businessInfo: businessInfo,
-          contact: contact,
-          location: location,
-          role: data['role'],
-          hasUploadedIdentificationDocuments:
-          data['hasUploadedIdentificationDocuments'] ?? false,
-          isVerified: data['isVerified'] ?? false,
-          imageUrl: data['imageUrl'] ?? "",
-          username: data['username'],
-          password: data['password']
-        );
+            id: data['id'],
+            name: data['name'],
+            businessName: data['businessName'],
+            contact: contact,
+            location: location,
+            role: data['role'],
+            hasUploadedIdentificationDocuments:
+                data['hasUploadedIdentificationDocuments'] ?? false,
+            isVerified: data['isVerified'] ?? false,
+            imageUrl: data['imageUrl'] ?? "",
+            username: data['username'],
+            password: data['password']);
       }).toList();
 
       return supplierList;
@@ -239,49 +224,45 @@ class AccountApi {
     CollectionReference usersRef = _firebaseFirestore.collection('users');
 
     // Create a query against the collection to get the document with the matching username and password
-    Query q = usersRef.where("username", isEqualTo: username).where("password", isEqualTo: password, );
+    Query q = usersRef.where("username", isEqualTo: username).where(
+          "password",
+          isEqualTo: password,
+        );
     try {
-    QuerySnapshot querySnapshot = await q.get();
-    if (querySnapshot.docs.isNotEmpty) {
-      Map<String, dynamic> data = (querySnapshot.docs.first.data() as Map<String, dynamic>);
+      QuerySnapshot querySnapshot = await q.get();
+      if (querySnapshot.docs.isNotEmpty) {
+        Map<String, dynamic> data =
+            (querySnapshot.docs.first.data() as Map<String, dynamic>);
 
-      BusinessInfo businessInfo = BusinessInfo(
-        businessCategory: data['businessInformation']['businessCategory'],
-        businessName: data['businessInformation']['businessName'],
-      );
+        Contact contact = Contact(
+          email: data['contact']['email'],
+          phoneNumber: data['contact']['phoneNumber'],
+        );
 
-      Contact contact = Contact(
-        email: data['contact']['email'],
-        phoneNumber: data['contact']['phoneNumber'],
-      );
+        Location location = Location(
+          county: data['location']['county'],
+          town: data['location']['town'],
+          address: data['location']['address'],
+        );
 
-      Location location = Location(
-        county: data['location']['county'],
-        town: data['location']['town'],
-        address: data['location']['address'],
-      );
+        Account account = Account(
+            id: data['id'],
+            name: data['name'],
+            role: data['role'],
+            contact: contact,
+            location: location,
+            businessName: data['businessName'],
+            hasUploadedIdentificationDocuments:
+                data['hasUploadedIdentificationDocuments'] ?? false,
+            isVerified: data['isVerified'] ?? false,
+            imageUrl: data['imageUrl'] ?? "",
+            username: data['username'],
+            password: data['password']);
 
-      Account account = Account(
-        id: data['id'],
-        name: data['name'],
-        role: data['role'],
-        contact: contact,
-        location: location,
-        businessInfo: businessInfo,
-        hasUploadedIdentificationDocuments:
-        data['hasUploadedIdentificationDocuments'] ?? false,
-        isVerified: data['isVerified'] ?? false,
-        imageUrl: data['imageUrl'] ?? "",
-        username: data['username'],
-        password: data['password']
-      );
-
-      return account;
-    } else {
-      return null; // No matching user found
-    }
-
-
+        return account;
+      } else {
+        return null; // No matching user found
+      }
     } catch (e) {
       // Handle errors, log, or rethrow if necessary
       print("Error: $e");

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../models/Account.dart';
 
-
 class SupplierRegistration extends StatefulWidget {
   const SupplierRegistration({super.key});
 
@@ -32,7 +31,8 @@ class _SupplierRegistrationState extends State<SupplierRegistration> {
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   bool hasUploadedIdentificationDocuments = false;
   bool hasAgreedTermsAndConditions = false;
@@ -52,12 +52,10 @@ class _SupplierRegistrationState extends State<SupplierRegistration> {
     });
 
     //create a new supplier
-      Account newAccount = Account(
+    Account newAccount = Account(
         id: "",
         name: _nameController.text,
-        businessInfo: BusinessInfo(
-            businessCategory: _businessCategory,
-            businessName: _businessNameController.text),
+        businessName: _businessNameController.text,
         contact: Contact(
           email: _emailController.text,
           phoneNumber: int.parse(_contactController.text),
@@ -71,37 +69,33 @@ class _SupplierRegistrationState extends State<SupplierRegistration> {
         isVerified: false,
         imageUrl: "",
         username: _usernameController.text,
-        password: _passwordController.text
-      );
+        password: _passwordController.text);
 
-      final FirebaseAuth auth = FirebaseAuth.instance;
-      await auth.verifyPhoneNumber(
-        phoneNumber: '+${_contactController.text}',
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          await auth.signInWithCredential(credential);
-          // The user is signed in automatically, and you can access the user's information using _auth.currentUser.
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    await auth.verifyPhoneNumber(
+      phoneNumber: '+${_contactController.text}',
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await auth.signInWithCredential(credential);
+        // The user is signed in automatically, and you can access the user's information using _auth.currentUser.
 
-          // Link the phone authentication to the existing user account
-          await auth.currentUser?.linkWithCredential(credential);
-
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          // Handle verification failure if needed.
-        },
-        codeSent: (String verificationId, int? resendToken) {
-          setState(() {
-            isOnboarding = false;
-          });
-          // Handle code sent to the user's phone.
-          // Prompt the user to enter the code.
-
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          // Auto-retrieval timeout. Handle the situation if needed.
-        },
-      );
-
-    }
+        // Link the phone authentication to the existing user account
+        await auth.currentUser?.linkWithCredential(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        // Handle verification failure if needed.
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        setState(() {
+          isOnboarding = false;
+        });
+        // Handle code sent to the user's phone.
+        // Prompt the user to enter the code.
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        // Auto-retrieval timeout. Handle the situation if needed.
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -207,6 +201,8 @@ class _SupplierRegistrationState extends State<SupplierRegistration> {
                 height: 15,
               ),
 
+              Text("Contact Information", style: ,),
+
               SizedBox(
                 width: 250,
                 child: TextFormField(
@@ -250,68 +246,68 @@ class _SupplierRegistrationState extends State<SupplierRegistration> {
               const SizedBox(
                 height: 15,
               ),
-            SizedBox(
-              height: 150,
-              child: GridView.count(
-                crossAxisCount: 2, // Number of columns
-                crossAxisSpacing: 10.0,
-                mainAxisSpacing: 10.0,
-                childAspectRatio: 3.0,
-                children: [
-                  SizedBox(
-                    width: 180,
-                    child: TextFormField(
-                      controller: _countyController,
-                      obscureText: false,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your county';
-                        }
-                        return null; // Return null if the input is valid
-                      },
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'County',
+              SizedBox(
+                height: 150,
+                child: GridView.count(
+                  crossAxisCount: 2, // Number of columns
+                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 10.0,
+                  childAspectRatio: 3.0,
+                  children: [
+                    SizedBox(
+                      width: 180,
+                      child: TextFormField(
+                        controller: _countyController,
+                        obscureText: false,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your county';
+                          }
+                          return null; // Return null if the input is valid
+                        },
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'County',
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 180,
-                    child: TextFormField(
-                      controller: _townController,
-                      obscureText: false,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your town';
-                        }
-                        return null; // Return null if the input is valid
-                      },
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Town',
+                    SizedBox(
+                      width: 180,
+                      child: TextFormField(
+                        controller: _townController,
+                        obscureText: false,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your town';
+                          }
+                          return null; // Return null if the input is valid
+                        },
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Town',
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 180,
-                    child: TextFormField(
-                      controller: _addressController,
-                      obscureText: false,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your address';
-                        }
-                        return null; // Return null if the input is valid
-                      },
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Address',
+                    SizedBox(
+                      width: 180,
+                      child: TextFormField(
+                        controller: _addressController,
+                        obscureText: false,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your address';
+                          }
+                          return null; // Return null if the input is valid
+                        },
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Address',
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
               const SizedBox(
                 height: 15,
               ),
@@ -319,7 +315,8 @@ class _SupplierRegistrationState extends State<SupplierRegistration> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Do you have relevant valid certificates and licenses?'),
+                  const Text(
+                      'Do you have relevant valid certificates and licenses?'),
                   Row(
                     children: [
                       Row(
@@ -387,7 +384,8 @@ class _SupplierRegistrationState extends State<SupplierRegistration> {
                               style: TextStyle(
                                   color: Colors.black.withOpacity(0.4)),
                             ),
-                            const Icon(Icons.file_upload, color: Colors.blueGrey)
+                            const Icon(Icons.file_upload,
+                                color: Colors.blueGrey)
                           ],
                         ),
                       ),
@@ -413,7 +411,7 @@ class _SupplierRegistrationState extends State<SupplierRegistration> {
                 child: TextFormField(
                   controller: _usernameController,
                   obscureText: false,
-                  onChanged: (value){
+                  onChanged: (value) {
                     setState(() {
                       _usernameController.text = value;
                     });
@@ -436,7 +434,7 @@ class _SupplierRegistrationState extends State<SupplierRegistration> {
                 child: TextFormField(
                   controller: _passwordController,
                   obscureText: false,
-                  onChanged: (value){
+                  onChanged: (value) {
                     setState(() {
                       _passwordController.text = value;
                     });
@@ -459,7 +457,7 @@ class _SupplierRegistrationState extends State<SupplierRegistration> {
                 child: TextFormField(
                   controller: _confirmPasswordController,
                   obscureText: false,
-                  onChanged: (value){
+                  onChanged: (value) {
                     setState(() {
                       _confirmPasswordController.text = value;
                     });
@@ -522,7 +520,8 @@ class _SupplierRegistrationState extends State<SupplierRegistration> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const LoginPage()),
                       );
                     },
                     child: const Text(

@@ -1,7 +1,8 @@
-import 'dart:io';
-import 'package:AfriMed/pages/accounts/buyer/buyer_account.dart';
 import 'package:AfriMed/pages/auth/login.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:AfriMed/pages/auth/registration/widgets/BusinessInformation.dart';
+import 'package:AfriMed/pages/auth/registration/widgets/LoginInformation.dart';
+import 'package:AfriMed/pages/auth/registration/widgets/PersonalInformation.dart';
+
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
@@ -12,27 +13,45 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> registrationFormKey = GlobalKey<FormState>();
   //create the controllers
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _contactController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController contactController = TextEditingController();
+  final TextEditingController businessNameController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController townController = TextEditingController();
+  final TextEditingController countyController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
-  String selectedOption = "";
   bool hasAgreedTermsAndConditions = false;
-
-  FilePickerResult? documents;
-  File? selectedDocument;
 
   @override
   Widget build(BuildContext context) {
+    final screens = [
+      PersonalInformation(
+          nameController: nameController,
+          emailController: emailController,
+          contactController: contactController),
+      BusinessInformation(
+          businessNameController: businessNameController,
+          addressController: addressController,
+          townController: townController,
+          countyController: countyController),
+      LoginInformation(
+          usernameController: usernameController,
+          passwordController: passwordController,
+          confirmPasswordController: confirmPasswordController),
+    ];
     return Scaffold(
       appBar: AppBar(
         title: const Text('Register'),
       ),
       body: Form(
-        key: _formKey,
+        key: registrationFormKey,
         child: Container(
           padding: const EdgeInsets.all(20),
           child: ListView(
@@ -42,174 +61,15 @@ class _RegisterState extends State<Register> {
               const SizedBox(
                 height: 20,
               ),
-              SizedBox(
-                width: 250,
-                child: TextField(
-                  controller: _nameController,
-                  obscureText: false,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blueGrey)),
-                    labelText: 'Name',
-                  ),
-                ),
-              ),
-              //some space between name and email
+
               const SizedBox(
                 height: 15,
               ),
-              SizedBox(
-                width: 250,
-                child: TextField(
-                  controller: _emailController,
-                  obscureText: false,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Business Name',
-                  ),
-                ),
-              ),
-              //some space between name and email
-              const SizedBox(
-                height: 15,
-              ),
-              SizedBox(
-                width: 250,
-                child: TextField(
-                  controller: _emailController,
-                  obscureText: false,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Email Address',
-                  ),
-                ),
-              ),
+
               //some space between email and mobile
               const SizedBox(
                 height: 15,
               ),
-
-              SizedBox(
-                width: 250,
-                child: TextField(
-                  controller: _contactController,
-                  obscureText: false,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Contact',
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-
-              SizedBox(
-                width: 250,
-                child: TextField(
-                  controller: _addressController,
-                  obscureText: false,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Address',
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Do you have relevant valid certificates and licenses?'),
-                  Row(
-                    children: [
-                      Row(
-                        children: [
-                          Radio(
-                            value: 'Yes',
-                            groupValue: selectedOption,
-                            onChanged: (value) {
-                              setState(() {
-                                selectedOption = "Yes";
-                              });
-                            },
-                          ),
-                          const Text('Yes')
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Radio(
-                            value: 'I will upload later',
-                            groupValue: selectedOption,
-                            onChanged: (value) {
-                              setState(() {
-                                selectedOption = "I will upload later";
-                              });
-                            },
-                          ),
-                          const Text('I will upload later')
-                        ],
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              if (selectedOption == 'Yes')
-                Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () async {
-                        documents = await FilePicker.platform
-                            .pickFiles(allowMultiple: true);
-
-                        // Check if files were picked
-                        if (documents?.files.isNotEmpty ?? false) {
-                          // Display the first selected file
-                          final file = documents!.files.first;
-                          setState(() {
-                            // Set the selected file to a variable to be used in the UI
-                            selectedDocument =
-                            file.path != null ? File(file.path!) : null;
-                          });
-                        }
-                      },
-                      child: Container(
-                        height: 60,
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blueGrey),
-                            borderRadius: BorderRadius.circular(5.0)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Upload Documents',
-                              style: TextStyle(
-                                  color: Colors.black.withOpacity(0.4)),
-                            ),
-                            const Icon(Icons.file_upload, color: Colors.blueGrey)
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    if (selectedDocument != null)
-                      Row(
-                        children: [
-                          Container(
-                              height: 100,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.blueGrey, width: 2.5),
-                                  borderRadius: BorderRadius.circular(5.0)),
-                              child: Image.file(selectedDocument!)),
-                        ],
-                      ),
-                  ],
-                ),
               Row(
                 children: [
                   Checkbox(
@@ -226,24 +86,22 @@ class _RegisterState extends State<Register> {
               //create button for register
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary, // background (button) color
+                  backgroundColor: Theme.of(context)
+                      .colorScheme
+                      .primary, // background (button) color
                   foregroundColor: Colors.white,
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
                           Radius.circular(5))), // foreground (text) color
                 ),
-                onPressed: () {
-                  //we will trying to print input
-                  //print(_nameController.text);
-                  //print(_emailController.text);
-                  //print(_contactController.text);
-                  //print(_addressController.text);
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const BuyerAccount()),
-                  );
-                },
+                onPressed: hasAgreedTermsAndConditions
+                    ? () {
+                        //register the user
+                        if (registrationFormKey.currentState!.validate()) {
+                          //proceed to submitting the information
+                        }
+                      }
+                    : null,
                 child: const Text(
                   'Submit',
                   style: TextStyle(
@@ -258,13 +116,15 @@ class _RegisterState extends State<Register> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const LoginPage()),
                       );
                     },
                     child: Text(
                       'Sign In',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary),
                     ), // Text displayed on the button
                   ),
                 ],

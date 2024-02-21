@@ -4,40 +4,39 @@ class Account {
   late String role;
   late Contact contact;
   late Location location;
-  late BusinessInfo businessInfo;
+  late String businessName;
   late bool hasUploadedIdentificationDocuments;
   late bool isVerified;
   late String imageUrl;
   late String username;
   late String password;
-  Account({
-    required this.id,
-    required this.name,
-    required this.role,
-    required this.contact,
-    required this.location,
-    required this.businessInfo,
-    required this.hasUploadedIdentificationDocuments,
-    required this.isVerified,
-    required this.imageUrl,
-    required this.username,
-    required this.password
-});
+  Account(
+      {required this.id,
+      required this.name,
+      required this.role,
+      required this.contact,
+      required this.location,
+      required this.businessName,
+      required this.hasUploadedIdentificationDocuments,
+      required this.isVerified,
+      required this.imageUrl,
+      required this.username,
+      required this.password});
 
-  factory Account.fromMap(String id,Map<String, dynamic> map) {
+  factory Account.fromMap(String id, Map<String, dynamic> map) {
     return Account(
-      id: map['id'],
-      name: map['name'],
-      role: map['role'],
-      businessInfo: BusinessInfo.fromMap(map['businessInformation']),
-      contact: Contact.fromMap(map['contact']),
-      location: Location.fromMap(map['location']),
-      hasUploadedIdentificationDocuments: map['hasUploadedIdentificationDocuments'] ?? false,
-      isVerified : map['isVerified'] ?? false,
-      imageUrl: map['imageUrl'],
-      username: map['username'],
-      password: map['password']
-    );
+        id: map['id'],
+        name: map['name'],
+        role: map['role'],
+        businessName: map['businessName'],
+        contact: Contact.fromMap(map['contact']),
+        location: Location.fromMap(map['location']),
+        hasUploadedIdentificationDocuments:
+            map['hasUploadedIdentificationDocuments'] ?? false,
+        isVerified: map['isVerified'] ?? false,
+        imageUrl: map['imageUrl'],
+        username: map['username'],
+        password: map['password']);
   }
 }
 
@@ -70,39 +69,11 @@ class Location {
   Location({required this.county, required this.town, required this.address});
 
   Map<String, dynamic> toMap() {
-    return {
-      'county': county,
-      'town': town,
-      'address': address
-    };
+    return {'county': county, 'town': town, 'address': address};
   }
 
   factory Location.fromMap(Map<String, dynamic> map) {
     return Location(
-      county: map['county'],
-      town: map['town'],
-      address: map['address']
-    );
-  }
-}
-
-class BusinessInfo {
-  final String businessCategory;
-  final String businessName;
-
-  BusinessInfo({required this.businessCategory, required this.businessName});
-
-  Map<String, dynamic> toMap() {
-    return {
-      'businessCategory': businessCategory,
-      'businessName': businessName,
-    };
-  }
-
-  factory BusinessInfo.fromMap(Map<String, dynamic> map) {
-    return BusinessInfo(
-      businessCategory: map['businessCategory'],
-      businessName: map['businessName'],
-    );
+        county: map['county'], town: map['town'], address: map['address']);
   }
 }

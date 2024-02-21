@@ -16,7 +16,6 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController _countyController = TextEditingController();
   final TextEditingController _businessNameController = TextEditingController();
 
-
   //create a boolean to check the state of the entered information
   //if there is any change, the submit button is activated, else, the button remains disabled
 
@@ -30,7 +29,7 @@ class _EditProfileState extends State<EditProfile> {
     _emailController.text = widget.account.contact.email;
     _contactController.text = widget.account.contact.phoneNumber.toString();
     _countyController.text = widget.account.location.county;
-    _businessNameController.text = widget.account.businessInfo.businessName;
+    _businessNameController.text = widget.account.businessName;
   }
 
   @override
@@ -61,7 +60,7 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Profile'),
-              ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -80,7 +79,7 @@ class _EditProfileState extends State<EditProfile> {
                           border: OutlineInputBorder(),
                           label: Text('Name'),
                         ),
-                        onChanged: (input){
+                        onChanged: (input) {
                           _nameController.text = input;
                         },
                         obscureText: false,
@@ -96,10 +95,8 @@ class _EditProfileState extends State<EditProfile> {
                         controller: _emailController,
                         obscureText: false,
                         decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          label: Text('Email')
-                        ),
-                        onChanged: (input){
+                            border: OutlineInputBorder(), label: Text('Email')),
+                        onChanged: (input) {
                           _emailController.text = input;
                         },
                       ),
@@ -115,9 +112,8 @@ class _EditProfileState extends State<EditProfile> {
                         obscureText: false,
                         decoration: const InputDecoration(
                             border: OutlineInputBorder(),
-                            label: Text('Contact')
-                        ),
-                        onChanged: (input){
+                            label: Text('Contact')),
+                        onChanged: (input) {
                           _contactController.text = input;
                         },
                       ),
@@ -132,14 +128,12 @@ class _EditProfileState extends State<EditProfile> {
                         obscureText: false,
                         decoration: const InputDecoration(
                             border: OutlineInputBorder(),
-                            label: Text('County')
-                        ),
-                        onChanged: (input){
+                            label: Text('County')),
+                        onChanged: (input) {
                           _countyController.text = input;
                         },
                       ),
                     ),
-
                     const SizedBox(
                       height: 10,
                     ),
@@ -150,18 +144,15 @@ class _EditProfileState extends State<EditProfile> {
                         obscureText: false,
                         decoration: const InputDecoration(
                             border: OutlineInputBorder(),
-                            label: Text('Business Name')
-                        ),
-                        onChanged: (input){
+                            label: Text('Business Name')),
+                        onChanged: (input) {
                           _businessNameController.text = input;
                         },
                       ),
                     ),
                   ],
                 ),
-
               ],
-
             ),
             SizedBox(
                 width: double.infinity,
@@ -170,13 +161,14 @@ class _EditProfileState extends State<EditProfile> {
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     foregroundColor: Colors.white,
                     shape: const RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(5))),
-                    padding: const EdgeInsets.all(16.0),),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    padding: const EdgeInsets.all(16.0),
+                  ),
                   onPressed: () {
                     //edit the details of the profile
-
-                  }, child: const Text('Save Changes'),))
+                  },
+                  child: const Text('Save Changes'),
+                ))
           ],
         ),
       ),
