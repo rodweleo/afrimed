@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class BusinessInformation extends StatelessWidget {
+class BusinessInformation extends StatefulWidget {
   const BusinessInformation({
     super.key,
     required this.businessNameController,
@@ -13,6 +13,12 @@ class BusinessInformation extends StatelessWidget {
   final TextEditingController addressController;
   final TextEditingController townController;
   final TextEditingController countyController;
+
+  @override
+  State<BusinessInformation> createState() => _BusinessInformationState();
+}
+
+class _BusinessInformationState extends State<BusinessInformation> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -26,14 +32,15 @@ class BusinessInformation extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
+
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextField(
-            controller: businessNameController,
+            controller: widget.businessNameController,
             obscureText: false,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              labelText: 'Business Name',
+              labelText: 'Business Name:',
             ),
           ),
         ),
@@ -44,7 +51,7 @@ class BusinessInformation extends StatelessWidget {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextField(
-            controller: addressController,
+            controller: widget.addressController,
             obscureText: false,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
@@ -58,7 +65,7 @@ class BusinessInformation extends StatelessWidget {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextField(
-            controller: addressController,
+            controller: widget.townController,
             obscureText: false,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
@@ -72,7 +79,7 @@ class BusinessInformation extends StatelessWidget {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextField(
-            controller: addressController,
+            controller: widget.countyController,
             obscureText: false,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),

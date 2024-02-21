@@ -1,8 +1,10 @@
+import 'package:AfriMed/apis/AccountApi.dart';
 import 'package:AfriMed/models/Account.dart';
 import 'package:AfriMed/pages/auth/login.dart';
 import 'package:AfriMed/pages/auth/registration/widgets/BusinessInformation.dart';
 import 'package:AfriMed/pages/auth/registration/widgets/LoginInformation.dart';
 import 'package:AfriMed/pages/auth/registration/widgets/PersonalInformation.dart';
+import 'package:AfriMed/services/ToastService.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
@@ -30,6 +32,7 @@ class _RegisterState extends State<Register> {
       TextEditingController();
 
   String selectedOption = "";
+  bool isCreatingAccount = false;
 
   //file picker for the national id
   FilePickerResult? nationalIds;
@@ -43,27 +46,58 @@ class _RegisterState extends State<Register> {
 
   bool hasAgreedTermsAndConditions = false;
 
+  String accountType = "";
+
+  void clearForm() {
+    nameController.clear();
+    emailController.clear();
+    contactController.clear();
+    businessNameController.clear();
+    addressController.clear();
+    townController.clear();
+    countyController.clear();
+    usernameController.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    accountType = "Buyer";
+  }
+
   @override
   Widget build(BuildContext context) {
-    //collecting the information for the account
-    Account newAccount = Account(
-      id: "",
-      name: nameController.text,
-      role: 'buyer',
-      contact: Contact(
-          email: emailController.text,
-          phoneNumber: int.parse(contactController.text)),
-      username: usernameController.text,
-      hasUploadedIdentificationDocuments: false,
-      password: passwordController.text,
-      isVerified: hasAgreedTermsAndConditions,
-      imageUrl: '',
-      businessName: businessNameController.text,
-      location: Location(
-          address: addressController.text,
-          town: townController.text,
-          county: countyController.text),
-    );
+    //function for creating the account
+    AccountApi accountApi = AccountApi();
+    Future<String?> uploadData() async {
+      setState(() {
+        isCreatingAccount = true;
+      });
+      //collecting the information for the account
+      Account newAccount = Account(
+        id: "",
+        name: nameController.text,
+        role: accountType,
+        contact: Contact(
+            email: emailController.text, phoneNumber: contactController.text),
+        username: usernameController.text,
+        hasUploadedIdentificationDocuments: false,
+        password: passwordController.text,
+        isVerified: false,
+        imageUrl: '',
+        businessName: businessNameController.text,
+        location: Location(
+            address: addressController.text,
+            town: townController.text,
+            county: countyController.text),
+      );
+
+      String? feedback = await accountApi.createAccount(newAccount);
+      return feedback;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -90,6 +124,47 @@ class _RegisterState extends State<Register> {
               const SizedBox(
                 height: 20,
               ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Choose account type:'),
+                  Row(
+                    children: [
+                      Row(
+                        children: [
+                          Radio(
+                            value: 'Buyer',
+                            groupValue: accountType,
+                            onChanged: (value) {
+                              setState(() {
+                                accountType = value.toString();
+                              });
+                            },
+                          ),
+                          const Text('Buyer')
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Radio(
+                            value: 'Supplier',
+                            groupValue: accountType,
+                            onChanged: (value) {
+                              setState(() {
+                                accountType = value.toString();
+                              });
+                            },
+                          ),
+                          const Text('Supplier')
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 15,
+              ),
               BusinessInformation(
                   businessNameController: businessNameController,
                   addressController: addressController,
@@ -108,8 +183,7 @@ class _RegisterState extends State<Register> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                          'Do you have relevant valid certificates and licenses?'),
+                      const Text('Do you have your identification documents?'),
                       Row(
                         children: [
                           Row(
@@ -290,16 +364,42 @@ class _RegisterState extends State<Register> {
                           Radius.circular(5))), // foreground (text) color
                 ),
                 onPressed: hasAgreedTermsAndConditions
-                    ? () {
-                        //register the user
+                    ? () async {
+                        if (registrationFormKey.currentState!.validate()) {
+                          setState(() {
+                            isCreatingAccount = false;
+                          });
+                          //register the user
+                          String? feedback = await uploadData();
+                          if (feedback != null) {
+                            setState(() {
+                              isCreatingAccount = false;
+                              clearForm();
+                            });
+                            ToastService.showSuccessToast(context, feedback);
+                            registrationFormKey.currentState!.activate();
+                          } else {
+                            setState(() {
+                              isCreatingAccount = false;
+                            });
+                          }
+                        }
                       }
                     : null,
-                child: const Text(
-                  'Submit',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
+                child: isCreatingAccount
+                    ? const SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text(
+                        'Submit',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
               ),
               Column(
                 children: [

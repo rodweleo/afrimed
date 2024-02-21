@@ -44,6 +44,7 @@ class PersonalInformation extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           child: TextField(
             controller: emailController,
+            keyboardType: TextInputType.emailAddress,
             obscureText: false,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
@@ -60,6 +61,7 @@ class PersonalInformation extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           child: TextField(
             controller: contactController,
+            keyboardType: TextInputType.phone,
             obscureText: false,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),

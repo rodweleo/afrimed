@@ -6,12 +6,17 @@ import '../models/ShippingAddress.dart';
 class AccountApi {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
-  Future<String?> createAccount(String? uId, Account account) async {
+  Future<String?> createAccount(Account account) async {
+    //when creating an account, if the account type is a supplier or a buyer
+    //1. we need to create sub_collections for the account; products, shipping addresses, and the identification documents
+
     // Reference to the FireStore collection
-    CollectionReference usersReference = _firebaseFirestore.collection('users');
+    CollectionReference usersCollection =
+        _firebaseFirestore.collection('users');
 
     // Data to be added, including nested fields like location
     Map<String, dynamic> newAccount = {
+      "id": account.id,
       'name': account.name,
       'businessName': account.businessName,
       'role': account.role,
@@ -26,19 +31,25 @@ class AccountApi {
       },
       'hasUploadedIdentificationDocuments':
           account.hasUploadedIdentificationDocuments,
-      'isVerified': account.isVerified
+      'isVerified': account.isVerified,
+      "imageURL": account.imageUrl,
+      "username": account.username,
+      "password": account.password
     };
 
     try {
-      // Add the data to FireStore
-      await usersReference.doc(uId).set(newAccount).then((value) {
-        return 'Supplier account created successfully!';
-      });
-    } catch (e) {
-      return null;
-    }
+      // save the account information
+      DocumentReference documentReference =
+          await usersCollection.add(newAccount);
+      String docId = documentReference.id;
 
-    return null;
+      //after getting the id, update the account id
+      await usersCollection.doc(docId).update({"id": docId});
+
+      return "Account created successfully";
+    } catch (e) {
+      return "$e";
+    }
   }
 
   //update the shipping address of the buyers

@@ -1,5 +1,5 @@
 class Account {
-  late String? id;
+  late String id;
   late String name;
   late String role;
   late Contact contact;
@@ -10,7 +10,7 @@ class Account {
   late String imageUrl;
   late String username;
   late String password;
-  Account(Map<dynamic, Object> map,
+  Account(
       {required this.id,
       required this.name,
       required this.role,
@@ -23,7 +23,7 @@ class Account {
       required this.username,
       required this.password});
 
-  factory Account.fromMap(String id, Map<String, dynamic> map) {
+  factory Account.fromMap(Map<String, dynamic> map) {
     return Account(
         id: map['id'],
         name: map['name'],
@@ -42,7 +42,7 @@ class Account {
 
 class Contact {
   final String email;
-  final int phoneNumber;
+  final String phoneNumber;
 
   Contact({required this.email, required this.phoneNumber});
 

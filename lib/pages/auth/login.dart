@@ -71,12 +71,15 @@ class _LoginPageState extends State<LoginPage> {
                         });
                       },
                       decoration: InputDecoration(
-                          disabledBorder: const UnderlineInputBorder(
+                          border: OutlineInputBorder(
                             // width: 0.0 produces a thin "hairline" border
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 2.0),
+                            borderSide: BorderSide(
+                                color: _usernameController.text.isNotEmpty
+                                    ? Colors.green
+                                    : Colors.grey,
+                                width: 2.0),
                           ),
-                          enabledBorder: UnderlineInputBorder(
+                          enabledBorder: OutlineInputBorder(
                             // width: 0.0 produces a thin "hairline" border
                             borderSide: BorderSide(
                                 color: _usernameController.text.isNotEmpty
@@ -118,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                         });
                       },
                       decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
+                          enabledBorder: OutlineInputBorder(
                             // width: 0.0 produces a thin "hairline" border
                             borderSide: BorderSide(
                                 color: _passwordController.text.isNotEmpty
@@ -126,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                                     : Colors.grey,
                                 width: 2.0),
                           ),
-                          border: UnderlineInputBorder(
+                          border: OutlineInputBorder(
                               borderSide: BorderSide(
                                   color: _passwordController.text.isNotEmpty
                                       ? Colors.green
@@ -192,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                                         _passwordController.text);
                                 if (account != null) {
                                   //this means the account has been found successfully, redirect to the appropriate account page
-                                  switch (account.role) {
+                                  switch (account.role.toLowerCase()) {
                                     case 'buyer':
                                       //set the auth provider to contain the details of the current account
                                       Provider.of<AuthProvider>(context,
