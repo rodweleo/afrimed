@@ -26,6 +26,7 @@ class _BusinessDocumentationState extends State<BusinessDocumentation> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
           "Business Documentation",

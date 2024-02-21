@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class LoginInformation extends StatelessWidget {
+class LoginInformation extends StatefulWidget {
   const LoginInformation(
       {super.key,
       required this.usernameController,
@@ -10,6 +10,13 @@ class LoginInformation extends StatelessWidget {
   final TextEditingController usernameController;
   final TextEditingController passwordController;
   final TextEditingController confirmPasswordController;
+
+  @override
+  State<LoginInformation> createState() => _LoginInformationState();
+}
+
+class _LoginInformationState extends State<LoginInformation> {
+  bool visiblePassword = false;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -26,7 +33,7 @@ class LoginInformation extends StatelessWidget {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextField(
-            controller: usernameController,
+            controller: widget.usernameController,
             obscureText: false,
             decoration: const InputDecoration(
               border: OutlineInputBorder(
@@ -42,12 +49,19 @@ class LoginInformation extends StatelessWidget {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextField(
-            controller: passwordController,
-            obscureText: true,
+            controller: widget.passwordController,
+            obscureText: !visiblePassword,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              suffixIcon:
-                  IconButton(onPressed: () {}, icon: Icon(Icons.visibility)),
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      visiblePassword = !visiblePassword;
+                    });
+                  },
+                  icon: Icon(visiblePassword
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined)),
               labelText: 'Password',
             ),
           ),
@@ -58,13 +72,20 @@ class LoginInformation extends StatelessWidget {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: TextField(
-            controller: confirmPasswordController,
-            obscureText: true,
+            controller: widget.confirmPasswordController,
+            obscureText: !visiblePassword,
             decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Confirm Password',
-                suffixIcon:
-                    IconButton(onPressed: () {}, icon: Icon(Icons.visibility))),
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        visiblePassword = !visiblePassword;
+                      });
+                    },
+                    icon: Icon(visiblePassword
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined))),
           ),
         ),
       ],

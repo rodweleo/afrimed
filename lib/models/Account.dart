@@ -10,7 +10,7 @@ class Account {
   late String imageUrl;
   late String username;
   late String password;
-  Account(
+  Account(Map<dynamic, Object> map,
       {required this.id,
       required this.name,
       required this.role,
