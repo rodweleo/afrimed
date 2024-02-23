@@ -141,7 +141,7 @@ class _CheckoutState extends State<Checkout> {
                       'Total Items:',
                     ),
                     Text(
-                      cartProvider.getSupplierItemsInCart(widget.account.id!).length.toString(),
+                      cartProvider.getSupplierItemsInCart(widget.account.id).length.toString(),
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 20),
                     ),
@@ -155,7 +155,7 @@ class _CheckoutState extends State<Checkout> {
                       'Total Price:',
                     ),
                     Text(
-                      'KES ${cartProvider.getSupplierItemsTotalAmount(widget.account.id!).toString()}',
+                      'KES ${cartProvider.getSupplierItemsTotalAmount(widget.account.id).toString()}',
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 20),
                     ),
@@ -164,7 +164,7 @@ class _CheckoutState extends State<Checkout> {
               ]),
               TextButton(
                 onPressed: () {
-                  _createOrder(account!.id!, widget.account.id!, cartProvider.getSupplierItemsInCart(widget.account.id!), cartProvider.getSupplierItemsTotalAmount(widget.account.id!));
+                  _createOrder(account!.id, widget.account.id, cartProvider.getSupplierItemsInCart(widget.account.id), cartProvider.getSupplierItemsTotalAmount(widget.account.id));
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,

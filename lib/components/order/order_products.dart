@@ -12,7 +12,7 @@ class OrderProducts extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Order Products [${products.length}]',
-        style: TextStyle(
+        style: const TextStyle(
           fontWeight: FontWeight.bold
         ),),
         SizedBox(

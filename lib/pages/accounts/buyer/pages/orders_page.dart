@@ -27,7 +27,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
   Future<List<ShoppingOrder>?> _loadOrders() async {
     Order_Api orderApi = Order_Api();
     // Use your fetchAllOrders() function to get the suppliers
-    return orderApi.fetchBuyerOrders(Provider.of<AuthProvider>(context, listen: false).getCurrentAccount()!.id!);
+    return orderApi.fetchBuyerOrders(Provider.of<AuthProvider>(context, listen: false).getCurrentAccount()!.id);
   }
 
   @override

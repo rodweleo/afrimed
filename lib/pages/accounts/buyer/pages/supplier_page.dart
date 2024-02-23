@@ -30,7 +30,7 @@ class _SupplierPageState extends State<SupplierPage> {
 
     // Getting the current active supplier Id
     List<SupplierProduct> allProducts =
-    await productApi.fetchAllSupplierProducts(widget.account.id!);
+    await productApi.fetchAllSupplierProducts(widget.account.id);
 
     // Filter products based on the search query
     List<SupplierProduct> filteredProducts = allProducts
@@ -45,7 +45,7 @@ class _SupplierPageState extends State<SupplierPage> {
   @override
   Widget build(BuildContext context) {
     //get the elements in the cart that are a given supplier's
-    List<CartItem> items = Provider.of<CartProvider>(context, listen: true).getSupplierItemsInCart(widget.account.id!);
+    List<CartItem> items = Provider.of<CartProvider>(context, listen: true).getSupplierItemsInCart(widget.account.id);
     return Scaffold(
       body: CustomScrollView(
         slivers: [

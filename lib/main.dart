@@ -13,7 +13,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseAppCheck.instance.activate(
+  FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
   );
   runApp(const MyApp());

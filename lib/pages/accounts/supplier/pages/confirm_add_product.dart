@@ -85,7 +85,7 @@ class _ConfirmAddProductState extends State<ConfirmAddProduct> {
         stock: int.parse(_productStockController.text),
         supplierId: Provider.of<AuthProvider>(context, listen: false)
             .getCurrentAccount()!
-            .id!);
+            .id);
 
     //try adding the product into the database
     Product_Api productApi = Product_Api();

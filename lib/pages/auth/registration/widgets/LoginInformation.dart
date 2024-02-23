@@ -52,7 +52,7 @@ class _LoginInformationState extends State<LoginInformation> {
             controller: widget.passwordController,
             obscureText: !visiblePassword,
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
               suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
@@ -75,7 +75,7 @@ class _LoginInformationState extends State<LoginInformation> {
             controller: widget.confirmPasswordController,
             obscureText: !visiblePassword,
             decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 labelText: 'Confirm Password',
                 suffixIcon: IconButton(
                     onPressed: () {

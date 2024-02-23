@@ -13,9 +13,9 @@ class ShoppingCartListItems extends StatelessWidget {
     //getting the items in store for a given supplier when in his/her page
     final cartProvider = Provider.of<CartProvider>(context);
     return ListView.builder(
-        itemCount: cartProvider.getSupplierItemsInCart(account.id!).length,
+        itemCount: cartProvider.getSupplierItemsInCart(account.id).length,
         itemBuilder: (context, int index){
-        return ShoppingCartListItem(cartItem: cartProvider.getSupplierItemsInCart(account.id!)[index]);
+        return ShoppingCartListItem(cartItem: cartProvider.getSupplierItemsInCart(account.id)[index]);
     });
   }
 }

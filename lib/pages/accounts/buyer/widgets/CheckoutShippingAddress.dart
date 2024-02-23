@@ -45,7 +45,7 @@ class _CheckoutShippingAddressState extends State<CheckoutShippingAddress> {
     );
 
 
-    String? feedback = await _accountApi.addShippingAddress(Provider.of<UserProvider>(context, listen: false).account!.id!, shippingAddress);
+    String? feedback = await _accountApi.addShippingAddress(Provider.of<UserProvider>(context, listen: false).account!.id, shippingAddress);
     if(feedback != null){
       _isAddingAddress = false;
       clearInputFields();

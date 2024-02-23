@@ -11,15 +11,15 @@ class OrderDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Order_Api order_api = Order_Api();
+    Order_Api orderApi = Order_Api();
 
     Future<void> cancelOrder() async {
-      String feedback = await order_api.cancelOrder(order.id);
+      String feedback = await orderApi.cancelOrder(order.id);
       ToastService.showSuccessToast(context, feedback);
     }
 
     Future<void> confirmOrder() async {
-      String feedback = await order_api.confirmOrder(order.id);
+      String feedback = await orderApi.confirmOrder(order.id);
       ToastService.showSuccessToast(context, feedback);
       Future.delayed(const Duration(seconds: 3), () {
         Navigator.pop(context);
@@ -27,7 +27,7 @@ class OrderDetailsPage extends StatelessWidget {
     }
 
     void transportOrder() async {
-      String feedback = await order_api.transportOrder(order.id);
+      String feedback = await orderApi.transportOrder(order.id);
       ToastService.showSuccessToast(context, feedback);
       Future.delayed(const Duration(seconds: 3), () {
         Navigator.pop(context);
@@ -35,7 +35,7 @@ class OrderDetailsPage extends StatelessWidget {
     }
 
     void deliverOrder() async {
-      String feedback = await order_api.deliverOrder(order.id);
+      String feedback = await orderApi.deliverOrder(order.id);
       ToastService.showSuccessToast(context, feedback);
       Future.delayed(const Duration(seconds: 3), () {
         Navigator.pop(context);

@@ -54,7 +54,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                       TextStyle(color: Theme.of(context).colorScheme.secondary),
                 ),
                 Text(
-                  'KES ${cartProvider.getSupplierItemsTotalAmount(widget.account.id!).toString()}', // You may need to adjust this based on your discount logic
+                  'KES ${cartProvider.getSupplierItemsTotalAmount(widget.account.id).toString()}', // You may need to adjust this based on your discount logic
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 20),
                 ),
@@ -63,7 +63,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: cartProvider
-                      .getSupplierItemsInCart(widget.account.id!)
+                      .getSupplierItemsInCart(widget.account.id)
                       .isEmpty
                   ? null
                   : () {
